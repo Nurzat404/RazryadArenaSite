@@ -1,0 +1,83 @@
+﻿<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Турнир #12 — РазрядАрена</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&family=Rajdhani:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/components.css" />
+    <link rel="stylesheet" href="../assets/css/layouts.css" />
+    <link rel="stylesheet" href="../assets/css/pages.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+  </head>
+  <body class="layout-admin" data-page="admin-tournament-detail" data-role="admin">
+    <div class="app-shell">
+            <aside class="app-sidebar" data-component="admin-sidebar">
+        <div class="app-sidebar-title">Admin Panel</div>
+        <div class="app-sidebar-group">
+          <div class="app-sidebar-group-title">Обзор</div>
+          <a class="app-sidebar-link" href="admin-dashboard.html">Dashboard</a>
+        </div>
+        <div class="app-sidebar-group">
+          <div class="app-sidebar-group-title">Управление</div>
+          <a class="app-sidebar-link" href="admin-users.html">Пользователи</a>
+          <a class="app-sidebar-link" href="admin-teams.html">Команды</a>
+          <a class="app-sidebar-link is-active" href="admin-tournaments.html">Турниры</a>
+          <a class="app-sidebar-link" href="admin-matches.html">Матчи</a>
+          <a class="app-sidebar-link" href="admin-ratings.html">Рейтинг</a>
+          <a class="app-sidebar-link" href="admin-content.html">Контент</a>
+        </div>
+      </aside>
+      <main class="app-content">
+        <header class="app-topbar d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <div><h1 class="h4 mb-0">RA Open Cup #12</h1><small class="text-muted-strong">CS2 • registration</small></div>
+          <div class="admin-toolbar">
+            <button class="cta-button cta-button-secondary" type="button">Сгенерировать сетку</button>
+            <button class="cta-button cta-button-primary" type="button">Одобрить заявки</button>
+          </div>
+        </header>
+
+        <div class="row g-3">
+          <div class="col-lg-5">
+            <article class="form-panel">
+              <h2 class="h5">Параметры турнира</h2>
+              <div class="mb-2"><label class="form-label">Название</label><input class="form-control" value="RA Open Cup #12" /></div>
+              <div class="mb-2"><label class="form-label">Макс. команд</label><input class="form-control" type="number" value="16" /></div>
+              <div class="mb-2"><label class="form-label">Размер команды</label><input class="form-control" type="number" value="5" /></div>
+              <button class="cta-button cta-button-primary mt-1" type="button">Сохранить</button>
+            </article>
+          </div>
+          <div class="col-lg-7">
+            <article class="table-block">
+              <table class="table table-dark-custom">
+                <thead><tr><th>Команда</th><th>Состав</th><th>Возраст</th><th>Steam</th><th>Статус</th></tr></thead>
+                <tbody>
+                  <tr><td>Volt5</td><td>5/5</td><td>OK</td><td>OK</td><td><span class="status-badge is-pending">pending</span></td></tr>
+                  <tr><td>Nexus</td><td>5/5</td><td>OK</td><td>OK</td><td><span class="status-badge is-active">approved</span></td></tr>
+                  <tr><td>Raven</td><td>4/5</td><td>⚠</td><td>OK</td><td><span class="status-badge is-disabled">rejected</span></td></tr>
+                </tbody>
+              </table>
+            </article>
+          </div>
+          <div class="col-12">
+            <section class="bracket-board" data-component="BracketView">
+              <h2 class="h5 mb-2">Bracket preview (admin)</h2>
+              <p class="text-muted-strong mb-0">Псевдо-интерактивная сетка готова под будущий Vue-компонент с live-обновлением матчей.</p>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/main.js"></script>
+  </body>
+</html>
+
+

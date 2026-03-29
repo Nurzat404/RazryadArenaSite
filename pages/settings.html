@@ -1,0 +1,115 @@
+﻿<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Настройки — РазрядАрена</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&family=Rajdhani:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/components.css" />
+    <link rel="stylesheet" href="../assets/css/layouts.css" />
+    <link rel="stylesheet" href="../assets/css/pages.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+  </head>
+  <body class="layout-user" data-page="settings" data-role="user">
+    <header class="site-header site-header-user" data-component="user-top-nav">
+      <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container py-2 gap-2">
+          <a class="navbar-brand site-navbar-brand" href="../index.html">
+            <img class="site-logo" src="../assets/img/logo/razryad_logo_clean.png" alt="Логотип РазрядАрена" />
+            <span>РазрядАрена</span>
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#userTopNav" aria-controls="userTopNav" aria-expanded="false" aria-label="Переключить меню">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="d-flex align-items-center ms-auto order-lg-3 user-nav-actions">
+            <a class="icon-button" href="notifications.html" aria-label="Уведомления">
+              <span class="notification-dot"></span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V10a6 6 0 1 0-12 0v4.2a2 2 0 0 1-.6 1.4L4 17h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                <path d="M10 19a2 2 0 0 0 4 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+              </svg>
+            </a>
+            <div class="dropdown">
+              <button class="user-avatar-button" type="button" data-bs-toggle="dropdown" aria-expanded="false">N</button>
+              <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
+                <li><a class="dropdown-item" href="profile.html">Профиль</a></li>
+                <li><a class="dropdown-item" href="settings.html">Настройки</a></li>
+                <li><a class="dropdown-item" href="../index.html">Выйти</a></li>
+              </ul>
+            </div>
+            <a class="cta-button cta-button-primary" href="dashboard.html">Мой кабинет</a>
+          </div>
+          <div class="collapse navbar-collapse justify-content-center order-lg-2" id="userTopNav">
+            <ul class="navbar-nav align-items-lg-center gap-lg-3">
+              <li class="nav-item"><a class="site-nav-link" data-user-nav-link="tournaments" href="tournaments.html">Турниры</a></li>
+              <li class="nav-item"><a class="site-nav-link" data-user-nav-link="ratings" href="ratings.html">Рейтинг</a></li>
+              <li class="nav-item"><a class="site-nav-link" data-user-nav-link="matches" href="matches.html">Матчи</a></li>
+              <li class="nav-item"><a class="site-nav-link" data-user-nav-link="teams" href="teams.html">Команды</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <div class="app-shell">
+            <aside class="app-sidebar" data-component="user-sidebar">
+        <div class="app-sidebar-title">User Dashboard</div>
+        <div class="admin-sidebar mb-3">
+          <div class="fw-semibold">Игрок: Nurzat</div>
+          <small class="text-muted-strong">Captain • Volt5</small>
+        </div>
+        <div class="app-sidebar-group">
+          <div class="app-sidebar-group-title">Профиль</div>
+          <a class="app-sidebar-link" href="dashboard.html">Dashboard</a>
+          <a class="app-sidebar-link" href="profile.html">Профиль</a>
+          <a class="app-sidebar-link is-active" href="settings.html">Настройки</a>
+          <a class="app-sidebar-link" href="notifications.html">Уведомления</a>
+        </div>
+        <div class="app-sidebar-group">
+          <div class="app-sidebar-group-title">Команды</div>
+          <a class="app-sidebar-link" href="teams.html">Мои команды</a>
+          <a class="app-sidebar-link" href="team-create.html">Создать команду</a>
+          <a class="app-sidebar-link" href="team-search.html">Поиск команд</a>
+        </div>
+        <div class="app-sidebar-group">
+          <div class="app-sidebar-group-title">Турниры</div>
+          <a class="app-sidebar-link" href="my-tournaments.html">Мои турниры</a>
+          <a class="app-sidebar-link" href="matches.html">Матчи</a>
+          <a class="app-sidebar-link" href="tournaments.html">Каталог турниров</a>
+        </div>
+      </aside>
+      <main class="app-content">
+        <header class="app-topbar"><h1 class="h4 mb-0">Настройки аккаунта</h1></header>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <article class="form-panel">
+              <h2 class="h5">Уведомления</h2>
+              <div class="form-check mb-2"><input class="form-check-input" type="checkbox" checked id="notifyMatch" /><label class="form-check-label" for="notifyMatch">Напоминания о матчах</label></div>
+              <div class="form-check mb-2"><input class="form-check-input" type="checkbox" checked id="notifyTeam" /><label class="form-check-label" for="notifyTeam">Заявки в команду</label></div>
+              <div class="form-check"><input class="form-check-input" type="checkbox" id="notifyEmail" /><label class="form-check-label" for="notifyEmail">Email-уведомления</label></div>
+            </article>
+          </div>
+          <div class="col-lg-6">
+            <article class="form-panel">
+              <h2 class="h5">Безопасность</h2>
+              <div class="mb-2"><label class="form-label">Текущий пароль</label><input class="form-control" type="password" /></div>
+              <div class="mb-2"><label class="form-label">Новый пароль</label><input class="form-control" type="password" /></div>
+              <button class="cta-button cta-button-primary" type="button">Обновить пароль</button>
+            </article>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/main.js"></script>
+  </body>
+</html>
+
+
+

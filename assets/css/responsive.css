@@ -1,0 +1,163 @@
+/* ===== Large Tablets / Small Laptops ===== */
+@media (max-width: 1199.98px) {
+  .mini-kpi-grid,
+  .admin-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ===== Tablet ===== */
+@media (max-width: 991.98px) {
+  .hero {
+    padding-top: 4rem;
+  }
+
+  .user-nav-actions .cta-button {
+    padding: 0.55rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .app-sidebar {
+    position: static;
+    height: auto;
+    border-right: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .app-sidebar-group {
+    margin-bottom: 0.8rem;
+  }
+
+  .bracket-round-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-mockup-grid,
+  .home-rating-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .teams-photo-card {
+    min-height: 320px;
+  }
+
+  .broadcast-match-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .partners-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .partners-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .battle-item {
+    grid-template-columns: auto 1fr;
+    align-items: center;
+  }
+}
+
+/* ===== Mobile ===== */
+@media (max-width: 767.98px) {
+  .section-padding {
+    padding: 3.2rem 0;
+  }
+
+  .hero-panel {
+    padding: 1rem;
+  }
+
+  .hero-title {
+    font-size: 1.9rem;
+  }
+
+  .user-nav-actions {
+    gap: 0.35rem;
+  }
+
+  .site-logo {
+    width: 36px;
+    height: 36px;
+  }
+
+  .tournament-cover {
+    height: 230px;
+  }
+
+  .mini-kpi-grid,
+  .admin-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .table-block {
+    overflow-x: auto;
+  }
+
+  .table-dark-custom {
+    min-width: 640px;
+  }
+
+  .app-content {
+    padding: 0.9rem;
+  }
+
+  .site-footer {
+    margin-top: 2.5rem;
+  }
+
+  .teams-photo-card {
+    min-height: 250px;
+    padding: 0.9rem;
+  }
+
+  .teams-photo-status {
+    top: 0.7rem;
+    left: 0.7rem;
+  }
+
+  .teams-action-row .cta-button {
+    width: 100%;
+  }
+
+  .broadcast-card {
+    padding: 0.9rem;
+  }
+
+  .partners-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .partner-logo-card {
+    min-height: 58px;
+    font-size: 0.84rem;
+  }
+
+  .partners-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .battle-item {
+    grid-template-columns: auto 1fr;
+    align-items: center;
+  }
+
+  .home-faq .accordion-button {
+    font-size: 0.95rem;
+  }
+
+  .partner-email-box .cta-button {
+    width: 100%;
+  }
+
+  .footer-social-link {
+    width: 100%;
+    justify-content: center;
+  }
+}
