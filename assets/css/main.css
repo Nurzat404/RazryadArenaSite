@@ -1,28 +1,36 @@
 :root {
   --color-bg: #0f0b1f;
   --color-bg-secondary: #1a1333;
+  --color-bg-elevated: #231a47;
+  --color-surface: rgba(255, 255, 255, 0.04);
+  --color-surface-strong: rgba(255, 255, 255, 0.08);
   --color-accent-orange: #ff8c00;
   --color-accent-yellow: #ffd700;
   --color-accent-violet: #8a2be2;
+  --color-accent-cyan: #26d9ff;
   --color-text: #ffffff;
   --color-text-muted: #b0b0b0;
-  --color-border: rgba(255, 255, 255, 0.14);
+  --color-border: rgba(255, 255, 255, 0.16);
   --color-success: #19c37d;
   --color-danger: #ff5f75;
   --color-info: #33c7ff;
-  --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.22);
-  --shadow-glow-orange: 0 0 25px rgba(255, 140, 0, 0.3);
-  --shadow-glow-violet: 0 0 25px rgba(138, 43, 226, 0.34);
+  --shadow-soft: 0 10px 34px rgba(0, 0, 0, 0.28);
+  --shadow-elevated: 0 22px 60px rgba(0, 0, 0, 0.35);
+  --shadow-glow-orange: 0 0 24px rgba(255, 140, 0, 0.28);
+  --shadow-glow-violet: 0 0 28px rgba(138, 43, 226, 0.34);
+  --shadow-glow-cyan: 0 0 26px rgba(38, 217, 255, 0.25);
   --radius-sm: 0.5rem;
   --radius-md: 0.75rem;
   --radius-lg: 1rem;
-  --radius-control: 0.65rem;
-  --radius-button: 0.65rem;
-  --radius-badge: 0.6rem;
-  --radius-card: 0.75rem;
-  --radius-panel: 1rem;
-  --transition-fast: 0.2s ease;
-  --transition-base: 0.3s ease;
+  --radius-xl: 1.35rem;
+  --radius-button: 0.72rem;
+  --radius-badge: 0.62rem;
+  --radius-card: 0.82rem;
+  --radius-panel: 1.05rem;
+  --section-space: clamp(3.2rem, 6vw, 5.25rem);
+  --transition-fast: 0.18s ease-out;
+  --transition-base: 0.26s ease-out;
+  --transition-decorative: 0.38s ease-out;
 }
 
 /* ===== Base ===== */
@@ -38,22 +46,20 @@ body {
   padding: 0;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  font-family: "Exo 2", "Segoe UI", sans-serif;
-  background: radial-gradient(
-      circle at 10% -10%,
-      rgba(138, 43, 226, 0.22),
-      transparent 36%
-    ),
-    radial-gradient(
-      circle at 90% 0%,
-      rgba(255, 140, 0, 0.18),
-      transparent 34%
-    ),
+  font-family: "Manrope", "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at 8% -12%, rgba(138, 43, 226, 0.25), transparent 34%),
+    radial-gradient(circle at 100% 0%, rgba(255, 140, 0, 0.2), transparent 28%),
+    radial-gradient(circle at 50% 118%, rgba(38, 217, 255, 0.08), transparent 30%),
     var(--color-bg);
   color: var(--color-text);
   min-height: 100vh;
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 h1,
@@ -63,9 +69,21 @@ h4,
 h5,
 h6,
 .heading-font {
-  font-family: "Rajdhani", "Trebuchet MS", sans-serif;
-  letter-spacing: 0.02em;
+  font-family: "Sora", "Trebuchet MS", sans-serif;
+  letter-spacing: 0.01em;
   margin-top: 0;
+}
+
+h1 {
+  font-size: clamp(2rem, 5.2vw, 3.8rem);
+}
+
+h2 {
+  font-size: clamp(1.45rem, 3.3vw, 2.4rem);
+}
+
+h3 {
+  font-size: clamp(1.1rem, 2vw, 1.45rem);
 }
 
 a {
@@ -83,17 +101,17 @@ img {
 }
 
 .section-padding {
-  padding: 4.5rem 0;
+  padding: var(--section-space) 0;
 }
 
 .section-title {
-  font-size: clamp(1.6rem, 2.5vw, 2.25rem);
+  font-size: clamp(1.55rem, 2.8vw, 2.4rem);
   font-weight: 700;
 }
 
 .section-subtitle {
   color: var(--color-text-muted);
-  max-width: 700px;
+  max-width: 760px;
 }
 
 .text-muted-strong {
@@ -103,11 +121,11 @@ img {
 .surface-panel {
   background: linear-gradient(
     145deg,
-    rgba(255, 255, 255, 0.06),
-    rgba(255, 255, 255, 0.01)
+    rgba(255, 255, 255, 0.07),
+    rgba(255, 255, 255, 0.015)
   );
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-panel);
   box-shadow: var(--shadow-soft);
 }
 
@@ -117,13 +135,13 @@ img {
   background: linear-gradient(
     90deg,
     rgba(255, 255, 255, 0),
-    rgba(255, 255, 255, 0.32),
+    rgba(255, 255, 255, 0.35),
     rgba(255, 255, 255, 0)
   );
 }
 
 .glow-text {
-  text-shadow: 0 0 14px rgba(255, 140, 0, 0.45);
+  text-shadow: 0 0 16px rgba(255, 140, 0, 0.48);
 }
 
 .brand-gradient-text {
@@ -155,9 +173,24 @@ img {
 }
 
 .page-head {
-  margin-bottom: 1.75rem;
+  margin-bottom: 1.6rem;
 }
 
 .page-head .section-title {
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.45rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

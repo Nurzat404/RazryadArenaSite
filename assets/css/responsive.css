@@ -4,12 +4,33 @@
   .admin-stats-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .home-hero-stack {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ===== Tablet ===== */
 @media (max-width: 991.98px) {
   .hero {
-    padding-top: 4rem;
+    padding-top: 4.3rem;
+  }
+
+  .hero-panel {
+    padding: 1.2rem;
+  }
+
+  .home-hero-panel {
+    background-position: 72% center;
+  }
+
+  .home-hero-stack {
+    margin-top: 0.4rem;
+  }
+
+  .process-step-img {
+    min-height: 320px;
+    margin-top: 0.55rem;
   }
 
   .user-nav-actions .cta-button {
@@ -42,7 +63,7 @@
   }
 
   .teams-photo-card {
-    min-height: 320px;
+    min-height: 350px;
   }
 
   .broadcast-match-row {
@@ -51,7 +72,7 @@
   }
 
   .partners-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .partners-kpi-grid {
@@ -62,6 +83,14 @@
     grid-template-columns: auto 1fr;
     align-items: center;
   }
+
+  .scenario-action-panel {
+    padding: 0.95rem;
+  }
+
+  .control-visual-grid {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 /* ===== Mobile ===== */
@@ -70,51 +99,46 @@
     padding: 3.2rem 0;
   }
 
-  .hero-panel {
-    padding: 1rem;
-  }
-
-  .hero-title {
-    font-size: 1.9rem;
-  }
-
-  .user-nav-actions {
-    gap: 0.35rem;
-  }
-
   .site-logo {
     width: 36px;
     height: 36px;
   }
 
-  .tournament-cover {
-    height: 230px;
+  .hero-panel {
+    padding: 1rem;
   }
 
-  .mini-kpi-grid,
-  .admin-stats-grid {
-    grid-template-columns: 1fr;
+  .hero-title {
+    font-size: 2rem;
   }
 
-  .table-block {
-    overflow-x: auto;
+  .hero-description {
+    font-size: 0.96rem;
   }
 
-  .table-dark-custom {
-    min-width: 640px;
+  .home-hero-panel {
+    background-position: 66% center;
   }
 
-  .app-content {
-    padding: 0.9rem;
+  .home-discipline-strip {
+    padding: 0.72rem;
   }
 
-  .site-footer {
-    margin-top: 2.5rem;
+  .discipline-chip {
+    font-size: 0.8rem;
+  }
+
+  .process-step-card {
+    padding: 0.9rem 0.85rem 0.9rem 1rem;
+  }
+
+  .process-step-img {
+    min-height: 260px;
   }
 
   .teams-photo-card {
-    min-height: 250px;
-    padding: 0.9rem;
+    min-height: 260px;
+    padding: 0.95rem;
   }
 
   .teams-photo-status {
@@ -148,6 +172,26 @@
     align-items: center;
   }
 
+  .scenario-item-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.32rem;
+  }
+
+  .scenario-meta-row span {
+    width: 100%;
+    text-align: center;
+  }
+
+  .scenario-action-list .cta-button,
+  .tournament-control-panel .cta-button {
+    width: 100%;
+  }
+
+  .control-visual-grid {
+    grid-template-columns: 1fr;
+  }
+
   .home-faq .accordion-button {
     font-size: 0.95rem;
   }
@@ -156,8 +200,33 @@
     width: 100%;
   }
 
+  .mini-kpi-grid,
+  .admin-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .table-block {
+    overflow-x: auto;
+  }
+
+  .table-dark-custom {
+    min-width: 640px;
+  }
+
+  .app-content {
+    padding: 0.9rem;
+  }
+
+  .site-footer {
+    margin-top: 2.5rem;
+  }
+
   .footer-social-link {
     width: 100%;
     justify-content: center;
+  }
+
+  .user-nav-actions {
+    gap: 0.35rem;
   }
 }

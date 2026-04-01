@@ -6,12 +6,12 @@
     <title>РазрядАрена — Турнирная платформа</title>
     <meta
       name="description"
-      content="РазрядАрена — платформа для любительских турниров по киберспорту, футболу, баскетболу и другим дисциплинам."
+      content="РазрядАрена — платформа для организации любительских турниров по киберспорту и классическим видам спорта."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&family=Rajdhani:wght@600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap"
       rel="stylesheet"
     />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
@@ -21,8 +21,7 @@
     <link rel="stylesheet" href="assets/css/pages.css" />
     <link rel="stylesheet" href="assets/css/responsive.css" />
   </head>
-  <body class="layout-public" data-page="home" data-role="public">
-    <!-- Header -->
+  <body class="layout-public home-v2" data-page="home" data-role="public">
     <header class="site-header site-header-public" data-component="site-header">
       <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container py-2">
@@ -52,40 +51,41 @@
 
     <main class="main-content">
       <!-- 1. Hero -->
-      <section class="hero pt-5">
+      <section class="hero pt-5 home-section home-section-home">
         <div class="container">
           <div class="hero-panel home-hero-panel">
             <div class="row g-4 align-items-center">
               <div class="col-lg-7">
-                <span class="hero-eyebrow">Tournament Platform • Product Showcase</span>
-                <h1 class="hero-title mb-3">Платформа для любительских турниров по киберспорту и спорту</h1>
-                <p class="hero-description">
-                  Создавайте команды, подавайте заявки, следите за матчами, турнирной сеткой и рейтингом — всё в одном месте.
+                <span class="hero-eyebrow">Турнирная платформа</span>
+                <h1 class="hero-title mb-3">Турниры, команды и матчи — в одном месте.</h1>
+                <p class="hero-description mb-4">
+                  РазрядАрена помогает проводить любительские турниры по-человечески:
+                  составы, заявки, сетка, матчи и рейтинг собраны в одном понятном интерфейсе.
                 </p>
                 <div class="d-flex flex-wrap gap-2">
                   <a class="cta-button cta-button-primary" href="pages/tournaments.html">Смотреть турниры</a>
-                  <a class="cta-button cta-button-secondary" href="pages/team-create.html">Создать команду</a>
+                  <a class="cta-button cta-button-ghost" href="pages/team-create.html">Создать команду</a>
                 </div>
               </div>
             </div>
           </div>
           <div class="home-discipline-strip mt-3">
             <div class="d-flex flex-wrap gap-2 justify-content-center">
-              <span class="discipline-chip">CS2</span>
+              <span class="discipline-chip">Киберспорт</span>
               <span class="discipline-chip">Футбол</span>
               <span class="discipline-chip">Баскетбол</span>
               <span class="discipline-chip">Волейбол</span>
-              <span class="discipline-chip">Любительские лиги</span>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- 2. Для любых дисциплин -->
-      <section class="section-padding pt-0">
+      <!-- 2. Дисциплины -->
+      <section class="section-padding pt-0 home-section home-section-categories">
         <div class="container">
           <div class="page-head">
-            <h2 class="section-title">Одна платформа для разных турниров</h2>
+            <h2 class="section-title">Одна платформа для разных дисциплин</h2>
+            <p class="text-muted-strong mb-0">Выбирай формат, подключай команду и работай по единому сценарию турнира.</p>
           </div>
           <div class="row g-3">
             <div class="col-lg-3 col-md-6">
@@ -93,7 +93,7 @@
                 <div class="category-card-media category-card-media-esports"></div>
                 <div class="category-card-content">
                   <h3 class="h6 mb-1">Киберспорт</h3>
-                  <p class="text-muted-strong mb-0">CS2, Dota, Valorant и локальные лиги.</p>
+                  <p class="text-muted-strong mb-0">Лиги, сетка, матчи и результаты по раундам.</p>
                 </div>
               </article>
             </div>
@@ -102,7 +102,7 @@
                 <div class="category-card-media category-card-media-football"></div>
                 <div class="category-card-content">
                   <h3 class="h6 mb-1">Футбол</h3>
-                  <p class="text-muted-strong mb-0">Городские и студенческие турниры.</p>
+                  <p class="text-muted-strong mb-0">Группы, календарь игр и управление составами.</p>
                 </div>
               </article>
             </div>
@@ -111,7 +111,7 @@
                 <div class="category-card-media category-card-media-basketball"></div>
                 <div class="category-card-content">
                   <h3 class="h6 mb-1">Баскетбол</h3>
-                  <p class="text-muted-strong mb-0">Уличные и зальные форматы.</p>
+                  <p class="text-muted-strong mb-0">Быстрый учёт матчей и продвижение по сетке.</p>
                 </div>
               </article>
             </div>
@@ -120,65 +120,59 @@
                 <div class="category-card-media category-card-media-volleyball"></div>
                 <div class="category-card-content">
                   <h3 class="h6 mb-1">Волейбол</h3>
-                  <p class="text-muted-strong mb-0">Локальные серии и сезонные кубки.</p>
+                  <p class="text-muted-strong mb-0">Единые правила, заявки и фиксация результатов.</p>
                 </div>
               </article>
             </div>
           </div>
-          <div class="mt-5 d-flex justify-content-center"><a class="cta-button cta-button-primary" href="pages/tournaments.html">Смотреть турниры</a></div>
         </div>
       </section>
 
-      <!-- 3. Как работает -->
-      <section id="how-it-works-section" class="section-padding pt-0">
+      <!-- 3. Как это работает -->
+      <section id="how-it-works-section" class="section-padding pt-0 home-section home-section-process">
         <div class="container">
           <div class="page-head">
-            <h2 class="section-title">Как работает РазрядАрена</h2>
+            <h2 class="section-title">Как это работает</h2>
           </div>
           <div class="row g-3 process-step">
             <div class="col-lg-4">
-              <div class="row g-3">
-                <div class="col-12"><article class="process-step-card"><span class="process-step-number">1</span><p class="mb-0">Регистрируйтесь</p></article></div>
-                <div class="col-12"><article class="process-step-card"><span class="process-step-number">2</span><p class="mb-0">Создавайте команду</p></article></div>
-                <div class="col-12"><article class="process-step-card"><span class="process-step-number">3</span><p class="mb-0">Приглашайте друзей</p></article></div>
-                <div class="col-12"><article class="process-step-card"><span class="process-step-number">4</span><p class="mb-0">Участвуйте в турнирах</p></article></div>
-                <div class="col-12"><article class="process-step-card"><span class="process-step-number">5</span><p class="mb-0">Побеждайте</p></article></div>
-                <div class="col-12"><article class="process-step-card"><span class="process-step-number">6</span><p class="mb-0">Повышайтесь в рейтинге!</p></article></div>
+              <div class="row g-3 process-step-list">
+                <div class="col-12"><article class="process-step-card"><span class="process-step-number">1</span><p class="mb-0">Создай аккаунт</p></article></div>
+                <div class="col-12"><article class="process-step-card"><span class="process-step-number">2</span><p class="mb-0">Собери команду</p></article></div>
+                <div class="col-12"><article class="process-step-card"><span class="process-step-number">3</span><p class="mb-0">Выбери турнир</p></article></div>
+                <div class="col-12"><article class="process-step-card"><span class="process-step-number">4</span><p class="mb-0">Следи за матчами</p></article></div>
+                <div class="col-12"><article class="process-step-card"><span class="process-step-number">5</span><p class="mb-0">Расти в рейтинге</p></article></div>
               </div>
             </div>
             <div class="col-lg-8 d-flex">
-              <div class="process-step-img"></div>
+              <div class="process-step-img" aria-hidden="true"></div>
             </div>
           </div>
         </div>
       </section>
 
       <!-- 4. Для кого -->
-      <section class="section-padding pt-0">
+      <section class="section-padding pt-0 home-section home-section-persona">
         <div class="container">
           <div class="page-head">
             <h2 class="section-title">Для кого платформа</h2>
-            <p class="text-muted-strong mb-0">Три роли, три сценария, одна турнирная экосистема.</p>
           </div>
           <div class="row g-3">
             <div class="col-lg-4">
               <article class="persona-panel persona-panel-players">
                 <div class="persona-panel-header">
                   <span class="persona-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M12 3L20 7V12C20 16.5 16.9 20.6 12 22C7.1 20.6 4 16.5 4 12V7L12 3Z" stroke="currentColor" stroke-width="1.6"/>
-                    </svg>
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3L20 7V12C20 16.5 16.9 20.6 12 22C7.1 20.6 4 16.5 4 12V7L12 3Z" stroke="currentColor" stroke-width="1.6"/></svg>
                   </span>
                   <div>
                     <p class="persona-role mb-1">Игрокам</p>
-                    <h3 class="h5 mb-0">Быстрый вход в турнирную игру</h3>
+                    <h3 class="h5 mb-0">Быстрый доступ к турнирам</h3>
                   </div>
                 </div>
-                <p class="text-muted-strong mb-0">Подходит тем, кто хочет быстро найти состав и начать играть без хаоса в чатах.</p>
                 <ul class="persona-list">
-                  <li>Найти подходящую команду</li>
-                  <li>Следить за матчами и временем</li>
-                  <li>Видеть личные результаты и прогресс</li>
+                  <li>Профиль и участие в матчах</li>
+                  <li>Единая лента турнирных событий</li>
+                  <li>Понятный рейтинг без ручных таблиц</li>
                 </ul>
               </article>
             </div>
@@ -186,20 +180,17 @@
               <article class="persona-panel persona-panel-captains">
                 <div class="persona-panel-header">
                   <span class="persona-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M4 7H20M7 7L9 19H15L17 7M9.5 11H14.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 7H20M7 7L9 19H15L17 7M9.5 11H14.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
                   </span>
                   <div>
                     <p class="persona-role mb-1">Капитанам</p>
-                    <h3 class="h5 mb-0">Контроль команды в одном окне</h3>
+                    <h3 class="h5 mb-0">Контроль состава и заявок</h3>
                   </div>
                 </div>
-                <p class="text-muted-strong mb-0">Подходит капитанам, которым важно управлять составом и заявками централизованно.</p>
                 <ul class="persona-list">
-                  <li>Управлять составом и ролями</li>
-                  <li>Принимать заявки и приглашения</li>
-                  <li>Подача в турниры за пару кликов</li>
+                  <li>Управление ролями и участниками</li>
+                  <li>Заявки и приглашения в одном месте</li>
+                  <li>Подача в турнир за пару шагов</li>
                 </ul>
               </article>
             </div>
@@ -207,20 +198,17 @@
               <article class="persona-panel persona-panel-organizers">
                 <div class="persona-panel-header">
                   <span class="persona-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M6 5H18M7 9H17M8 13H16M10 17H14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                    </svg>
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 5H18M7 9H17M8 13H16M10 17H14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
                   </span>
                   <div>
                     <p class="persona-role mb-1">Организаторам</p>
-                    <h3 class="h5 mb-0">Турнир под полным управлением</h3>
+                    <h3 class="h5 mb-0">Управление турниром по этапам</h3>
                   </div>
                 </div>
-                <p class="text-muted-strong mb-0">Подходит организаторам, которым нужна прозрачная сетка, матчи и управление контентом.</p>
                 <ul class="persona-list">
-                  <li>Создание и настройка турниров</li>
+                  <li>Настройка формата и правил</li>
                   <li>Сетка, матчи и статусы</li>
-                  <li>Единый контроль правил и контента</li>
+                  <li>Админ-панель для контроля контента</li>
                 </ul>
               </article>
             </div>
@@ -228,285 +216,227 @@
         </div>
       </section>
 
-      <!-- 5. Популярные турниры -->
-      <section class="section-padding pt-0">
-        <div class="container">
-          <div class="page-head"><h2 class="section-title">Популярные турниры</h2></div>
-          <section class="filter-panel mb-3" data-filter-group>
-            <div class="d-flex flex-wrap gap-2">
-              <button class="filter-chip is-active" type="button" data-filter-chip>Все</button>
-              <button class="filter-chip" type="button" data-filter-chip>CS2</button>
-              <button class="filter-chip" type="button" data-filter-chip>Футбол</button>
-              <button class="filter-chip" type="button" data-filter-chip>Баскетбол</button>
-              <button class="filter-chip" type="button" data-filter-chip>Волейбол</button>
-            </div>
-          </section>
-          <div class="row g-3">
-            <div class="col-lg-4 col-md-6"><article class="tournament-card h-100"><h3 class="h5">Tournament 1x1</h3><p class="text-muted-strong mb-2">CS2 • Онлайн</p><p class="text-muted-strong mb-2">06.04 • 5v5</p><span class="status-badge is-pending mb-3">Открыта регистрация</span><a class="cta-button cta-button-secondary w-100" href="pages/tournament-detail.html">Подробнее</a></article></div>
-            <div class="col-lg-4 col-md-6"><article class="tournament-card h-100"><h3 class="h5">City Football League</h3><p class="text-muted-strong mb-2">Футбол • Белебей</p><p class="text-muted-strong mb-2">10.04 • 11v11</p><span class="status-badge is-active mb-3">Идёт турнир</span><a class="cta-button cta-button-secondary w-100" href="pages/tournament-detail.html">Подробнее</a></article></div>
-            <div class="col-lg-4 col-md-6"><article class="tournament-card h-100"><h3 class="h5">Street Basket Weekend</h3><p class="text-muted-strong mb-2">Баскетбол • Казань</p><p class="text-muted-strong mb-2">14.04 • 3v3</p><span class="status-badge is-pending mb-3">Открыта регистрация</span><a class="cta-button cta-button-secondary w-100" href="pages/tournament-detail.html">Подробнее</a></article></div>
-          </div>
-          <div class="mt-3 d-flex justify-content-center"><a class="cta-button cta-button-primary " href="pages/tournaments.html">Смотреть турниры</a></div>
-        </div>
-      </section>
-
-      <!-- 6. Команды и участие -->
-      <section class="section-padding pt-0 teams-showcase-section">
-        <div class="container">
-          <div class="row g-3 align-items-stretch">
-            <div class="col-lg-6">
-              <article class="teams-photo-card">
-                <span class="status-badge is-active teams-photo-status">Набор открыт</span>
-                <div class="teams-photo-content">
-                  <h3 class="h4 mb-1">Volt5 • Состав 4/5</h3>
-                  <p class="text-muted-strong mb-0">Нужен Support игрок. Ближайший матч: 06.04 • 19:00</p>
-                </div>
-              </article>
-            </div>
-            <div class="col-lg-6">
-              <article class="teams-benefits-panel">
-                <h2 class="section-title h3">Собирайте состав и управляйте командой</h2>
-                <p class="text-muted-strong mb-3">
-                  Создайте команду, назначьте роли и контролируйте заявки в одном месте — без хаоса в чатах.
-                </p>
-                <ul class="comparison-list teams-benefits-list mb-4">
-                  <li>Заявки на вступление</li>
-                  <li>Приглашения игроков</li>
-                  <li>Роли и права капитана</li>
-                  <li>Лимит состава</li>
-                  <li>Статус набора</li>
-                </ul>
-                <div class="teams-trust-row mb-4">
-                  <span>480+ активных команд</span>
-                  <span>1200+ игроков в базе</span>
-                </div>
-                <div class="teams-action-row">
-                  <a class="cta-button cta-button-primary" href="pages/team-create.html">Создать команду</a>
-                </div>
-              </article>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 7. Трансляции и просмотр турниров -->
-      <section class="section-padding pt-0 broadcast-section">
+      <!-- 5. Сценарии -->
+      <section class="section-padding pt-0 home-section home-section-tournaments">
         <div class="container">
           <div class="page-head">
-            <h2 class="section-title">Трансляции и просмотр турниров</h2>
-            <p class="text-muted-strong mb-0">Следите за матчами в прямом эфире и не пропускайте ключевые встречи.</p>
+            <h2 class="section-title">Сценарии, которые закрывает платформа</h2>
+            <p class="text-muted-strong mb-0">Не просто список разделов, а готовые рабочие сценарии для игроков, капитанов и организаторов.</p>
           </div>
-          <div class="row g-3 align-items-stretch">
+          <div class="row g-3">
             <div class="col-lg-7">
-              <article class="broadcast-card h-100">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                  <h3 class="h5 mb-0">Ближайшие эфиры</h3>
-                  <span class="live-badge is-live">Live</span>
-                </div>
-                <div class="broadcast-schedule">
-                  <div class="broadcast-match-row">
-                    <div>
-                      <div class="fw-semibold">Volt5 vs Nexus</div>
-                      <small class="text-muted-strong">06.04 • 19:00 • Полуфинал</small>
-                    </div>
-                    <span class="live-badge is-live">Прямо сейчас</span>
+              <article class="scenario-board h-100">
+                <div class="scenario-item">
+                  <div class="scenario-item-head">
+                    <h3 class="h5 mb-1">Запуск турнира</h3>
+                    <span class="scenario-badge">Организатор</span>
                   </div>
-                  <div class="broadcast-match-row">
-                    <div>
-                      <div class="fw-semibold">Falcon Unit vs Titan</div>
-                      <small class="text-muted-strong">07.04 • 18:30 • Финал лиги</small>
-                    </div>
-                    <span class="live-badge is-upcoming">Скоро</span>
-                  </div>
-                  <div class="broadcast-match-row">
-                    <div>
-                      <div class="fw-semibold">Street Basket Weekend</div>
-                      <small class="text-muted-strong">08.04 • 17:00 • Групповой этап</small>
-                    </div>
-                    <span class="live-badge is-upcoming">Скоро</span>
+                  <p class="text-muted-strong mb-2">Создайте структуру этапов, задайте регламент и откройте регистрацию команд.</p>
+                  <div class="scenario-meta-row">
+                    <span>Формат и правила</span>
+                    <span>Сетка и этапы</span>
+                    <span>Страница турнира</span>
                   </div>
                 </div>
-                <div class="d-flex flex-wrap gap-2 mt-3">
-                  <a class="cta-button cta-button-primary" href="pages/tournaments.html">Смотреть турниры</a>
+
+                <div class="scenario-item">
+                  <div class="scenario-item-head">
+                    <h3 class="h5 mb-1">Управление составом</h3>
+                    <span class="scenario-badge">Капитан</span>
+                  </div>
+                  <p class="text-muted-strong mb-2">Добавляйте игроков, распределяйте роли и подавайте заявки без лишней переписки.</p>
+                  <div class="scenario-meta-row">
+                    <span>Приглашения</span>
+                    <span>Роли команды</span>
+                    <span>Заявки в турниры</span>
+                  </div>
+                </div>
+
+                <div class="scenario-item">
+                  <div class="scenario-item-head">
+                    <h3 class="h5 mb-1">Игровой день</h3>
+                    <span class="scenario-badge">Игрок</span>
+                  </div>
+                  <p class="text-muted-strong mb-2">Смотрите расписание матчей, счёт и движение по сетке в одном месте.</p>
+                  <div class="scenario-meta-row">
+                    <span>Календарь матчей</span>
+                    <span>Результаты</span>
+                    <span>Позиция в рейтинге</span>
+                  </div>
                 </div>
               </article>
             </div>
             <div class="col-lg-5">
-              <article class="broadcast-card h-100">
-                <h3 class="h5 mb-3">Где смотреть</h3>
-                <ul class="broadcast-platform-list">
-                  <li><span>Telegram</span><small>Короткие клипы и анонсы</small></li>
-                  <li><span>VK Video</span><small>Полные записи матчей</small></li>
-                  <li><span>YouTube</span><small>Трансляции финалов и хайлайты</small></li>
-                  <li><span>Twitch</span><small>Live эфиры с комментариями</small></li>
-                </ul>
-              </article>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 8. Партнёры и спонсоры -->
-      <section class="section-padding pt-0 partners-section">
-        <div class="container">
-          <div class="row g-3 align-items-stretch">
-            <div class="col-lg-8">
-              <article class="split-panel h-100">
-                <h2 class="section-title h3 mb-2">Партнёры и спонсоры</h2>
-                <p class="text-muted-strong mb-3">Мы открыты к сотрудничеству с брендами, клубами и локальными площадками.</p>
-                <div class="partners-grid">
-                  <div class="partner-logo-card">Arena Gear</div>
-                  <div class="partner-logo-card">City Sport Hub</div>
-                  <div class="partner-logo-card">PlayZone</div>
-                  <div class="partner-logo-card">FastNet</div>
-                  <div class="partner-logo-card">Energy Lab</div>
-                  <div class="partner-logo-card">Neo Arena</div>
+              <article class="scenario-action-panel h-100">
+                <h3 class="h4 mb-2">Быстрые переходы</h3>
+                <p class="text-muted-strong mb-3">Выберите, с чего хотите начать прямо сейчас.</p>
+                <div class="scenario-action-list">
+                  <a class="cta-button cta-button-primary w-100" href="pages/tournaments.html">Перейти к турнирам</a>
+                  <a class="cta-button cta-button-secondary w-100" href="pages/team-create.html">Создать команду</a>
+                  <a class="cta-button cta-button-ghost w-100" href="pages/matches.html">Открыть матчи</a>
+                  <a class="cta-button cta-button-secondary w-100" href="pages/ratings.html">Посмотреть рейтинг</a>
                 </div>
               </article>
             </div>
-            <div class="col-lg-4">
-              <article class="partner-cta-panel h-100">
-                <h3 class="h4 mb-3 mt-2">Что получает партнёр?</h3>
-                <ul class="comparison-list mb-5">
-                  <li>Видимость на страницах турниров</li>
-                  <li>Бренд-интеграция в трансляциях</li>
-                  <li>Доступ к активному сообществу игроков</li>
-                </ul>
-                <a class="cta-button cta-button-primary w-100" href="pages/partners.html">Стать партнёром</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Контроль турнира -->
+      <section class="section-padding pt-0 home-section home-section-broadcast">
+        <div class="container">
+          <div class="page-head">
+            <h2 class="section-title">Турнир под контролем на каждом этапе</h2>
+            <p class="text-muted-strong mb-0">Чёткая структура действий вместо ручной координации в десятке чатов.</p>
+          </div>
+          <div class="row g-3 align-items-stretch">
+            <div class="col-lg-6 order-2 order-lg-1">
+              <article class="tournament-control-panel h-100">
+                <h3 class="h4 mb-3">Как проходит цикл турнира</h3>
+                <div class="control-step-list">
+                  <div class="control-step-item">
+                    <span class="control-step-index">1</span>
+                    <div>
+                      <h4 class="h6 mb-1">Подготовка</h4>
+                      <p class="text-muted-strong mb-0">Настройка формата, правил и этапов.</p>
+                    </div>
+                  </div>
+                  <div class="control-step-item">
+                    <span class="control-step-index">2</span>
+                    <div>
+                      <h4 class="h6 mb-1">Регистрация команд</h4>
+                      <p class="text-muted-strong mb-0">Проверка заявок и финализация участников.</p>
+                    </div>
+                  </div>
+                  <div class="control-step-item">
+                    <span class="control-step-index">3</span>
+                    <div>
+                      <h4 class="h6 mb-1">Проведение матчей</h4>
+                      <p class="text-muted-strong mb-0">Расписание, фиксация результатов и движение по сетке.</p>
+                    </div>
+                  </div>
+                  <div class="control-step-item">
+                    <span class="control-step-index">4</span>
+                    <div>
+                      <h4 class="h6 mb-1">Итоги</h4>
+                      <p class="text-muted-strong mb-0">Обновление рейтинга и публикация финального результата.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex flex-wrap gap-2 mt-4">
+                  <a class="cta-button cta-button-primary" href="pages/tournament-detail.html">Открыть пример турнира</a>
+                  <a class="cta-button cta-button-secondary" href="pages/rules.html">Изучить правила</a>
+                </div>
+              </article>
+            </div>
+            <div class="col-lg-6 order-1 order-lg-2">
+              <article class="tournament-control-visual h-100">
+                <div class="control-visual-header">
+                  <strong>Панель турнира</strong>
+                  <span>Единый экран управления</span>
+                </div>
+                <div class="control-visual-grid">
+                  <div class="control-visual-cell">
+                    <small>Этап</small>
+                    <strong>Групповой</strong>
+                  </div>
+                  <div class="control-visual-cell">
+                    <small>Матчей в туре</small>
+                    <strong>по расписанию</strong>
+                  </div>
+                  <div class="control-visual-cell">
+                    <small>Статусы</small>
+                    <strong>в реальном потоке</strong>
+                  </div>
+                  <div class="control-visual-cell">
+                    <small>Итоги</small>
+                    <strong>в одном отчёте</strong>
+                  </div>
+                </div>
+                <div class="control-visual-note">
+                  Организатор и команды видят одинаковую картину турнира: меньше лишних вопросов, больше понятных действий.
+                </div>
               </article>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- 9. Сравнение -->
-      <section class="section-padding pt-0 comparison-battle">
+      <!-- 7. Сравнение -->
+      <section class="section-padding pt-0 comparison-battle home-section home-section-battle">
         <div class="container">
           <div class="page-head">
             <h2 class="section-title">Почему удобнее, чем таблицы и чаты</h2>
-            <p class="text-muted-strong mb-0">Один интерфейс вместо ручной координации в десятке разрозненных инструментов.</p>
           </div>
           <div class="row g-3 align-items-stretch">
             <div class="col-lg-6">
               <article class="battle-column battle-column-good h-100">
                 <h3 class="h4 mb-3">РазрядАрена</h3>
-                <div class="battle-item">
-                  <span class="battle-marker battle-marker-plus">+</span>
-                  <div>
-                    <div class="fw-semibold">Команды и роли</div>
-                    <small class="text-muted-strong">Капитан, состав, приглашения и заявки в одном месте.</small>
-                  </div>
-                </div>
-                <div class="battle-item">
-                  <span class="battle-marker battle-marker-plus">+</span>
-                  <div>
-                    <div class="fw-semibold">Сетка и матчи</div>
-                    <small class="text-muted-strong">Прозрачные стадии турнира и актуальные статусы матчей.</small>
-                  </div>
-                </div>
-                <div class="battle-item">
-                  <span class="battle-marker battle-marker-plus">+</span>
-                  <div>
-                    <div class="fw-semibold">Рейтинг и статистика</div>
-                    <small class="text-muted-strong">Очки, форма и динамика команд без ручных таблиц.</small>
-                  </div>
-                </div>
-                <div class="battle-item">
-                  <span class="battle-marker battle-marker-plus">+</span>
-                  <div>
-                    <div class="fw-semibold">Уведомления и напоминания</div>
-                    <small class="text-muted-strong">Важные обновления приходят вовремя и не теряются.</small>
-                  </div>
-                </div>
+                <div class="battle-item"><span class="battle-marker battle-marker-plus">+</span><div>Одна система для турниров, матчей и рейтинга</div></div>
+                <div class="battle-item"><span class="battle-marker battle-marker-plus">+</span><div>Единые роли для игрока, капитана и организатора</div></div>
+                <div class="battle-item"><span class="battle-marker battle-marker-plus">+</span><div>Структура данных готова для масштабирования</div></div>
               </article>
             </div>
             <div class="col-lg-6">
               <article class="battle-column battle-column-bad h-100">
-                <h3 class="h4 mb-3">Ручная организация</h3>
-                <div class="battle-item">
-                  <span class="battle-marker battle-marker-minus">-</span>
-                  <div>
-                    <div class="fw-semibold">Разрозненные таблицы</div>
-                    <small class="text-muted-strong">Данные по командам и матчам быстро устаревают.</small>
-                  </div>
-                </div>
-                <div class="battle-item">
-                  <span class="battle-marker battle-marker-minus">-</span>
-                  <div>
-                    <div class="fw-semibold">Потеря контекста в чатах</div>
-                    <small class="text-muted-strong">Заявки, изменения времени и решения тонут в переписке.</small>
-                  </div>
-                </div>
-                <div class="battle-item">
-                  <span class="battle-marker battle-marker-minus">-</span>
-                  <div>
-                    <div class="fw-semibold">Высокий риск ошибок</div>
-                    <small class="text-muted-strong">Опоздания, путаница с составом и технические поражения.</small>
-                  </div>
-                </div>
-                <div class="battle-item">
-                  <span class="battle-marker battle-marker-minus">-</span>
-                  <div>
-                    <div class="fw-semibold">Нет единой аналитики</div>
-                    <small class="text-muted-strong">Сложно понять форму команд и объективный рейтинг.</small>
-                  </div>
-                </div>
+                <h3 class="h4 mb-3">Ручной подход</h3>
+                <div class="battle-item"><span class="battle-marker battle-marker-minus">-</span><div>Разные таблицы в разных местах</div></div>
+                <div class="battle-item"><span class="battle-marker battle-marker-minus">-</span><div>Потеря контекста в длинных чатах</div></div>
+                <div class="battle-item"><span class="battle-marker battle-marker-minus">-</span><div>Сложно поддерживать порядок в матчах и статусах</div></div>
               </article>
             </div>
           </div>
-          <div class="mt-3 d-flex justify-content-center"><a class="cta-button cta-button-primary" href="pages/register.html">Попробовать платформу</a></div>
         </div>
       </section>
 
-      <!-- 10. FAQ -->
-      <section id="home-faq" class="section-padding pt-0 home-faq">
+      <!-- 8. FAQ -->
+      <section id="home-faq" class="section-padding pt-0 home-faq home-section home-section-faq">
         <div class="container">
           <div class="page-head">
             <h2 class="section-title">FAQ</h2>
-            <p class="text-muted-strong mb-0">Частые вопросы по командам, турнирам, матчам, рейтингу и партнёрству.</p>
           </div>
           <div class="accordion" id="homeFaqAccordion">
-            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">Как создать команду?</button></h2><div id="faq1" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">Перейдите в раздел «Команды» и нажмите «Создать команду».</div></div></div>
-            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">Как подать заявку?</button></h2><div id="faq2" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">На странице турнира нажмите «Подать заявку» от имени вашей команды.</div></div></div>
-            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">Можно ли вступить в команду без приглашения?</button></h2><div id="faq3" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">Да, игрок может отправить заявку на вступление, а капитан подтверждает её в кабинете команды.</div></div></div>
-            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">Кто может создать турнир?</button></h2><div id="faq4" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">Турниры создают организаторы и администраторы с соответствующей ролью доступа.</div></div></div>
-            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">Как считается рейтинг?</button></h2><div id="faq5" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">Рейтинг формируется по результатам матчей, стадии турнира и текущей серии команды.</div></div></div>
-            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">Что делать при спорной ситуации в матче?</button></h2><div id="faq6" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">Нужно открыть тикет организатору турнира и приложить доказательства. Финальное решение принимает администрация.</div></div></div>
-            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq7">Есть ли уведомления о времени матча?</button></h2><div id="faq7" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">Да, система отправляет напоминания о ближайших матчах и изменениях расписания.</div></div></div>
-            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq8">Какие дисциплины поддерживаются?</button></h2><div id="faq8" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">Киберспорт, футбол, баскетбол, волейбол и другие любительские форматы.</div></div></div>
-            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq9">Можно ли участвовать в нескольких турнирах сразу?</button></h2><div id="faq9" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">Да, если расписание не конфликтует и команда соответствует требованиям каждого турнира.</div></div></div>
-            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq10">Как стать организатором на платформе?</button></h2><div id="faq10" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">Оставьте заявку через страницу партнёров или контактов. После проверки выдаётся роль организатора.</div></div></div>
-            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq11">Что делать, если обнаружен баг?</button></h2><div id="faq11" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">Напишите в поддержку через контакты и укажите шаги воспроизведения. Мы фиксируем такие обращения в приоритете.</div></div></div>
-            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq12">Как стать партнёром РазрядАрена?</button></h2><div id="faq12" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">Перейдите в раздел «Партнёрам» и отправьте запрос на <a class="link-light" href="mailto:razryadarena@ya.ru">razryadarena@ya.ru</a>.</div></div></div>
+            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">Как создать команду?</button></h2><div id="faq1" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">Открой раздел «Команды», заполни форму и назначь капитана.</div></div></div>
+            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">Как подать заявку в турнир?</button></h2><div id="faq2" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">На странице турнира выбери команду и отправь заявку через карточку участия.</div></div></div>
+            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">Где смотреть сетку?</button></h2><div id="faq3" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">Сетка доступна на детальной странице турнира во вкладках этапов.</div></div></div>
+            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">Как формируется рейтинг?</button></h2><div id="faq4" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">Позиция команды зависит от результата матчей и турнирных стадий.</div></div></div>
+            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">Кто может создавать турниры?</button></h2><div id="faq5" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">Турниры создают организаторы и администраторы с нужной ролью доступа.</div></div></div>
+            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">Можно ли участвовать в нескольких дисциплинах?</button></h2><div id="faq6" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">Да, если команда соответствует требованиям каждого турнира.</div></div></div>
+            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq7">Как сообщить об ошибке?</button></h2><div id="faq7" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">Напиши в контакты и приложи шаги, чтобы воспроизвести проблему.</div></div></div>
+            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq8">Как стать партнёром?</button></h2><div id="faq8" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">Отправь заявку на <a class="link-light" href="mailto:razryadarena@ya.ru">razryadarena@ya.ru</a>.</div></div></div>
+            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq9">Можно ли участвовать без команды?</button></h2><div id="faq9" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">Да. Можно создать команду или подать заявку на вступление в открытый состав.</div></div></div>
+            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq10">Где смотреть правила конкретного турнира?</button></h2><div id="faq10" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">На странице турнира есть отдельный блок с регламентом и условиями участия.</div></div></div>
+            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq11">Как работают уведомления?</button></h2><div id="faq11" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">Уведомления показывают изменения по команде, матчам, заявкам и важным действиям в кабинете.</div></div></div>
+            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq12">Можно ли использовать платформу для школьных и локальных лиг?</button></h2><div id="faq12" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">Да. Система рассчитана на любительские форматы и подходит для локальных турниров.</div></div></div>
           </div>
           <div class="mt-3 d-flex flex-wrap gap-2">
-            <a class="cta-button cta-button-secondary" href="pages/rules.html">Все правила</a>
-            <a class="cta-button cta-button-primary" href="pages/partners.html">Партнёрам</a>
+            <a class="cta-button cta-button-secondary" href="pages/rules.html">Смотреть правила</a>
+            <a class="cta-button cta-button-primary" href="pages/contacts.html">Написать на почту</a>
           </div>
         </div>
       </section>
 
-      <!-- 11. Финальный CTA -->
-      <section class="section-padding pt-0">
+      <!-- 9. Финальный CTA -->
+      <section class="section-padding pt-0 home-section home-section-final-cta">
         <div class="container">
           <div class="hero-panel">
-            <h2 class="section-title mb-3">Готовы начать?</h2>
-            <p class="text-muted-strong mb-4">Создайте команду, найдите турнир и начните играть в единой турнирной системе.</p>
-  
-            <a class="cta-button cta-button-primary" href="pages/login.html">Начать выигрывать!</a>
-
+            <h2 class="section-title mb-3">Готов начать?</h2>
+            <p class="text-muted-strong mb-4">Открой турниры, собери команду и подключайся к системе РазрядАрена.</p>
+            <div class="d-flex flex-wrap gap-2">
+              <a class="cta-button cta-button-primary" href="pages/register.html">Регистрация</a>
+              <a class="cta-button cta-button-secondary" href="pages/tournaments.html">Смотреть турниры</a>
+            </div>
           </div>
         </div>
       </section>
     </main>
 
-    <!-- 12. Footer -->
     <footer class="site-footer py-4">
       <div class="container">
         <div class="row g-3">
           <div class="col-md-3">
             <div class="site-footer-title">РазрядАрена</div>
-            <p class="text-muted-strong mb-0">Единая турнирная система для любительских лиг и команд.</p>
+            <p class="text-muted-strong mb-0">Платформа для любительских турниров по киберспорту и спорту.</p>
           </div>
           <div class="col-md-3">
             <div class="site-footer-title">Разделы</div>
@@ -526,20 +456,11 @@
             </div>
           </div>
           <div class="col-md-3">
-            <div class="site-footer-title">Мы в соцсетях</div>
+            <div class="site-footer-title">Каналы проекта</div>
             <div class="footer-socials">
-              <a class="footer-social-link" href="https://t.me/" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M9.7 15.6l-.4 4.1c.6 0 .8-.3 1.2-.6l2.8-2.7 5.8 4.2c1.1.6 1.8.3 2.1-1l3.8-17.6h0c.3-1.5-.6-2.1-1.6-1.7L1.8 9.3c-1.4.5-1.4 1.3-.2 1.7l5.5 1.7L20 4.5c.6-.4 1.2-.2.8.2"/></svg>
-                <span>Telegram</span>
-              </a>
-              <a class="footer-social-link" href="https://vk.com/" target="_blank" rel="noopener noreferrer" aria-label="VK">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12.8 17.2h1.4s.4 0 .6-.2c.2-.2.2-.5.2-.5s0-1.5.7-1.7c.7-.2 1.6 1.4 2.5 2 .7.5 1.3.4 1.3.4h2.6s1.4-.1.7-1.2c-.1-.1-.4-.8-1.9-2.2-1.6-1.4-1.4-1.2.5-3.8 1.2-1.6 1.7-2.6 1.5-3-.1-.4-.9-.3-.9-.3h-2.9s-.2 0-.4.1c-.2.1-.3.3-.3.3s-.5 1.4-1.2 2.6c-1.5 2.5-2.1 2.6-2.4 2.4-.7-.4-.5-1.5-.5-2.3 0-2.5.4-3.5-.7-3.8-.4-.1-.7-.2-1.8-.2-1.3 0-2.3 0-2.9.3-.4.2-.7.5-.5.6.3 0 .9.2 1.2.6.3.5.3 1.7.3 1.7s.2 2.9-.5 3.3c-.5.3-1.2-.4-2.6-2.4-.7-1.1-1.2-2.4-1.2-2.4s-.1-.2-.3-.3c-.2-.1-.5-.1-.5-.1H1.7s-.4 0-.6.2c-.1.2 0 .5 0 .5s2.2 5.2 4.7 7.8c2.3 2.4 5 2.2 5 2.2"/></svg>
-                <span>VK</span>
-              </a>
-              <a class="footer-social-link" href="https://discord.com/" target="_blank" rel="noopener noreferrer" aria-label="Discord">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M20.3 4.4A16.9 16.9 0 0016.1 3a11.7 11.7 0 00-.5 1c-2.2-.3-4.3-.3-6.5 0a11.7 11.7 0 00-.5-1 16.8 16.8 0 00-4.2 1.4C1.7 8.2.9 11.8 1.3 15.4a17 17 0 005.1 2.6c.4-.5.8-1.1 1.1-1.7a10.8 10.8 0 01-1.7-.8l.4-.3c3.2 1.5 6.7 1.5 9.9 0l.4.3c-.5.3-1.1.6-1.7.8.3.6.7 1.2 1.1 1.7a17 17 0 005.1-2.6c.5-4.2-.8-7.8-3.2-11zm-9.9 8.8c-1 0-1.8-.9-1.8-2 0-1 .8-2 1.8-2s1.8.9 1.8 2c0 1-.8 2-1.8 2zm3.2 0c-1 0-1.8-.9-1.8-2 0-1 .8-2 1.8-2s1.8.9 1.8 2c0 1-.8 2-1.8 2z"/></svg>
-                <span>Discord</span>
-              </a>
+              <a class="footer-social-link" href="pages/contacts.html" aria-label="Telegram"><span>Telegram</span></a>
+              <a class="footer-social-link" href="pages/contacts.html" aria-label="VK"><span>VK</span></a>
+              <a class="footer-social-link" href="pages/contacts.html" aria-label="MAX"><span>MAX</span></a>
             </div>
           </div>
         </div>
@@ -551,3 +472,4 @@
     <script src="assets/js/main.js"></script>
   </body>
 </html>
+
