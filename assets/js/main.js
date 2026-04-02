@@ -109,15 +109,18 @@ document.addEventListener("DOMContentLoaded", function () {
   // Scroll reveal animations for visually important homepage sections
   var animatedNodes = Array.prototype.slice.call(document.querySelectorAll("[data-animate]"));
   if (animatedNodes.length) {
-    var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    document.body.classList.add("motion-ready");
-
-    if (reducedMotion || typeof IntersectionObserver === "undefined") {
+    if (typeof IntersectionObserver === "undefined") {
+      document.body.classList.add("motion-ready");
       animatedNodes.forEach(function (node) {
         node.classList.add("is-visible");
       });
     } else {
+      var pendingNodes = animatedNodes.slice();
+      var animationsArmed = false;
+
       var revealNode = function (node) {
+        if (!node || node.classList.contains("is-visible") || !animationsArmed) return false;
+
         var animationName = node.getAttribute("data-animate");
         var animationDelay = node.getAttribute("data-animate-delay");
 
@@ -128,6 +131,40 @@ document.addEventListener("DOMContentLoaded", function () {
         node.style.setProperty("--animate-duration", "0.72s");
         if (animationDelay) {
           node.style.animationDelay = animationDelay + "ms";
+          node.style.transitionDelay = animationDelay + "ms";
+        }
+
+        pendingNodes = pendingNodes.filter(function (item) {
+          return item !== node;
+        });
+
+        return true;
+      };
+
+      var revealVisibleNodes = function () {
+        var viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+
+        pendingNodes.slice().forEach(function (node) {
+          var rect = node.getBoundingClientRect();
+          var isNearViewport = rect.top <= viewportHeight * 0.92 && rect.bottom >= 0;
+
+          if (isNearViewport) {
+            revealNode(node);
+            observer.unobserve(node);
+          }
+        });
+
+        if (!pendingNodes.length) {
+          window.removeEventListener("scroll", revealVisibleNodes);
+          window.removeEventListener("resize", revealVisibleNodes);
+          window.removeEventListener("orientationchange", revealVisibleNodes);
+          document.removeEventListener("visibilitychange", handleVisibilityChange);
+        }
+      };
+
+      var handleVisibilityChange = function () {
+        if (!document.hidden) {
+          revealVisibleNodes();
         }
       };
 
@@ -135,18 +172,34 @@ document.addEventListener("DOMContentLoaded", function () {
         function (entries) {
           entries.forEach(function (entry) {
             if (!entry.isIntersecting) return;
-            revealNode(entry.target);
-            observer.unobserve(entry.target);
+            if (revealNode(entry.target)) {
+              observer.unobserve(entry.target);
+            }
           });
         },
         {
-          threshold: 0.18,
-          rootMargin: "0px 0px -8% 0px",
+          threshold: 0.08,
+          rootMargin: "0px 0px -4% 0px",
         }
       );
 
       animatedNodes.forEach(function (node) {
         observer.observe(node);
+      });
+
+      window.addEventListener("scroll", revealVisibleNodes, { passive: true });
+      window.addEventListener("resize", revealVisibleNodes);
+      window.addEventListener("orientationchange", revealVisibleNodes);
+      document.addEventListener("visibilitychange", handleVisibilityChange);
+
+      window.requestAnimationFrame(function () {
+        document.body.classList.add("motion-ready");
+
+        window.requestAnimationFrame(function () {
+          animationsArmed = true;
+          revealVisibleNodes();
+          window.setTimeout(revealVisibleNodes, 180);
+        });
       });
     }
   }
