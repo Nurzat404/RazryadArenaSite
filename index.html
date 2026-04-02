@@ -1,12 +1,26 @@
 ﻿<!doctype html>
 <html lang="ru">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>РазрядАрена — Турнирная платформа</title>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <title>РазрядАрена — платформа для любительских турниров и команд</title>
+    
+    <link rel="icon" type="image/png" href="assets/img/logo/razryad_logo_clean.png" />
     <meta
       name="description"
-      content="РазрядАрена — платформа для организации любительских турниров по киберспорту и классическим видам спорта."
+      content="РазрядАрена объединяет турниры, матчи, рейтинг, правила и управление командами в одном пространстве для любительских лиг."
+    />
+    <meta property="og:title" content="РазрядАрена — платформа для любительских турниров и команд" />
+    <meta
+      property="og:description"
+      content="Платформа для любительских турниров с матч-центром, рейтингом, правилами и инструментами для игроков, капитанов и организаторов."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta
+      property="og:image"
+      content="https://images.pexels.com/photos/31105995/pexels-photo-31105995.jpeg?cs=srgb&dl=pexels-chris-wade-ntezicimpa-564856410-31105995.jpg&fm=jpg"
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -15,21 +29,35 @@
       rel="stylesheet"
     />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
     <link rel="stylesheet" href="assets/css/main.css" />
     <link rel="stylesheet" href="assets/css/components.css" />
     <link rel="stylesheet" href="assets/css/layouts.css" />
-    <link rel="stylesheet" href="assets/css/pages.css" />
     <link rel="stylesheet" href="assets/css/responsive.css" />
+    <link rel="stylesheet" href="assets/css/home.css" />
   </head>
-  <body class="layout-public home-v2" data-page="home" data-role="public">
-    <header class="site-header site-header-public" data-component="site-header">
-      <nav class="navbar navbar-expand-lg navbar-dark">
+  <body class="layout-public home-landing" data-page="home" data-role="public">
+    <a class="skip-link" href="#main-content">Перейти к содержимому</a>
+
+    <header class="site-header site-header-public home-header" data-component="site-header">
+      <nav class="navbar navbar-expand-lg navbar-dark" aria-label="Основная навигация">
         <div class="container py-2">
-          <a class="navbar-brand site-navbar-brand" href="index.html">
+          <a class="navbar-brand site-navbar-brand" href="index.html" aria-label="РазрядАрена, перейти на главную страницу">
             <img class="site-logo" src="assets/img/logo/razryad_logo_clean.png" alt="Логотип РазрядАрена" />
             <span>РазрядАрена</span>
           </a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#publicNav" aria-controls="publicNav" aria-expanded="false" aria-label="Переключить меню">
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-nav-toggle="collapse"
+            data-nav-target="#publicNav"
+            aria-controls="publicNav"
+            aria-expanded="false"
+            aria-label="Открыть меню сайта"
+          >
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse header-main-nav" id="publicNav">
@@ -40,7 +68,7 @@
               <li class="nav-item"><a class="site-nav-link" data-nav-page="rules" href="pages/rules.html">Правила</a></li>
               <li class="nav-item"><a class="site-nav-link" data-nav-page="partners" href="pages/partners.html">Партнёрам</a></li>
             </ul>
-            <div class="d-flex align-items-center gap-2">
+            <div class="d-flex align-items-center gap-2 home-header__actions">
               <a class="cta-button cta-button-secondary" href="pages/login.html">Войти</a>
               <a class="cta-button cta-button-primary" href="pages/register.html">Регистрация</a>
             </div>
@@ -49,397 +77,524 @@
       </nav>
     </header>
 
-    <main class="main-content">
-      <!-- 1. Hero -->
-      <section class="hero pt-5 home-section home-section-home">
+    <main id="main-content" class="main-content">
+      <!-- Главный экран с более компактной продуктовой подачей -->
+      <section class="home-hero" aria-labelledby="hero-title">
         <div class="container">
-          <div class="hero-panel home-hero-panel">
-            <div class="row g-4 align-items-center">
-              <div class="col-lg-7">
-                <span class="hero-eyebrow">Турнирная платформа</span>
-                <h1 class="hero-title mb-3">Турниры, команды и матчи — в одном месте.</h1>
-                <p class="hero-description mb-4">
-                  РазрядАрена помогает проводить любительские турниры по-человечески:
-                  составы, заявки, сетка, матчи и рейтинг собраны в одном понятном интерфейсе.
-                </p>
-                <div class="d-flex flex-wrap gap-2">
-                  <a class="cta-button cta-button-primary" href="pages/tournaments.html">Смотреть турниры</a>
-                  <a class="cta-button cta-button-ghost" href="pages/team-create.html">Создать команду</a>
-                </div>
+          <div class="home-hero__shell">
+            <div class="home-hero__content" data-animate="animate__fadeInUp">
+              <p class="home-kicker">Платформа для любительских турниров</p>
+              <h1 id="hero-title" class="home-hero__title">Просто управляйте любительскими турнирами.</h1>
+              <p class="home-hero__lead">
+                Матчи, составы, заявки, правила и рейтинг собраны в одном сервисе.
+                Команда быстрее находит нужную информацию, а организатору не нужно держать сезон в таблицах и чатах.
+              </p>
+              <div class="home-hero__actions" aria-label="Основные действия">
+                <a class="cta-button cta-button-primary" href="pages/register.html">Начать участие</a>
+                <a class="cta-button cta-button-secondary" href="pages/tournaments.html">Смотреть турниры</a>
               </div>
             </div>
+            <figure class="home-hero__media" data-animate="animate__fadeInRight" data-animate-delay="120">
+              <img
+                class="home-hero__image"
+                src="https://images.pexels.com/photos/31105995/pexels-photo-31105995.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=1400"
+                srcset="
+                  https://images.pexels.com/photos/31105995/pexels-photo-31105995.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=560&w=768 768w,
+                  https://images.pexels.com/photos/31105995/pexels-photo-31105995.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=720&w=1024 1024w,
+                  https://images.pexels.com/photos/31105995/pexels-photo-31105995.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=1400 1400w
+                "
+                sizes="(max-width: 991px) 100vw, 46vw"
+                alt="Команда собралась в круг на футбольном поле перед матчем"
+                fetchpriority="high"
+                decoding="async"
+              />
+              <figcaption class="home-hero__media-caption">
+                <span class="home-hero__media-tag">Команда</span>
+                <strong>Команда видит матч, состав и статус турнира на одном экране</strong>
+              </figcaption>
+            </figure>
           </div>
-          <div class="home-discipline-strip mt-3">
-            <div class="d-flex flex-wrap gap-2 justify-content-center">
-              <span class="discipline-chip">Киберспорт</span>
-              <span class="discipline-chip">Футбол</span>
-              <span class="discipline-chip">Баскетбол</span>
-              <span class="discipline-chip">Волейбол</span>
+        </div>
+      </section>
+
+      <!-- Короткий блок выгод с акцентом на рабочую пользу -->
+      <section class="home-section home-benefits section-padding" aria-labelledby="benefits-title">
+        <div class="container">
+          <div class="home-section__heading" data-animate="animate__fadeInUp">
+            <p class="home-kicker">Почему это удобно</p>
+            <h2 id="benefits-title" class="section-title">Все матчи и результаты — в одном месте</h2>
+            <p class="section-subtitle">Каждый раздел помогает быстро найти нужное действие: собрать команду, открыть матч, проверить правила или посмотреть таблицу.</p>
+          </div>
+          <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 g-4">
+            <div class="col">
+              <article class="benefit-card" data-animate="animate__fadeInUp">
+                <span class="benefit-card__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M5 6.5h14M5 12h14M5 17.5h9" /></svg>
+                </span>
+                <h3>Календарь без чатов</h3>
+                <p>Команда сразу видит даты матчей, дедлайны и изменения по турниру.</p>
+              </article>
+            </div>
+            <div class="col">
+              <article class="benefit-card" data-animate="animate__fadeInUp" data-animate-delay="90">
+                <span class="benefit-card__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M7 4h10l3 4v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8l3-4Z" /><path d="M9 11h6M9 15h4" /></svg>
+                </span>
+                <h3>Состав под рукой</h3>
+                <p>Капитан проверяет состав, роли и статус заявки без ручной сводки.</p>
+              </article>
+            </div>
+            <div class="col">
+              <article class="benefit-card" data-animate="animate__fadeInUp" data-animate-delay="180">
+                <span class="benefit-card__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M12 4l7 3.5v5c0 4.2-2.8 7.9-7 9.5-4.2-1.6-7-5.3-7-9.5v-5L12 4Z" /><path d="M9.5 12.5 11 14l3.5-3.5" /></svg>
+                </span>
+                <h3>Правила без поиска</h3>
+                <p>Игрок открывает регламент, формат матча и важные условия в пару кликов.</p>
+              </article>
+            </div>
+            <div class="col">
+              <article class="benefit-card" data-animate="animate__fadeInUp" data-animate-delay="270">
+                <span class="benefit-card__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M6 18h12M8 18V9m4 9V5m4 13v-7" /></svg>
+                </span>
+                <h3>Таблица по матчам</h3>
+                <p>Рейтинг обновляется по реальным результатам и показывает движение команд по сезону.</p>
+              </article>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- 2. Дисциплины -->
-      <section class="section-padding pt-0 home-section home-section-categories">
+      <!-- Пошаговая логика входа в продукт -->
+      <section class="home-section home-process section-padding" aria-labelledby="process-title">
         <div class="container">
-          <div class="page-head">
-            <h2 class="section-title">Одна платформа для разных дисциплин</h2>
-            <p class="text-muted-strong mb-0">Выбирай формат, подключай команду и работай по единому сценарию турнира.</p>
+          <div class="home-section__heading" data-animate="animate__fadeInUp">
+            <p class="home-kicker">Как работает платформа</p>
+            <h2 id="process-title" class="section-title">Как начать за четыре шага</h2>
           </div>
-          <div class="row g-3">
-            <div class="col-lg-3 col-md-6">
-              <article class="category-card category-card-esports">
-                <div class="category-card-media category-card-media-esports"></div>
-                <div class="category-card-content">
-                  <h3 class="h6 mb-1">Киберспорт</h3>
-                  <p class="text-muted-strong mb-0">Лиги, сетка, матчи и результаты по раундам.</p>
+          <div class="process-grid">
+            <article class="process-step" data-animate="animate__fadeInUp">
+              <span class="process-step__number">01</span>
+              <div class="process-step__body">
+                <div class="process-step__title-row">
+                  <span class="process-step__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M12 13a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" /><path d="M5 20a7 7 0 0 1 14 0" /></svg>
+                  </span>
+                  <h3>Создайте аккаунт</h3>
                 </div>
-              </article>
-            </div>
-            <div class="col-lg-3 col-md-6">
-              <article class="category-card category-card-football">
-                <div class="category-card-media category-card-media-football"></div>
-                <div class="category-card-content">
-                  <h3 class="h6 mb-1">Футбол</h3>
-                  <p class="text-muted-strong mb-0">Группы, календарь игр и управление составами.</p>
-                </div>
-              </article>
-            </div>
-            <div class="col-lg-3 col-md-6">
-              <article class="category-card category-card-basketball">
-                <div class="category-card-media category-card-media-basketball"></div>
-                <div class="category-card-content">
-                  <h3 class="h6 mb-1">Баскетбол</h3>
-                  <p class="text-muted-strong mb-0">Быстрый учёт матчей и продвижение по сетке.</p>
-                </div>
-              </article>
-            </div>
-            <div class="col-lg-3 col-md-6">
-              <article class="category-card category-card-volleyball">
-                <div class="category-card-media category-card-media-volleyball"></div>
-                <div class="category-card-content">
-                  <h3 class="h6 mb-1">Волейбол</h3>
-                  <p class="text-muted-strong mb-0">Единые правила, заявки и фиксация результатов.</p>
-                </div>
-              </article>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 3. Как это работает -->
-      <section id="how-it-works-section" class="section-padding pt-0 home-section home-section-process">
-        <div class="container">
-          <div class="page-head">
-            <h2 class="section-title">Как это работает</h2>
-          </div>
-          <div class="row g-3 process-step">
-            <div class="col-lg-4">
-              <div class="row g-3 process-step-list">
-                <div class="col-12"><article class="process-step-card"><span class="process-step-number">1</span><p class="mb-0">Создай аккаунт</p></article></div>
-                <div class="col-12"><article class="process-step-card"><span class="process-step-number">2</span><p class="mb-0">Собери команду</p></article></div>
-                <div class="col-12"><article class="process-step-card"><span class="process-step-number">3</span><p class="mb-0">Выбери турнир</p></article></div>
-                <div class="col-12"><article class="process-step-card"><span class="process-step-number">4</span><p class="mb-0">Следи за матчами</p></article></div>
-                <div class="col-12"><article class="process-step-card"><span class="process-step-number">5</span><p class="mb-0">Расти в рейтинге</p></article></div>
+                <p>Выберите роль и получите доступ к кабинету команды или турнира.</p>
               </div>
-            </div>
-            <div class="col-lg-8 d-flex">
-              <div class="process-step-img" aria-hidden="true"></div>
-            </div>
+            </article>
+            <article class="process-step" data-animate="animate__fadeInUp" data-animate-delay="110">
+              <span class="process-step__number">02</span>
+              <div class="process-step__body">
+                <div class="process-step__title-row">
+                  <span class="process-step__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M4 18h16" /><path d="M7 14a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" /><path d="M17 14a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" /></svg>
+                  </span>
+                  <h3>Соберите команду</h3>
+                </div>
+                <p>Добавьте игроков, назначьте роли и подготовьте заявку на участие.</p>
+              </div>
+            </article>
+            <article class="process-step" data-animate="animate__fadeInUp" data-animate-delay="220">
+              <span class="process-step__number">03</span>
+              <div class="process-step__body">
+                <div class="process-step__title-row">
+                  <span class="process-step__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M7 5h10v14H7z" /><path d="M10 9h4M10 13h4" /></svg>
+                  </span>
+                  <h3>Откройте регламент</h3>
+                </div>
+                <p>Проверьте правила участия, формат матчей и условия сезона перед стартом.</p>
+              </div>
+            </article>
+            <article class="process-step" data-animate="animate__fadeInUp" data-animate-delay="330">
+              <span class="process-step__number">04</span>
+              <div class="process-step__body">
+                <div class="process-step__title-row">
+                  <span class="process-step__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
+                  </span>
+                  <h3>Следите за матчем</h3>
+                </div>
+                <p>Открывайте расписание, результат и таблицу сезона в одном потоке.</p>
+              </div>
+            </article>
           </div>
         </div>
       </section>
 
-      <!-- 4. Для кого -->
-      <section class="section-padding pt-0 home-section home-section-persona">
+      <!-- Атмосферный блок про день матча -->
+      <section class="home-section section-padding home-matchday" aria-labelledby="matchday-title">
         <div class="container">
-          <div class="page-head">
-            <h2 class="section-title">Для кого платформа</h2>
-          </div>
-          <div class="row g-3">
-            <div class="col-lg-4">
-              <article class="persona-panel persona-panel-players">
-                <div class="persona-panel-header">
-                  <span class="persona-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3L20 7V12C20 16.5 16.9 20.6 12 22C7.1 20.6 4 16.5 4 12V7L12 3Z" stroke="currentColor" stroke-width="1.6"/></svg>
-                  </span>
-                  <div>
-                    <p class="persona-role mb-1">Игрокам</p>
-                    <h3 class="h5 mb-0">Быстрый доступ к турнирам</h3>
-                  </div>
-                </div>
-                <ul class="persona-list">
-                  <li>Профиль и участие в матчах</li>
-                  <li>Единая лента турнирных событий</li>
-                  <li>Понятный рейтинг без ручных таблиц</li>
-                </ul>
-              </article>
-            </div>
-            <div class="col-lg-4">
-              <article class="persona-panel persona-panel-captains">
-                <div class="persona-panel-header">
-                  <span class="persona-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 7H20M7 7L9 19H15L17 7M9.5 11H14.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  </span>
-                  <div>
-                    <p class="persona-role mb-1">Капитанам</p>
-                    <h3 class="h5 mb-0">Контроль состава и заявок</h3>
-                  </div>
-                </div>
-                <ul class="persona-list">
-                  <li>Управление ролями и участниками</li>
-                  <li>Заявки и приглашения в одном месте</li>
-                  <li>Подача в турнир за пару шагов</li>
-                </ul>
-              </article>
-            </div>
-            <div class="col-lg-4">
-              <article class="persona-panel persona-panel-organizers">
-                <div class="persona-panel-header">
-                  <span class="persona-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 5H18M7 9H17M8 13H16M10 17H14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-                  </span>
-                  <div>
-                    <p class="persona-role mb-1">Организаторам</p>
-                    <h3 class="h5 mb-0">Управление турниром по этапам</h3>
-                  </div>
-                </div>
-                <ul class="persona-list">
-                  <li>Настройка формата и правил</li>
-                  <li>Сетка, матчи и статусы</li>
-                  <li>Админ-панель для контроля контента</li>
-                </ul>
-              </article>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 5. Сценарии -->
-      <section class="section-padding pt-0 home-section home-section-tournaments">
-        <div class="container">
-          <div class="page-head">
-            <h2 class="section-title">Сценарии, которые закрывает платформа</h2>
-            <p class="text-muted-strong mb-0">Не просто список разделов, а готовые рабочие сценарии для игроков, капитанов и организаторов.</p>
-          </div>
-          <div class="row g-3">
-            <div class="col-lg-7">
-              <article class="scenario-board h-100">
-                <div class="scenario-item">
-                  <div class="scenario-item-head">
-                    <h3 class="h5 mb-1">Запуск турнира</h3>
-                    <span class="scenario-badge">Организатор</span>
-                  </div>
-                  <p class="text-muted-strong mb-2">Создайте структуру этапов, задайте регламент и откройте регистрацию команд.</p>
-                  <div class="scenario-meta-row">
-                    <span>Формат и правила</span>
-                    <span>Сетка и этапы</span>
-                    <span>Страница турнира</span>
-                  </div>
-                </div>
-
-                <div class="scenario-item">
-                  <div class="scenario-item-head">
-                    <h3 class="h5 mb-1">Управление составом</h3>
-                    <span class="scenario-badge">Капитан</span>
-                  </div>
-                  <p class="text-muted-strong mb-2">Добавляйте игроков, распределяйте роли и подавайте заявки без лишней переписки.</p>
-                  <div class="scenario-meta-row">
-                    <span>Приглашения</span>
-                    <span>Роли команды</span>
-                    <span>Заявки в турниры</span>
-                  </div>
-                </div>
-
-                <div class="scenario-item">
-                  <div class="scenario-item-head">
-                    <h3 class="h5 mb-1">Игровой день</h3>
-                    <span class="scenario-badge">Игрок</span>
-                  </div>
-                  <p class="text-muted-strong mb-2">Смотрите расписание матчей, счёт и движение по сетке в одном месте.</p>
-                  <div class="scenario-meta-row">
-                    <span>Календарь матчей</span>
-                    <span>Результаты</span>
-                    <span>Позиция в рейтинге</span>
-                  </div>
-                </div>
-              </article>
-            </div>
-            <div class="col-lg-5">
-              <article class="scenario-action-panel h-100">
-                <h3 class="h4 mb-2">Быстрые переходы</h3>
-                <p class="text-muted-strong mb-3">Выберите, с чего хотите начать прямо сейчас.</p>
-                <div class="scenario-action-list">
-                  <a class="cta-button cta-button-primary w-100" href="pages/tournaments.html">Перейти к турнирам</a>
-                  <a class="cta-button cta-button-secondary w-100" href="pages/team-create.html">Создать команду</a>
-                  <a class="cta-button cta-button-ghost w-100" href="pages/matches.html">Открыть матчи</a>
-                  <a class="cta-button cta-button-secondary w-100" href="pages/ratings.html">Посмотреть рейтинг</a>
-                </div>
-              </article>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 6. Контроль турнира -->
-      <section class="section-padding pt-0 home-section home-section-broadcast">
-        <div class="container">
-          <div class="page-head">
-            <h2 class="section-title">Турнир под контролем на каждом этапе</h2>
-            <p class="text-muted-strong mb-0">Чёткая структура действий вместо ручной координации в десятке чатов.</p>
-          </div>
-          <div class="row g-3 align-items-stretch">
+          <div class="row g-4 align-items-center">
             <div class="col-lg-6 order-2 order-lg-1">
-              <article class="tournament-control-panel h-100">
-                <h3 class="h4 mb-3">Как проходит цикл турнира</h3>
-                <div class="control-step-list">
-                  <div class="control-step-item">
-                    <span class="control-step-index">1</span>
-                    <div>
-                      <h4 class="h6 mb-1">Подготовка</h4>
-                      <p class="text-muted-strong mb-0">Настройка формата, правил и этапов.</p>
-                    </div>
-                  </div>
-                  <div class="control-step-item">
-                    <span class="control-step-index">2</span>
-                    <div>
-                      <h4 class="h6 mb-1">Регистрация команд</h4>
-                      <p class="text-muted-strong mb-0">Проверка заявок и финализация участников.</p>
-                    </div>
-                  </div>
-                  <div class="control-step-item">
-                    <span class="control-step-index">3</span>
-                    <div>
-                      <h4 class="h6 mb-1">Проведение матчей</h4>
-                      <p class="text-muted-strong mb-0">Расписание, фиксация результатов и движение по сетке.</p>
-                    </div>
-                  </div>
-                  <div class="control-step-item">
-                    <span class="control-step-index">4</span>
-                    <div>
-                      <h4 class="h6 mb-1">Итоги</h4>
-                      <p class="text-muted-strong mb-0">Обновление рейтинга и публикация финального результата.</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="d-flex flex-wrap gap-2 mt-4">
-                  <a class="cta-button cta-button-primary" href="pages/tournament-detail.html">Открыть пример турнира</a>
-                  <a class="cta-button cta-button-secondary" href="pages/rules.html">Изучить правила</a>
-                </div>
-              </article>
+              <div class="home-section__heading home-section__heading--left" data-animate="animate__fadeInLeft">
+                <p class="home-kicker">В день матча</p>
+                <h2 id="matchday-title" class="section-title">В день матча вся команда смотрит в один экран</h2>
+              </div>
+              <p class="home-matchday__lead">
+                Вместо переписок и отдельных таблиц у игроков, капитана и организатора остаётся один понятный сценарий: где матч, кто в составе и что делать дальше.
+              </p>
+              <ul class="home-matchday__list">
+                <li>Капитан видит состав и статус команды перед матчем.</li>
+                <li>Игрок быстро находит время, соперника и правила встречи.</li>
+                <li>Организатор держит под рукой заявки, расписание и регламент.</li>
+              </ul>
             </div>
             <div class="col-lg-6 order-1 order-lg-2">
-              <article class="tournament-control-visual h-100">
-                <div class="control-visual-header">
-                  <strong>Панель турнира</strong>
-                  <span>Единый экран управления</span>
+              <figure class="media-frame media-frame--tall" data-animate="animate__fadeInRight" data-animate-delay="120">
+                <img
+                  src="https://images.pexels.com/photos/33920550/pexels-photo-33920550.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=960&w=960"
+                  srcset="
+                    https://images.pexels.com/photos/33920550/pexels-photo-33920550.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=640&w=640 640w,
+                    https://images.pexels.com/photos/33920550/pexels-photo-33920550.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=960&w=960 960w
+                  "
+                  sizes="(max-width: 991px) 100vw, 48vw"
+                  alt="Любительская команда тренируется на футбольном поле"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </figure>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Ключевые продуктовые разделы без служебных заглушек -->
+      <section class="home-section section-padding" aria-labelledby="features-title">
+        <div class="container">
+          <div class="home-section__heading" data-animate="animate__fadeInUp">
+            <p class="home-kicker">Функции платформы</p>
+            <h2 id="features-title" class="section-title">Что можно сделать на платформе</h2>
+          </div>
+          <div class="row g-4">
+            <div class="col-lg-4">
+              <article class="feature-panel" data-animate="animate__fadeInUp">
+                <div class="feature-panel__intro">
+                  <span class="feature-panel__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M5 6h14v12H5z" /><path d="M8 3v6M16 3v6M5 10h14" /></svg>
+                  </span>
+                  <div>
+                    <h3>Турниры</h3>
+                    <p>Выберите нужную лигу, формат и этап турнира без лишнего поиска.</p>
+                  </div>
                 </div>
-                <div class="control-visual-grid">
-                  <div class="control-visual-cell">
-                    <small>Этап</small>
-                    <strong>Групповой</strong>
-                  </div>
-                  <div class="control-visual-cell">
-                    <small>Матчей в туре</small>
-                    <strong>по расписанию</strong>
-                  </div>
-                  <div class="control-visual-cell">
-                    <small>Статусы</small>
-                    <strong>в реальном потоке</strong>
-                  </div>
-                  <div class="control-visual-cell">
-                    <small>Итоги</small>
-                    <strong>в одном отчёте</strong>
+                <ul class="feature-panel__list">
+                  <li>Фильтры по виду спорта и формату</li>
+                  <li>Карточки сезонов с дедлайнами</li>
+                  <li>Переход к заявке и деталям участия</li>
+                </ul>
+                <a class="feature-panel__link" href="pages/tournaments.html">Открыть раздел турниров</a>
+              </article>
+            </div>
+            <div class="col-lg-4">
+              <article class="feature-panel" data-animate="animate__fadeInUp" data-animate-delay="120">
+                <div class="feature-panel__intro">
+                  <span class="feature-panel__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M6 18h12" /><path d="M8 18V9m4 9V5m4 13v-7" /></svg>
+                  </span>
+                  <div>
+                    <h3>Рейтинг</h3>
+                    <p>Рейтинг показывает позиции команд после сыгранных и подтверждённых матчей.</p>
                   </div>
                 </div>
-                <div class="control-visual-note">
-                  Организатор и команды видят одинаковую картину турнира: меньше лишних вопросов, больше понятных действий.
+                <ul class="feature-panel__list">
+                  <li>Таблица с очками и позициями</li>
+                  <li>Динамика сезона по реальным матчам</li>
+                  <li>Быстрый переход к правилам подсчёта</li>
+                </ul>
+                <a class="feature-panel__link" href="pages/ratings.html">Перейти к рейтингу</a>
+              </article>
+            </div>
+            <div class="col-lg-4">
+              <article class="feature-panel" data-animate="animate__fadeInUp" data-animate-delay="240">
+                <div class="feature-panel__intro">
+                  <span class="feature-panel__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
+                  </span>
+                  <div>
+                    <h3>Результаты и правила</h3>
+                    <p>Открывайте матч-центр, сетку и регламент турнира в одном разделе.</p>
+                  </div>
                 </div>
+                <ul class="feature-panel__list">
+                  <li>Протоколы и статусы встреч</li>
+                  <li>Регламент и формат матчей</li>
+                  <li>Связь между матчем и турнирной сеткой</li>
+                </ul>
+                <a class="feature-panel__link" href="pages/rules.html">Изучить правила</a>
               </article>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- 7. Сравнение -->
-      <section class="section-padding pt-0 comparison-battle home-section home-section-battle">
+      <!-- Персонализированные сценарии для разных ролей -->
+      <section class="home-section section-padding" aria-labelledby="roles-title">
         <div class="container">
-          <div class="page-head">
-            <h2 class="section-title">Почему удобнее, чем таблицы и чаты</h2>
+          <div class="home-section__heading" data-animate="animate__fadeInUp">
+            <p class="home-kicker">Роли пользователей</p>
+            <h2 id="roles-title" class="section-title">Отдельный сценарий для каждой роли</h2>
           </div>
-          <div class="row g-3 align-items-stretch">
-            <div class="col-lg-6">
-              <article class="battle-column battle-column-good h-100">
-                <h3 class="h4 mb-3">РазрядАрена</h3>
-                <div class="battle-item"><span class="battle-marker battle-marker-plus">+</span><div>Одна система для турниров, матчей и рейтинга</div></div>
-                <div class="battle-item"><span class="battle-marker battle-marker-plus">+</span><div>Единые роли для игрока, капитана и организатора</div></div>
-                <div class="battle-item"><span class="battle-marker battle-marker-plus">+</span><div>Структура данных готова для масштабирования</div></div>
-              </article>
+          <div class="roles-grid">
+            <article class="role-card role-card--players" data-animate="animate__fadeInUp">
+              <div class="role-card__header">
+                <span class="role-card__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M12 13a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" /><path d="M5 20a7 7 0 0 1 14 0" /></svg>
+                </span>
+                <p class="role-card__eyebrow">Игрокам</p>
+              </div>
+              <h3>Быстрый вход в матч</h3>
+              <p>Игрок сразу открывает расписание, формат встречи и турнирный статус команды.</p>
+              <ul>
+                <li>Профиль и история участия</li>
+                <li>Расписание и регламент в одном месте</li>
+                <li>Переход от матча к результату без поиска</li>
+              </ul>
+            </article>
+            <article class="role-card role-card--captains" data-animate="animate__fadeInUp" data-animate-delay="120">
+              <div class="role-card__header">
+                <span class="role-card__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M4 19h16" /><path d="M6 16V7l6-3 6 3v9" /><path d="M9.5 10.5h5" /></svg>
+                </span>
+                <p class="role-card__eyebrow">Капитанам</p>
+              </div>
+              <h3>Состав и заявка под контролем</h3>
+              <p>Капитан собирает команду, проверяет готовность и подаёт заявку без ручной сводки.</p>
+              <ul>
+                <li>Приглашения и роли участников</li>
+                <li>Проверка состава перед матчем</li>
+                <li>Подача в турнир и статус заявки</li>
+              </ul>
+            </article>
+            <article class="role-card role-card--organizers" data-animate="animate__fadeInUp" data-animate-delay="240">
+              <div class="role-card__header">
+                <span class="role-card__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M7 5h10v4H7z" /><path d="M8 9v3a4 4 0 0 0 8 0V9" /><path d="M9 19h6" /></svg>
+                </span>
+                <p class="role-card__eyebrow">Организаторам</p>
+              </div>
+              <h3>Турнир без ручной сборки</h3>
+              <p>Организатор публикует этапы, собирает заявки и держит расписание в одном кабинете.</p>
+              <ul>
+                <li>Публикация этапов и дедлайнов</li>
+                <li>Коммуникация с командами</li>
+                <li>Единая логика для матчей и таблиц</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Имиджевый блок с атмосферой командной игры -->
+      <section class="home-section section-padding" aria-labelledby="atmosphere-title">
+        <div class="container">
+          <div class="home-section__heading" data-animate="animate__fadeInUp">
+            <p class="home-kicker">Атмосфера проекта</p>
+            <h2 id="atmosphere-title" class="section-title">Визуальный образ командной игры, матча и результата</h2>
+            <p class="section-subtitle">Это концептуальные спортивные визуалы: они передают характер платформы и настроение сезона, но не выдаются за фотографии событий проекта.</p>
+          </div>
+          <div class="gallery-grid">
+            <figure class="gallery-card gallery-card--wide" data-animate="animate__zoomIn">
+              <img
+                src="https://images.pexels.com/photos/6203574/pexels-photo-6203574.jpeg?cs=srgb&dl=pexels-pavel-danilyuk-6203574.jpg&fm=jpg"
+                srcset="
+                  https://images.pexels.com/photos/6203574/pexels-photo-6203574.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=480&w=768 768w,
+                  https://images.pexels.com/photos/6203574/pexels-photo-6203574.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=750&w=1200 1200w
+                "
+                sizes="(max-width: 1199px) 100vw, 50vw"
+                alt="Игроки участвуют в командном волейбольном матче в зале"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>
+                <strong>Командная энергия</strong>
+                <span>Образ слаженной игры, где подготовка, роли и взаимодействие работают как единая система.</span>
+              </figcaption>
+            </figure>
+            <figure class="gallery-card" data-animate="animate__zoomIn" data-animate-delay="120">
+              <img
+                src="https://images.pexels.com/photos/33920629/pexels-photo-33920629.jpeg?cs=srgb&dl=pexels-kampus-33920629.jpg&fm=jpg"
+                srcset="
+                  https://images.pexels.com/photos/33920629/pexels-photo-33920629.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=480&w=768 768w,
+                  https://images.pexels.com/photos/33920629/pexels-photo-33920629.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=750&w=1200 1200w
+                "
+                sizes="(max-width: 1199px) 100vw, 33vw"
+                alt="Игроки готовятся к любительскому футбольному матчу на поле"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>
+                <strong>Ритм матча</strong>
+                <span>Визуальный акцент на темпе игры, расписании встреч и точной координации команды.</span>
+              </figcaption>
+            </figure>
+            <figure class="gallery-card" data-animate="animate__zoomIn" data-animate-delay="240">
+              <img
+                src="https://images.pexels.com/photos/6203650/pexels-photo-6203650.jpeg?cs=srgb&dl=pexels-pavel-danilyuk-6203650.jpg&fm=jpg"
+                srcset="
+                  https://images.pexels.com/photos/6203650/pexels-photo-6203650.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=480&w=768 768w,
+                  https://images.pexels.com/photos/6203650/pexels-photo-6203650.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=750&w=1200 1200w
+                "
+                sizes="(max-width: 1199px) 100vw, 33vw"
+                alt="Команда собирается в круг перед матчем в спортивном зале"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>
+                <strong>Итоги сезона</strong>
+                <span>Напоминание о том, что результаты, таблицы и история матчей должны сохраняться в одной системе.</span>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <!-- Раздел для партнёров и организаторов -->
+      <section class="home-section section-padding" aria-labelledby="partners-title">
+        <div class="container">
+          <div class="partner-band" data-animate="animate__fadeInUp">
+            <div class="partner-band__content">
+              <p class="home-kicker">Партнёрский раздел</p>
+              <h2 id="partners-title" class="section-title">Партнёрство для арен, лиг и локальных брендов</h2>
+              <p>
+                РазрядАрена помогает запускать любительские турниры, сопровождать сезон и аккуратно встраивать партнёров в события и коммуникацию.
+              </p>
+              <div class="partner-band__grid">
+                <article class="partner-band__card">
+                  <h3>Что можно обсудить</h3>
+                  <ul>
+                    <li>Инфопартнёрство и совместные анонсы</li>
+                    <li>Поддержку локальных турниров и серий</li>
+                    <li>Интеграцию площадки или бренда в сезон</li>
+                    <li>Контент для игроков и команд</li>
+                  </ul>
+                </article>
+                <article class="partner-band__card">
+                  <h3>Кому подойдёт</h3>
+                  <ul>
+                    <li>Спортивным площадкам и клубам</li>
+                    <li>Локальным лигам и школьным турнирам</li>
+                    <li>Брендам с фокусом на локальное комьюнити</li>
+                    <li>Организаторам регулярных сезонов</li>
+                  </ul>
+                </article>
+              </div>
             </div>
-            <div class="col-lg-6">
-              <article class="battle-column battle-column-bad h-100">
-                <h3 class="h4 mb-3">Ручной подход</h3>
-                <div class="battle-item"><span class="battle-marker battle-marker-minus">-</span><div>Разные таблицы в разных местах</div></div>
-                <div class="battle-item"><span class="battle-marker battle-marker-minus">-</span><div>Потеря контекста в длинных чатах</div></div>
-                <div class="battle-item"><span class="battle-marker battle-marker-minus">-</span><div>Сложно поддерживать порядок в матчах и статусах</div></div>
-              </article>
+            <div class="partner-band__actions" aria-label="Связь по партнёрству">
+              <div class="partner-band__contact">
+                <span>Почта для связи</span>
+                <a href="mailto:razryadarena@ya.ru">razryadarena@ya.ru</a>
+              </div>
+              <a class="cta-button cta-button-primary" href="pages/partners.html">Условия партнёрства</a>
+              <a class="cta-button cta-button-secondary" href="mailto:razryadarena@ya.ru">Обсудить сотрудничество</a>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- 8. FAQ -->
-      <section id="home-faq" class="section-padding pt-0 home-faq home-section home-section-faq">
+      <!-- FAQ на основе структуры Bootstrap accordion -->
+      <section class="home-section section-padding home-faq-section" id="home-faq" aria-labelledby="faq-title">
         <div class="container">
-          <div class="page-head">
-            <h2 class="section-title">FAQ</h2>
+          <div class="home-section__heading" data-animate="animate__fadeInUp">
+            <p class="home-kicker">FAQ</p>
+            <h2 id="faq-title" class="section-title">Частые вопросы</h2>
           </div>
-          <div class="accordion" id="homeFaqAccordion">
-            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">Как создать команду?</button></h2><div id="faq1" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">Открой раздел «Команды», заполни форму и назначь капитана.</div></div></div>
-            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">Как подать заявку в турнир?</button></h2><div id="faq2" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">На странице турнира выбери команду и отправь заявку через карточку участия.</div></div></div>
-            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">Где смотреть сетку?</button></h2><div id="faq3" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">Сетка доступна на детальной странице турнира во вкладках этапов.</div></div></div>
-            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">Как формируется рейтинг?</button></h2><div id="faq4" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">Позиция команды зависит от результата матчей и турнирных стадий.</div></div></div>
-            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">Кто может создавать турниры?</button></h2><div id="faq5" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">Турниры создают организаторы и администраторы с нужной ролью доступа.</div></div></div>
-            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">Можно ли участвовать в нескольких дисциплинах?</button></h2><div id="faq6" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">Да, если команда соответствует требованиям каждого турнира.</div></div></div>
-            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq7">Как сообщить об ошибке?</button></h2><div id="faq7" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">Напиши в контакты и приложи шаги, чтобы воспроизвести проблему.</div></div></div>
-            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq8">Как стать партнёром?</button></h2><div id="faq8" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">Отправь заявку на <a class="link-light" href="mailto:razryadarena@ya.ru">razryadarena@ya.ru</a>.</div></div></div>
-            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq9">Можно ли участвовать без команды?</button></h2><div id="faq9" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">Да. Можно создать команду или подать заявку на вступление в открытый состав.</div></div></div>
-            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq10">Где смотреть правила конкретного турнира?</button></h2><div id="faq10" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">На странице турнира есть отдельный блок с регламентом и условиями участия.</div></div></div>
-            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq11">Как работают уведомления?</button></h2><div id="faq11" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">Уведомления показывают изменения по команде, матчам, заявкам и важным действиям в кабинете.</div></div></div>
-            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq12">Можно ли использовать платформу для школьных и локальных лиг?</button></h2><div id="faq12" class="accordion-collapse collapse" data-bs-parent="#homeFaqAccordion"><div class="accordion-body text-muted-strong">Да. Система рассчитана на любительские форматы и подходит для локальных турниров.</div></div></div>
-          </div>
-          <div class="mt-3 d-flex flex-wrap gap-2">
-            <a class="cta-button cta-button-secondary" href="pages/rules.html">Смотреть правила</a>
-            <a class="cta-button cta-button-primary" href="pages/contacts.html">Написать на почту</a>
+          <div class="accordion home-faq" id="homeFaqAccordion">
+            <div class="accordion-item" data-animate="animate__fadeInUp">
+              <h2 class="accordion-header" id="faq-heading-1">
+                <button class="accordion-button" type="button" data-accordion-target="#faq-collapse-1" aria-expanded="true" aria-controls="faq-collapse-1">
+                  Что получает команда после регистрации?
+                </button>
+              </h2>
+              <div id="faq-collapse-1" class="accordion-collapse collapse show" aria-labelledby="faq-heading-1" data-accordion-parent="#homeFaqAccordion">
+                <div class="accordion-body">Команда получает профиль, состав, роли участников, доступ к турнирам и единый маршрут по матчам и регламенту.</div>
+              </div>
+            </div>
+            <div class="accordion-item" data-animate="animate__fadeInUp" data-animate-delay="80">
+              <h2 class="accordion-header" id="faq-heading-2">
+                <button class="accordion-button collapsed" type="button" data-accordion-target="#faq-collapse-2" aria-expanded="false" aria-controls="faq-collapse-2">
+                  Как работает рейтинг на платформе?
+                </button>
+              </h2>
+              <div id="faq-collapse-2" class="accordion-collapse collapse" aria-labelledby="faq-heading-2" data-accordion-parent="#homeFaqAccordion">
+                <div class="accordion-body">Рейтинг строится по подтверждённым матчам и итогам этапов, поэтому таблица всегда опирается на зафиксированные результаты.</div>
+              </div>
+            </div>
+            <div class="accordion-item" data-animate="animate__fadeInUp" data-animate-delay="160">
+              <h2 class="accordion-header" id="faq-heading-3">
+                <button class="accordion-button collapsed" type="button" data-accordion-target="#faq-collapse-3" aria-expanded="false" aria-controls="faq-collapse-3">
+                  Что видит капитан внутри команды?
+                </button>
+              </h2>
+              <div id="faq-collapse-3" class="accordion-collapse collapse" aria-labelledby="faq-heading-3" data-accordion-parent="#homeFaqAccordion">
+                <div class="accordion-body">Капитан видит состав, роли, заявки, дедлайны и статусы матчей в одном разделе.</div>
+              </div>
+            </div>
+            <div class="accordion-item" data-animate="animate__fadeInUp" data-animate-delay="240">
+              <h2 class="accordion-header" id="faq-heading-4">
+                <button class="accordion-button collapsed" type="button" data-accordion-target="#faq-collapse-4" aria-expanded="false" aria-controls="faq-collapse-4">
+                  Подойдёт ли платформа для школьных и локальных лиг?
+                </button>
+              </h2>
+              <div id="faq-collapse-4" class="accordion-collapse collapse" aria-labelledby="faq-heading-4" data-accordion-parent="#homeFaqAccordion">
+                <div class="accordion-body">Да. Платформа подходит для школьных, локальных и любительских лиг, где важно быстро навести порядок в матчах и расписании.</div>
+              </div>
+            </div>
+            <div class="accordion-item" data-animate="animate__fadeInUp" data-animate-delay="320">
+              <h2 class="accordion-header" id="faq-heading-5">
+                <button class="accordion-button collapsed" type="button" data-accordion-target="#faq-collapse-5" aria-expanded="false" aria-controls="faq-collapse-5">
+                  Как стать партнёром платформы?
+                </button>
+              </h2>
+              <div id="faq-collapse-5" class="accordion-collapse collapse" aria-labelledby="faq-heading-5" data-accordion-parent="#homeFaqAccordion">
+                <div class="accordion-body">Перейдите в раздел для партнёров или напишите на почту проекта, чтобы обсудить формат сотрудничества, лигу или спецпроект.</div>
+              </div>
+            </div>
+            <div class="accordion-item" data-animate="animate__fadeInUp" data-animate-delay="400">
+              <h2 class="accordion-header" id="faq-heading-6">
+                <button class="accordion-button collapsed" type="button" data-accordion-target="#faq-collapse-6" aria-expanded="false" aria-controls="faq-collapse-6">
+                  Где смотреть результаты матчей?
+                </button>
+              </h2>
+              <div id="faq-collapse-6" class="accordion-collapse collapse" aria-labelledby="faq-heading-6" data-accordion-parent="#homeFaqAccordion">
+                <div class="accordion-body">Результаты, движение по этапам и связанные протоколы отображаются в матч-центре и на страницах турниров в едином потоке.</div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <!-- 9. Финальный CTA -->
-      <section class="section-padding pt-0 home-section home-section-final-cta">
+      <!-- Финальный блок с концентрированным CTA -->
+      <section class="home-final-cta section-padding" aria-labelledby="final-cta-title">
         <div class="container">
-          <div class="hero-panel">
-            <h2 class="section-title mb-3">Готов начать?</h2>
-            <p class="text-muted-strong mb-4">Открой турниры, собери команду и подключайся к системе РазрядАрена.</p>
-            <div class="d-flex flex-wrap gap-2">
-              <a class="cta-button cta-button-primary" href="pages/register.html">Регистрация</a>
-              <a class="cta-button cta-button-secondary" href="pages/tournaments.html">Смотреть турниры</a>
+          <div class="home-final-cta__panel" data-animate="animate__fadeInUp">
+            <p class="home-kicker">Начать сезон</p>
+            <h2 id="final-cta-title" class="section-title">Запустите команду или турнир без ручной рутины</h2>
+            <p>Откройте матчи, соберите состав, проверьте правила и держите результаты в одной системе.</p>
+            <div class="home-final-cta__actions">
+              <a class="cta-button cta-button-primary" href="pages/register.html">Зарегистрироваться</a>
+              <a class="cta-button cta-button-secondary" href="pages/tournaments.html">Открыть турниры</a>
             </div>
           </div>
         </div>
       </section>
     </main>
 
-    <footer class="site-footer py-4">
+    <footer class="site-footer home-footer py-4">
       <div class="container">
-        <div class="row g-3">
-          <div class="col-md-3">
+        <div class="row g-4">
+          <div class="col-lg-3">
             <div class="site-footer-title">РазрядАрена</div>
-            <p class="text-muted-strong mb-0">Платформа для любительских турниров по киберспорту и спорту.</p>
+            <p class="text-muted-strong mb-0">
+              Платформа для любительских турниров, матчей и командного управления.
+            </p>
           </div>
-          <div class="col-md-3">
-            <div class="site-footer-title">Разделы</div>
+          <div class="col-lg-3">
+            <div class="site-footer-title">Навигация</div>
             <div class="d-flex flex-column gap-1">
               <a class="site-footer-link" href="pages/tournaments.html">Турниры</a>
               <a class="site-footer-link" href="pages/ratings.html">Рейтинг</a>
@@ -447,24 +602,27 @@
               <a class="site-footer-link" href="pages/partners.html">Партнёрам</a>
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-lg-3">
             <div class="site-footer-title">Документы</div>
-            <div class="d-flex flex-column gap-1 mb-2">
-              <a class="site-footer-link" href="pages/contacts.html">Контакты</a>
+            <div class="d-flex flex-column gap-1">
               <a class="site-footer-link" href="pages/user-agreement.html">Пользовательское соглашение</a>
               <a class="site-footer-link" href="pages/privacy-consent.html">Согласие на обработку данных</a>
+              <a class="site-footer-link" href="pages/contacts.html">Контакты</a>
             </div>
           </div>
-          <div class="col-md-3">
-            <div class="site-footer-title">Каналы проекта</div>
-            <div class="footer-socials">
-              <a class="footer-social-link" href="pages/contacts.html" aria-label="Telegram"><span>Telegram</span></a>
-              <a class="footer-social-link" href="pages/contacts.html" aria-label="VK"><span>VK</span></a>
-              <a class="footer-social-link" href="pages/contacts.html" aria-label="MAX"><span>MAX</span></a>
+          <div class="col-lg-3">
+            <div class="site-footer-title">Контакты</div>
+            <div class="d-flex flex-column gap-2">
+              <a class="site-footer-link" href="mailto:razryadarena@ya.ru">razryadarena@ya.ru</a>
+              <div class="footer-socials">
+                <a class="footer-social-link" href="pages/contacts.html" aria-label="Telegram"><span>Telegram</span></a>
+                <a class="footer-social-link" href="pages/contacts.html" aria-label="VK"><span>VK</span></a>
+                <a class="footer-social-link" href="pages/contacts.html" aria-label="MAX"><span>MAX</span></a>
+              </div>
             </div>
           </div>
         </div>
-        <div class="mt-3 text-muted-strong">© <span data-current-year></span> РазрядАрена</div>
+        <div class="mt-4 text-muted-strong">© <span data-current-year></span> РазрядАрена</div>
       </div>
     </footer>
 
@@ -472,4 +630,9 @@
     <script src="assets/js/main.js"></script>
   </body>
 </html>
+
+
+
+
+
 

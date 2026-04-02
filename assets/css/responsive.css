@@ -1,36 +1,52 @@
-/* ===== Large Tablets / Small Laptops ===== */
-@media (max-width: 1199.98px) {
-  .mini-kpi-grid,
-  .admin-stats-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+/* ===== Small Desktop ===== */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .header-main-nav .navbar-nav {
+    margin-left: 1rem;
   }
 
-  .home-hero-stack {
-    grid-template-columns: 1fr;
+  .header-main-nav .site-nav-link {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .home-header__actions {
+    gap: 0.5rem !important;
   }
 }
 
 /* ===== Tablet ===== */
 @media (max-width: 991.98px) {
-  .hero {
-    padding-top: 4.3rem;
+  .header-main-nav {
+    padding-top: 0.85rem;
+    padding-bottom: 0.35rem;
   }
 
-  .hero-panel {
-    padding: 1.2rem;
+  .header-main-nav .navbar-nav {
+    gap: 0.35rem !important;
+    padding: 0.2rem 0 0.35rem;
   }
 
-  .home-hero-panel {
-    background-position: 72% center;
+  .header-main-nav .nav-item {
+    width: 100%;
   }
 
-  .home-hero-stack {
-    margin-top: 0.4rem;
+  .header-main-nav .site-nav-link {
+    display: block;
+    padding: 0.72rem 0.85rem;
   }
 
-  .process-step-img {
-    min-height: 320px;
-    margin-top: 0.55rem;
+  .home-header__actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch !important;
+    margin-top: 0.85rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    gap: 0.6rem !important;
+  }
+
+  .home-header__actions .cta-button {
+    width: 100%;
   }
 
   .user-nav-actions .cta-button {
@@ -52,45 +68,6 @@
   .app-sidebar-group {
     margin-bottom: 0.8rem;
   }
-
-  .bracket-round-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .home-mockup-grid,
-  .home-rating-kpi-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .teams-photo-card {
-    min-height: 350px;
-  }
-
-  .broadcast-match-row {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .partners-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .partners-kpi-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .battle-item {
-    grid-template-columns: auto 1fr;
-    align-items: center;
-  }
-
-  .scenario-action-panel {
-    padding: 0.95rem;
-  }
-
-  .control-visual-grid {
-    grid-template-columns: 1fr 1fr;
-  }
 }
 
 /* ===== Mobile ===== */
@@ -104,105 +81,12 @@
     height: 36px;
   }
 
-  .hero-panel {
-    padding: 1rem;
-  }
-
-  .hero-title {
-    font-size: 2rem;
-  }
-
-  .hero-description {
-    font-size: 0.96rem;
-  }
-
-  .home-hero-panel {
-    background-position: 66% center;
-  }
-
-  .home-discipline-strip {
-    padding: 0.72rem;
-  }
-
-  .discipline-chip {
-    font-size: 0.8rem;
-  }
-
-  .process-step-card {
-    padding: 0.9rem 0.85rem 0.9rem 1rem;
-  }
-
-  .process-step-img {
-    min-height: 260px;
-  }
-
-  .teams-photo-card {
-    min-height: 260px;
-    padding: 0.95rem;
-  }
-
-  .teams-photo-status {
-    top: 0.7rem;
-    left: 0.7rem;
-  }
-
-  .teams-action-row .cta-button {
-    width: 100%;
-  }
-
-  .broadcast-card {
-    padding: 0.9rem;
-  }
-
-  .partners-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .partner-logo-card {
-    min-height: 58px;
-    font-size: 0.84rem;
-  }
-
-  .partners-kpi-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .battle-item {
-    grid-template-columns: auto 1fr;
-    align-items: center;
-  }
-
-  .scenario-item-head {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.32rem;
-  }
-
-  .scenario-meta-row span {
-    width: 100%;
-    text-align: center;
-  }
-
-  .scenario-action-list .cta-button,
-  .tournament-control-panel .cta-button {
-    width: 100%;
-  }
-
-  .control-visual-grid {
-    grid-template-columns: 1fr;
-  }
-
   .home-faq .accordion-button {
     font-size: 0.95rem;
   }
 
   .partner-email-box .cta-button {
     width: 100%;
-  }
-
-  .mini-kpi-grid,
-  .admin-stats-grid {
-    grid-template-columns: 1fr;
   }
 
   .table-block {
@@ -228,5 +112,9 @@
 
   .user-nav-actions {
     gap: 0.35rem;
+  }
+
+  .header-main-nav .site-nav-link {
+    padding: 0.8rem 0.9rem;
   }
 }

@@ -4,8 +4,7 @@
 }
 
 /* ===== User Layout ===== */
-.layout-user .main-content,
-.layout-admin .main-content {
+.layout-user .main-content {
   min-height: 100vh;
 }
 
@@ -73,31 +72,9 @@
   padding: 0.8rem 1rem;
 }
 
-/* ===== Admin-Specific Layout Layer ===== */
-.layout-admin .app-sidebar {
-  background: linear-gradient(
-    180deg,
-    rgba(25, 16, 44, 0.96),
-    rgba(10, 8, 20, 0.96)
-  );
-}
-
-.layout-admin .app-sidebar-link:hover,
-.layout-admin .app-sidebar-link.is-active {
-  background: rgba(138, 43, 226, 0.22);
-}
-
 .admin-sidebar {
   border-radius: 0.9rem;
   border: 1px solid rgba(255, 255, 255, 0.16);
   padding: 0.8rem;
   background: rgba(255, 255, 255, 0.04);
-}
-
-.admin-alert-strip {
-  border-radius: 0.7rem;
-  border: 1px solid rgba(255, 215, 0, 0.3);
-  background: rgba(255, 215, 0, 0.1);
-  color: #ffe79f;
-  padding: 0.6rem 0.75rem;
 }

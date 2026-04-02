@@ -1,9 +1,12 @@
 ﻿<!doctype html>
 <html lang="ru">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+    
     <title>Турниры — РазрядАрена</title>
+    
+    <link rel="icon" type="image/png" href="../assets/img/logo/razryad_logo_clean.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet" />
@@ -46,7 +49,7 @@
       <div class="container">
         <div class="page-head">
           <h1 class="section-title">Турниры</h1>
-          <p class="section-subtitle">Выбирай дисциплину, формат и этап проведения в едином каталоге.</p>
+          <p class="section-subtitle">Здесь публикуются анонсы турниров, этапы сезона и условия участия.</p>
         </div>
 
         <section class="filter-panel mb-3" data-filter-group>
@@ -61,29 +64,31 @@
 
         <div class="row g-3">
           <div class="col-lg-7">
-            <article class="surface-panel p-4 h-100">
-              <h2 class="h4 mb-2">Каталог турниров</h2>
-              <p class="text-muted-strong mb-3">
-                Новые турниры публикуются организаторами в этом разделе. Раздел готов для новых анонсов.
+            <article class="empty-state-panel h-100">
+              <span class="empty-state-panel__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M5 6h14v12H5z" /><path d="M8 3v6M16 3v6M5 10h14" /></svg>
+              </span>
+              <h2 class="h4 mb-2">Здесь появятся ближайшие турниры</h2>
+              <p class="mb-0">
+                Как только организатор откроет новый сезон, в разделе появятся карточки турниров, этапы, дедлайны и переход к подаче заявки.
               </p>
-              <ul class="comparison-list mb-0">
-                <li>Карточки турниров по дисциплинам</li>
-                <li>Фильтрация по формату и этапу</li>
-                <li>Переход на детальную страницу турнира</li>
-              </ul>
+              <div class="empty-state-panel__actions">
+                <a class="cta-button cta-button-primary" href="register.html">Подать заявку</a>
+                <a class="cta-button cta-button-secondary" href="rules.html">Посмотреть правила</a>
+              </div>
             </article>
           </div>
           <div class="col-lg-5">
             <article class="surface-panel p-4 h-100">
-              <h2 class="h4 mb-2">Как только турнир опубликован</h2>
+              <h2 class="h4 mb-2">Что будет в разделе</h2>
               <ul class="comparison-list mb-4">
-                <li>Команда подаёт заявку</li>
-                <li>Организатор подтверждает состав</li>
-                <li>Появляются матчи и сетка</li>
+                <li>Каталог турниров по дисциплинам</li>
+                <li>Фильтры по формату и этапу</li>
+                <li>Детальная страница с условиями участия</li>
               </ul>
               <div class="d-flex flex-wrap gap-2">
-                <a class="cta-button cta-button-primary" href="tournament-detail.html">Смотреть структуру</a>
-                <a class="cta-button cta-button-secondary" href="contacts.html">Написать на почту</a>
+                <a class="cta-button cta-button-primary" href="register.html">Зарегистрироваться</a>
+                <a class="cta-button cta-button-secondary" href="contacts.html">Связаться с организатором</a>
               </div>
             </article>
           </div>
@@ -132,4 +137,10 @@
     <script src="../assets/js/main.js"></script>
   </body>
 </html>
+
+
+
+
+
+
 
