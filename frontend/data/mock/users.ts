@@ -18,7 +18,7 @@ export const mockUsers: User[] = [
     email: 'alex@example.com',
     city: 'Екатеринбург',
     age: 21,
-    role: 'captain',
+    role: 'player',
     favoriteSports: ['cs2'],
     emailVerified: true
   },
@@ -39,7 +39,7 @@ export const mockUsers: User[] = [
     email: 'dana@example.com',
     city: 'Екатеринбург',
     age: 22,
-    role: 'tournament_manager',
+    role: 'player',
     favoriteSports: ['football', 'volleyball'],
     emailVerified: true
   },
@@ -60,7 +60,7 @@ export const mockUsers: User[] = [
     email: 'aigul@example.com',
     city: 'Екатеринбург',
     age: 20,
-    role: 'captain',
+    role: 'player',
     favoriteSports: ['volleyball'],
     emailVerified: true
   }

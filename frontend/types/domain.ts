@@ -1,4 +1,4 @@
-export type UserRole = 'guest' | 'player' | 'captain' | 'tournament_manager' | 'admin'
+export type UserRole = 'player' | 'admin'
 
 export type SportKey = 'cs2' | 'football' | 'basketball' | 'volleyball'
 
