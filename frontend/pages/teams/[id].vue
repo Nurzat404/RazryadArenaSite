@@ -12,7 +12,7 @@ useHead({
 <template>
   <section class="section-padding">
     <div class="container">
-      <PageHead :title="team?.name ?? 'Команда не найдена'" subtitle="Карточка команды на мок-данных." />
+      <PageHead :title="team?.name ?? 'Команда не найдена'" subtitle="Состав, город, рейтинг и статус набора игроков." />
       <div v-if="team" class="surface-panel p-4">
         <p>Спорт: {{ team.sport }}</p>
         <p>Город: {{ team.city }}</p>

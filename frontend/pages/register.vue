@@ -39,7 +39,7 @@ useHead({
               Создать аккаунт
             </h1>
             <p class="section-subtitle mx-auto mb-0">
-              Зарегистрируйтесь, чтобы собрать команду, подать заявку на турнир и получать всю информацию о матчах в одном месте.
+              Создайте аккаунт игрока. Команду можно собрать позже, когда будете готовы подать заявку.
             </p>
           </div>
 
@@ -61,7 +61,7 @@ useHead({
                   <label class="form-label" for="email">Email</label>
                   <input id="email" class="form-control" type="email" placeholder="you@example.com" autocomplete="email" required>
                   <div class="form-text">
-                    Позже сюда придёт письмо для подтверждения аккаунта.
+                    На этот адрес придёт письмо для подтверждения.
                   </div>
                 </div>
                 <div class="col-md-4">
@@ -80,10 +80,10 @@ useHead({
             </section>
             <section class="form-section" aria-labelledby="sports-title">
               <h2 id="sports-title" class="form-section__title">
-                Какие дисциплины вам интересны?
+                Что вам интересно?
               </h2>
               <p class="form-section__hint">
-                Можно выбрать несколько. Это поможет показывать подходящие турниры и команды.
+                Выберите несколько дисциплин, чтобы потом быстрее находить подходящие турниры.
               </p>
               <div class="sport-picker" role="group" aria-label="Выбор дисциплин">
                 <button
@@ -119,7 +119,7 @@ useHead({
             </button>
 
             <p v-if="submitted" class="form-success mb-0" role="status">
-              Готово. Аккаунт создан, теперь можно перейти к входу и продолжить работу с турнирами.
+              Готово. Аккаунт создан, теперь можно войти и выбрать турнир.
             </p>
           </form>
         </article>

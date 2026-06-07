@@ -1,34 +1,34 @@
 ﻿<script setup lang="ts">
 const faqItems = [
   {
-    question: 'Что даёт аккаунт в РазрядАрене?',
+    question: 'Зачем нужен аккаунт?',
     answer:
-      'После регистрации у вас появляется личный кабинет: там удобно следить за турнирами, матчами, заявками и командами, в которых вы участвуете.'
+      'Чтобы видеть свои команды, заявки и матчи без поиска по чатам.'
   },
   {
     question: 'Можно ли создать команду после регистрации?',
     answer:
-      'Да. Сначала создаётся обычный аккаунт игрока, а команду можно собрать позже в личном кабинете. Организаторские права выдаёт администратор.'
+      'Да. Сначала регистрируетесь как игрок, а команду создаёте позже в кабинете. Права организатора выдаёт админ.'
   },
   {
     question: 'Как команда подаёт заявку на турнир?',
     answer:
-      'Капитан выбирает турнир, проверяет состав и отправляет заявку. Организатор видит её статус и может подтвердить участие или попросить исправить данные.'
+      'Капитан выбирает турнир, проверяет состав и отправляет заявку. Организатор сразу видит, что с ней делать.'
   },
   {
     question: 'Где смотреть расписание и результаты?',
     answer:
-      'Матчи, соперники, время встречи, место проведения и итоговый результат собраны в матч-центре и связаны со страницей турнира.'
+      'В матчах видно соперников, время, место и результат. Не нужно листать переписку за прошлую неделю.'
   },
   {
     question: 'Как считается рейтинг?',
     answer:
-      'Рейтинг опирается на подтверждённые результаты матчей и правила конкретного сезона. Так команды видят не просто место в таблице, а понятную историю своего движения.'
+      'По подтверждённым результатам. Сыграли матч, результат приняли — таблица меняется.'
   },
   {
-    question: 'Подойдёт ли платформа для школьной или городской лиги?',
+    question: 'Подойдёт для школьной или городской лиги?',
     answer:
-      'Да. РазрядАрена рассчитана на любительские турниры: школьные сезоны, локальные лиги, корпоративные соревнования и небольшие серии матчей.'
+      'Да. Особенно если сейчас всё держится на таблицах, личных сообщениях и закреплённых постах.'
   }
 ]
 
@@ -39,7 +39,7 @@ const toggleFaq = (index: number) => {
 }
 
 useHead({
-  title: 'РазрядАрена — платформа для любительских турниров и команд',
+  title: 'РазрядАрена — турниры, команды и матчи без путаницы',
   bodyAttrs: {
     class: 'layout-public home-landing',
     'data-page': 'home',
@@ -55,14 +55,14 @@ useHead({
         <div class="container">
           <div class="home-hero__shell">
             <div class="home-hero__content" data-animate="animate__fadeInUp">
-              <p class="home-kicker">Платформа для любительских турниров</p>
+              <p class="home-kicker">Любительские турниры без хаоса</p>
               <h1 id="hero-title" class="home-hero__title">Турниры без хаоса в чатах.</h1>
               <p class="home-hero__lead">
-                РазрядАрена собирает команды, заявки, расписание, правила и результаты в одном месте.
-                Игроки быстро понимают, когда и с кем играют, а организатор ведёт сезон без бесконечных таблиц.
+                Когда заявки живут в личке, расписание в таблице, а результаты в чате, всё быстро путается.
+                РазрядАрена помогает держать сезон в порядке: кто играет, когда матч и что уже сыграно.
               </p>
               <div class="home-hero__actions" aria-label="Основные действия">
-                <a class="cta-button cta-button-primary" href="/register">Начать участие</a>
+                <a class="cta-button cta-button-primary" href="/register">Подать заявку</a>
                 <a class="cta-button cta-button-secondary" href="/tournaments">Смотреть турниры</a>
               </div>
             </div>
@@ -77,7 +77,7 @@ useHead({
               />
               <figcaption class="home-hero__media-caption">
                 <span class="home-hero__media-tag">Команда</span>
-                <strong>Команда видит матч, состав и статус турнира на одном экране</strong>
+                <strong>Игроки видят матч, состав и статус заявки без лишних вопросов</strong>
               </figcaption>
             </figure>
           </div>
@@ -88,9 +88,9 @@ useHead({
       <section class="home-section home-benefits section-padding" aria-labelledby="benefits-title">
         <div class="container">
           <div class="home-section__heading" data-animate="animate__fadeInUp">
-            <p class="home-kicker">Почему это удобно</p>
-            <h2 id="benefits-title" class="section-title">Понятный порядок для игроков и организаторов</h2>
-            <p class="section-subtitle">Сервис помогает не терять важное: кто играет, когда дедлайн, какой состав заявлен и как меняется турнирная таблица.</p>
+            <p class="home-kicker">Что болит на турнирах</p>
+            <h2 id="benefits-title" class="section-title">Меньше вопросов перед игрой</h2>
+            <p class="section-subtitle">Кто играет, когда дедлайн, какой состав заявлен и где результат — эти вещи должны быть видны сразу.</p>
           </div>
           <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 g-4">
             <div class="col">
@@ -99,7 +99,7 @@ useHead({
                   <svg viewBox="0 0 24 24"><path d="M5 6.5h14M5 12h14M5 17.5h9" /></svg>
                 </span>
                 <h3>Расписание перед глазами</h3>
-                <p>Игроки видят даты матчей, дедлайны заявок и переносы без поиска по перепискам.</p>
+                <p>Дата матча и переносы не тонут между мемами, голосовыми и “щас уточню”.</p>
               </article>
             </div>
             <div class="col">
@@ -107,8 +107,8 @@ useHead({
                 <span class="benefit-card__icon" aria-hidden="true">
                   <svg viewBox="0 0 24 24"><path d="M7 4h10l3 4v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8l3-4Z" /><path d="M9 11h6M9 15h4" /></svg>
                 </span>
-                <h3>Состав без путаницы</h3>
-                <p>Капитан понимает, кто в команде, кто подтвердил участие и готова ли заявка к отправке.</p>
+                <h3>Заявка без догадок</h3>
+                <p>Капитан видит состав и понимает, можно уже отправлять заявку или кто-то ещё молчит.</p>
               </article>
             </div>
             <div class="col">
@@ -116,8 +116,8 @@ useHead({
                 <span class="benefit-card__icon" aria-hidden="true">
                   <svg viewBox="0 0 24 24"><path d="M12 4l7 3.5v5c0 4.2-2.8 7.9-7 9.5-4.2-1.6-7-5.3-7-9.5v-5L12 4Z" /><path d="M9.5 12.5 11 14l3.5-3.5" /></svg>
                 </span>
-                <h3>Регламент рядом</h3>
-                <p>Формат турнира, правила матча и условия участия лежат там же, где заявки и расписание.</p>
+                <h3>Правила не надо искать</h3>
+                <p>Формат, ограничения и правила матча открываются рядом с турниром, а не в старом файле.</p>
               </article>
             </div>
             <div class="col">
@@ -126,7 +126,7 @@ useHead({
                   <svg viewBox="0 0 24 24"><path d="M6 18h12M8 18V9m4 9V5m4 13v-7" /></svg>
                 </span>
                 <h3>Рейтинг по делу</h3>
-                <p>Команды видят своё место в сезоне и понимают, какие результаты влияют на таблицу.</p>
+                <p>Результаты видны после игры, а не через три дня в переписке.</p>
               </article>
             </div>
           </div>
@@ -137,8 +137,8 @@ useHead({
       <section class="home-section home-process section-padding" aria-labelledby="process-title">
         <div class="container">
           <div class="home-section__heading" data-animate="animate__fadeInUp">
-            <p class="home-kicker">Как работает платформа</p>
-            <h2 id="process-title" class="section-title">Как команда входит в сезон</h2>
+            <p class="home-kicker">Как стартовать</p>
+            <h2 id="process-title" class="section-title">От аккаунта до первого матча</h2>
           </div>
           <div class="process-grid">
             <article class="process-step" data-animate="animate__fadeInUp">
@@ -150,7 +150,7 @@ useHead({
                   </span>
                   <h3>Зарегистрируйтесь</h3>
                 </div>
-                <p>Создайте обычный аккаунт игрока, чтобы участвовать в турнирах и управлять своим профилем.</p>
+                <p>Обычный аккаунт игрока. Без выбора “ролей” и лишних настроек на старте.</p>
               </div>
             </article>
             <article class="process-step" data-animate="animate__fadeInUp" data-animate-delay="110">
@@ -162,7 +162,7 @@ useHead({
                   </span>
                   <h3>Соберите команду</h3>
                 </div>
-                <p>После входа можно создать команду, пригласить игроков и подготовить состав к заявке.</p>
+                <p>Создайте команду, добавьте игроков и проверьте, хватает ли состава для турнира.</p>
               </div>
             </article>
             <article class="process-step" data-animate="animate__fadeInUp" data-animate-delay="220">
@@ -174,7 +174,7 @@ useHead({
                   </span>
                   <h3>Откройте регламент</h3>
                 </div>
-                <p>Перед заявкой команда видит требования к составу, формат матчей и правила сезона.</p>
+                <p>До заявки видно, сколько игроков нужно, какой формат и какие ограничения.</p>
               </div>
             </article>
             <article class="process-step" data-animate="animate__fadeInUp" data-animate-delay="330">
@@ -186,7 +186,7 @@ useHead({
                   </span>
                   <h3>Следите за матчем</h3>
                 </div>
-                <p>Расписание, статус встречи, результат и движение по таблице остаются связаны между собой.</p>
+                <p>Откройте матч и сразу увидите время, соперника, статус и результат.</p>
               </div>
             </article>
           </div>
@@ -200,15 +200,15 @@ useHead({
             <div class="col-lg-6 order-2 order-lg-1">
               <div class="home-section__heading home-section__heading--left" data-animate="animate__fadeInLeft">
                 <p class="home-kicker">В день матча</p>
-                <h2 id="matchday-title" class="section-title">В день матча вся команда смотрит в один экран</h2>
+                <h2 id="matchday-title" class="section-title">В день матча без “а во сколько?”</h2>
               </div>
               <p class="home-matchday__lead">
-                Перед игрой не должно быть десяти уточнений в чате. У команды есть один понятный маршрут: открыть матч, проверить состав, посмотреть правила и выйти на игру.
+                Перед игрой обычно начинается одно и то же: кто соперник, где играем, какие правила. Здесь это видно до стартового свистка.
               </p>
               <ul class="home-matchday__list">
-                <li>Капитан проверяет состав и готовность заявки перед стартом.</li>
-                <li>Игрок быстро находит время, соперника, место и правила встречи.</li>
-                <li>Организатор видит заявки, расписание и регламент в одной системе.</li>
+                <li>Капитан проверяет состав и заявку.</li>
+                <li>Игрок видит время, соперника и место.</li>
+                <li>Организатор не собирает ответы вручную.</li>
               </ul>
             </div>
             <div class="col-lg-6 order-1 order-lg-2">
@@ -230,8 +230,8 @@ useHead({
       <section class="home-section section-padding" aria-labelledby="features-title">
         <div class="container">
           <div class="home-section__heading" data-animate="animate__fadeInUp">
-            <p class="home-kicker">Функции платформы</p>
-            <h2 id="features-title" class="section-title">Разделы, которые закрывают весь сезон</h2>
+            <p class="home-kicker">Основные разделы</p>
+            <h2 id="features-title" class="section-title">То, что обычно теряется по чатам</h2>
           </div>
           <div class="row g-4">
             <div class="col-lg-4">
@@ -242,15 +242,15 @@ useHead({
                   </span>
                   <div>
                     <h3>Турниры</h3>
-                    <p>Откройте подходящий турнир, посмотрите формат и проверьте условия участия.</p>
+                    <p>Смотрите формат, сроки заявки и требования к составу до регистрации.</p>
                   </div>
                 </div>
                 <ul class="feature-panel__list">
                   <li>Фильтры по дисциплине и формату</li>
                   <li>Даты сезона, дедлайны и статус набора</li>
-                  <li>Быстрый переход к заявке и регламенту</li>
+                  <li>Переход к заявке и регламенту</li>
                 </ul>
-                <a class="feature-panel__link" href="/tournaments">Открыть раздел турниров</a>
+                <a class="feature-panel__link" href="/tournaments">Смотреть турниры</a>
               </article>
             </div>
             <div class="col-lg-4">
@@ -261,15 +261,15 @@ useHead({
                   </span>
                   <div>
                     <h3>Рейтинг</h3>
-                    <p>Таблица помогает понять, как команда идёт по сезону и что изменилось после матчей.</p>
+                    <p>После подтверждённых игр видно, кто поднялся, кто просел и сколько очков у команды.</p>
                   </div>
                 </div>
                 <ul class="feature-panel__list">
                   <li>Очки, позиции и движение команд</li>
-                  <li>Связь рейтинга с подтверждёнными матчами</li>
-                  <li>Понятные правила подсчёта</li>
+                  <li>Очки только по принятым результатам</li>
+                  <li>Правила подсчёта без сюрпризов</li>
                 </ul>
-                <a class="feature-panel__link" href="/ratings">Перейти к рейтингу</a>
+                <a class="feature-panel__link" href="/ratings">Посмотреть рейтинг</a>
               </article>
             </div>
             <div class="col-lg-4">
@@ -280,7 +280,7 @@ useHead({
                   </span>
                   <div>
                     <h3>Результаты и правила</h3>
-                    <p>Каждая встреча получает понятный статус: когда игра, кто участвует и чем всё закончилось.</p>
+                    <p>У матча есть время, соперники, статус и итоговый счёт. Всё коротко и по делу.</p>
                   </div>
                 </div>
                 <ul class="feature-panel__list">
@@ -288,7 +288,7 @@ useHead({
                   <li>Правила матча рядом с расписанием</li>
                   <li>Связь матча с турниром и таблицей</li>
                 </ul>
-                <a class="feature-panel__link" href="/rules">Изучить правила</a>
+                <a class="feature-panel__link" href="/rules">Открыть правила</a>
               </article>
             </div>
           </div>
@@ -299,8 +299,8 @@ useHead({
       <section class="home-section section-padding" aria-labelledby="roles-title">
         <div class="container">
           <div class="home-section__heading" data-animate="animate__fadeInUp">
-            <p class="home-kicker">Роли пользователей</p>
-            <h2 id="roles-title" class="section-title">Каждый участник видит своё</h2>
+            <p class="home-kicker">Кому что нужно</p>
+            <h2 id="roles-title" class="section-title">У каждого своя боль</h2>
           </div>
           <div class="roles-grid">
             <article class="role-card role-card--players" data-animate="animate__fadeInUp">
@@ -311,10 +311,10 @@ useHead({
                 <p class="role-card__eyebrow">Игрокам</p>
               </div>
               <h3>Быстрый доступ к игре</h3>
-              <p>Игроку не нужно спрашивать одно и то же в чате: время, соперник и правила доступны на странице матча.</p>
+              <p>Игрок открывает матч и видит главное: когда играем, с кем и по каким правилам.</p>
               <ul>
                 <li>Профиль и история участия</li>
-                <li>Расписание и регламент в одном месте</li>
+                <li>Расписание и регламент рядом</li>
                 <li>Переход от матча к результату и рейтингу</li>
               </ul>
             </article>
@@ -325,8 +325,8 @@ useHead({
                 </span>
                 <p class="role-card__eyebrow">Капитанам</p>
               </div>
-              <h3>Состав и заявка под контролем</h3>
-              <p>Капитан собирает состав, следит за готовностью игроков и отправляет заявку без ручных списков.</p>
+              <h3>Состав и заявка без ручных списков</h3>
+              <p>Капитан видит, кто в составе, кто подтвердился и можно ли уже заявляться.</p>
               <ul>
                 <li>Приглашения и роли участников</li>
                 <li>Проверка состава перед матчем</li>
@@ -340,12 +340,12 @@ useHead({
                 </span>
                 <p class="role-card__eyebrow">Организаторам</p>
               </div>
-              <h3>Турнир без ручной сборки</h3>
-              <p>Организатор получает рабочее место для сезона: заявки, расписание, правила и результаты не разъезжаются по разным каналам.</p>
+              <h3>Меньше таблиц и ручных сверок</h3>
+              <p>Организатор видит заявки, расписание и результаты там, где с ними реально работает.</p>
               <ul>
                 <li>Публикация этапов и дедлайнов</li>
-                <li>Коммуникация с командами</li>
-                <li>Единая логика для матчей и таблиц</li>
+                <li>Связь с командами</li>
+                <li>Матчи и таблицы без разъезда</li>
               </ul>
             </article>
           </div>
@@ -356,9 +356,9 @@ useHead({
       <section class="home-section section-padding" aria-labelledby="atmosphere-title">
         <div class="container">
           <div class="home-section__heading" data-animate="animate__fadeInUp">
-            <p class="home-kicker">Атмосфера проекта</p>
-            <h2 id="atmosphere-title" class="section-title">Визуальный образ командной игры, матча и результата</h2>
-            <p class="section-subtitle">Командный спорт держится на понятных ролях, ритме матча и честно зафиксированном результате. Такой же порядок должен быть и в сервисе.</p>
+            <p class="home-kicker">Как это ощущается</p>
+            <h2 id="atmosphere-title" class="section-title">Команда, матч, результат</h2>
+            <p class="section-subtitle">Любительский турнир может быть шумным, но не должен быть мутным: состав известен, матч назначен, результат записан.</p>
           </div>
           <div class="gallery-grid">
             <figure class="gallery-card gallery-card--wide" data-animate="animate__zoomIn">
@@ -370,8 +370,8 @@ useHead({
                 decoding="async"
               />
               <figcaption>
-                <strong>Командная энергия</strong>
-                <span>Когда состав готов, правила понятны, а каждый игрок знает свою задачу.</span>
+                <strong>Состав собран</strong>
+                <span>Игроки знают, кто выходит на матч и кого ещё ждёт капитан.</span>
               </figcaption>
             </figure>
             <figure class="gallery-card" data-animate="animate__zoomIn" data-animate-delay="120">
@@ -383,8 +383,8 @@ useHead({
                 decoding="async"
               />
               <figcaption>
-                <strong>Ритм матча</strong>
-                <span>Матч проще провести, когда время, соперник и место не теряются в переписке.</span>
+                <strong>Матч назначен</strong>
+                <span>Время, соперник и место не теряются в переписке.</span>
               </figcaption>
             </figure>
             <figure class="gallery-card" data-animate="animate__zoomIn" data-animate-delay="240">
@@ -396,8 +396,8 @@ useHead({
                 decoding="async"
               />
               <figcaption>
-                <strong>Итоги сезона</strong>
-                <span>Результаты важны не только в день игры: они формируют таблицу и историю сезона.</span>
+                <strong>Результат записан</strong>
+                <span>Счёт влияет на таблицу, а не остаётся сообщением в чате.</span>
               </figcaption>
             </figure>
           </div>
@@ -409,19 +409,19 @@ useHead({
         <div class="container">
           <div class="partner-band" data-animate="animate__fadeInUp">
             <div class="partner-band__content">
-              <p class="home-kicker">Партнёрский раздел</p>
-              <h2 id="partners-title" class="section-title">Партнёрство для арен, лиг и локальных брендов</h2>
+              <p class="home-kicker">Для площадок и лиг</p>
+              <h2 id="partners-title" class="section-title">Если вы проводите свои турниры</h2>
               <p>
-                РазрядАрена помогает локальным лигам и площадкам проводить турниры понятнее: с расписанием, заявками, результатами и местом для партнёрских интеграций.
+                Можно договориться о серии матчей, локальной лиге или поддержке турнира. Без длинных презентаций — сначала обсудим формат.
               </p>
               <div class="partner-band__grid">
                 <article class="partner-band__card">
                   <h3>Что можно обсудить</h3>
                   <ul>
-                    <li>Совместные анонсы турниров и сезонов</li>
-                    <li>Поддержку локальных лиг и регулярных серий</li>
-                    <li>Интеграцию площадки, клуба или бренда</li>
-                    <li>Полезный контент для игроков и команд</li>
+                    <li>Анонсы турниров и сезонов</li>
+                    <li>Локальные лиги и регулярные серии</li>
+                    <li>Площадку, клуб или бренд в сезоне</li>
+                    <li>Контент для игроков и команд</li>
                   </ul>
                 </article>
                 <article class="partner-band__card">
@@ -440,8 +440,8 @@ useHead({
                 <span>Почта для связи</span>
                 <a href="mailto:razryadarena@ya.ru">razryadarena@ya.ru</a>
               </div>
-              <a class="cta-button cta-button-primary" href="/partners">Условия партнёрства</a>
-              <a class="cta-button cta-button-secondary" href="mailto:razryadarena@ya.ru">Обсудить сотрудничество</a>
+              <a class="cta-button cta-button-primary" href="/partners">Смотреть условия</a>
+              <a class="cta-button cta-button-secondary" href="mailto:razryadarena@ya.ru">Написать на почту</a>
             </div>
           </div>
         </div>
@@ -451,7 +451,7 @@ useHead({
       <section class="home-section section-padding home-faq-section" id="home-faq" aria-labelledby="faq-title">
         <div class="container">
           <div class="home-section__heading" data-animate="animate__fadeInUp">
-            <p class="home-kicker">FAQ</p>
+            <p class="home-kicker">Вопросы</p>
             <h2 id="faq-title" class="section-title">Частые вопросы</h2>
           </div>
           <div class="accordion home-faq" id="homeFaqAccordion">
@@ -493,11 +493,11 @@ useHead({
         <div class="container">
           <div class="home-final-cta__panel" data-animate="animate__fadeInUp">
             <p class="home-kicker">Начать сезон</p>
-            <h2 id="final-cta-title" class="section-title">Соберите команду и доведите сезон до результата</h2>
-            <p>Начните с аккаунта, выберите турнир, подготовьте состав и следите за матчами без лишней путаницы.</p>
+            <h2 id="final-cta-title" class="section-title">Начните с команды и заявки</h2>
+            <p>Создайте аккаунт, выберите турнир и проверьте состав перед отправкой заявки.</p>
             <div class="home-final-cta__actions">
-              <a class="cta-button cta-button-primary" href="/register">Зарегистрироваться</a>
-              <a class="cta-button cta-button-secondary" href="/tournaments">Открыть турниры</a>
+              <a class="cta-button cta-button-primary" href="/register">Создать аккаунт</a>
+              <a class="cta-button cta-button-secondary" href="/tournaments">Смотреть турниры</a>
             </div>
           </div>
         </div>

@@ -15,7 +15,7 @@ useHead({
         <div class="auth-wrapper">
           <article class="form-panel">
             <h1 class="section-title mb-2">Вход</h1>
-            <p class="text-muted-strong">Войдите, чтобы открыть личный кабинет, управлять командой и следить за заявками на турниры.</p>
+            <p class="text-muted-strong">Войдите, чтобы видеть свои команды, заявки и ближайшие матчи.</p>
             <form>
               <div class="mb-3">
                 <label class="form-label">Email</label>

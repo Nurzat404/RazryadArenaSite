@@ -6,6 +6,17 @@ export type TournamentStatus = 'draft' | 'registration_open' | 'registration_clo
 
 export type ApplicationStatus = 'pending' | 'approved' | 'rejected' | 'excluded'
 
+export type MatchStatus = 'scheduled' | 'active' | 'finished' | 'technical_win'
+
+export type VetoStatus = 'pending' | 'active' | 'finished'
+
+export type UiStatus =
+  | TournamentStatus
+  | ApplicationStatus
+  | MatchStatus
+  | VetoStatus
+  | 'team_excluded'
+
 export interface User {
   id: string
   name: string
@@ -53,7 +64,7 @@ export interface Match {
   team2Id: string
   scheduledAt: string
   location: string
-  status: 'scheduled' | 'active' | 'finished'
+  status: MatchStatus
   score1?: number
   score2?: number
   winnerId?: string

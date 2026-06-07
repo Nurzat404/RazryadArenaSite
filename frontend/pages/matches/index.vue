@@ -17,7 +17,7 @@ useHead({
           Матчи
         </h1>
         <p class="section-subtitle">
-          Матч-центр показывает главное без лишних уточнений: соперники, время, место, статус и результат встречи.
+          Соперники, время, место и счёт — без вопросов “а где смотреть?”.
         </p>
       </div>
 
@@ -25,7 +25,7 @@ useHead({
         <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start">
           <button class="filter-chip is-active" type="button">Все матчи</button>
           <button class="filter-chip" type="button">Сегодня</button>
-          <button class="filter-chip" type="button">Запланированы</button>
+          <button class="filter-chip" type="button">Будущие</button>
           <button class="filter-chip" type="button">Завершены</button>
         </div>
       </section>
@@ -69,14 +69,14 @@ useHead({
 
       <article class="surface-panel p-4">
         <h2 class="h4 mb-2">
-          Что есть на странице матча
+          Что видно по матчу
         </h2>
         <p class="text-muted-strong mb-3">
-          На странице встречи удобно проверить составы, формат игры, место проведения, итоговый счёт и историю изменений.
+          Составы, формат, место, счёт и изменения по встрече. Всё, что обычно уточняют перед игрой.
         </p>
         <div class="d-flex flex-wrap gap-2">
-          <a class="cta-button cta-button-primary" href="/tournaments">Открыть турниры</a>
-          <a class="cta-button cta-button-secondary" href="/rules">Правила матча</a>
+          <a class="cta-button cta-button-primary" href="/tournaments">Смотреть турниры</a>
+          <a class="cta-button cta-button-secondary" href="/rules">Открыть правила</a>
         </div>
       </article>
     </div>

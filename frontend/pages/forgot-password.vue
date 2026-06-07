@@ -21,7 +21,7 @@ useHead({
               Восстановление пароля
             </h1>
             <p class="section-subtitle mx-auto mb-0">
-              Укажите email аккаунта. Если он есть в системе, мы отправим ссылку для сброса пароля.
+              Напишите email от аккаунта. Если он найден, пришлём ссылку для сброса.
             </p>
           </div>
           <div class="mb-4">
@@ -29,10 +29,10 @@ useHead({
             <input id="email" class="form-control" type="email" autocomplete="email" placeholder="you@example.com" required>
           </div>
           <button class="cta-button cta-button-primary w-100" type="submit">
-            Получить ссылку
+            Отправить ссылку
           </button>
           <p v-if="sent" class="form-success mb-0" role="status">
-            Готово. Проверьте почту и следуйте ссылке из письма.
+            Готово. Проверьте почту.
           </p>
         </form>
       </div>

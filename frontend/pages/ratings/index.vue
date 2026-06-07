@@ -14,7 +14,7 @@ useHead({
 <div class="container">
         <div class="page-head">
           <h1 class="section-title">Рейтинг команд</h1>
-          <p class="section-subtitle">Смотрите, как команды двигаются по сезону: очки, места и изменения после подтверждённых матчей.</p>
+          <p class="section-subtitle">Очки и места меняются после принятых результатов, а не по слухам из чата.</p>
         </div>
 
         <section class="filter-panel mb-3" data-filter-group>
@@ -32,10 +32,10 @@ useHead({
           </span>
           <h2 class="h4 mb-2">Рейтинг сезона</h2>
           <p class="mb-0">
-            Таблица обновляется по подтверждённым результатам. Так команда видит своё место, очки и влияние каждого матча на сезон.
+            Сыграли, результат приняли — таблица обновилась. Без ручных пересчётов после каждой игры.
           </p>
           <div class="empty-state-panel__actions">
-            <a class="cta-button cta-button-primary" href="/tournaments">Открыть турниры</a>
+            <a class="cta-button cta-button-primary" href="/tournaments">Смотреть турниры</a>
             <a class="cta-button cta-button-secondary" href="/rules">Как считается рейтинг</a>
           </div>
         </section>
@@ -43,13 +43,13 @@ useHead({
         <article class="surface-panel p-4">
           <h2 class="h4 mb-2">Что влияет на место в таблице</h2>
           <ul class="comparison-list mb-3">
-            <li>Подтверждённые победы, поражения и технические результаты</li>
-            <li>Формат турнира, стадия и правила конкретного сезона</li>
-            <li>Своевременная публикация протокола матча</li>
+            <li>Победы, поражения и технические результаты</li>
+            <li>Формат турнира и стадия сезона</li>
+            <li>Принятый протокол матча</li>
           </ul>
           <div class="d-flex flex-wrap gap-2">
             <a class="cta-button cta-button-primary" href="/rules">Открыть правила</a>
-            <a class="cta-button cta-button-secondary" href="/contacts">Связаться с организатором</a>
+            <a class="cta-button cta-button-secondary" href="/contacts">Написать организатору</a>
           </div>
         </article>
       </div>

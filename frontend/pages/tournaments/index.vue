@@ -14,7 +14,7 @@ useHead({
 <div class="container">
         <div class="page-head">
           <h1 class="section-title">Турниры</h1>
-          <p class="section-subtitle">Откройте сезон, посмотрите формат и выберите турнир, в котором вашей команде удобно участвовать.</p>
+          <p class="section-subtitle">Посмотрите дисциплину, даты и требования к составу до того, как отправлять заявку.</p>
         </div>
 
         <section class="filter-panel mb-3" data-filter-group>
@@ -33,12 +33,12 @@ useHead({
               <span class="empty-state-panel__icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24"><path d="M5 6h14v12H5z" /><path d="M8 3v6M16 3v6M5 10h14" /></svg>
               </span>
-              <h2 class="h4 mb-2">Сейчас открыт набор заявок</h2>
+              <h2 class="h4 mb-2">Выберите турнир и готовьте состав</h2>
               <p class="mb-0">
-                Выберите дисциплину и перейдите к регистрации. После входа команда сможет подготовить состав и отправить заявку на участие.
+                Сначала зарегистрируйтесь. После входа можно собрать команду и подать заявку без переписки с организатором.
               </p>
               <div class="empty-state-panel__actions">
-                <a class="cta-button cta-button-primary" href="/register">Зарегистрироваться</a>
+                <a class="cta-button cta-button-primary" href="/register">Подать заявку</a>
                 <a class="cta-button cta-button-secondary" href="/rules">Посмотреть правила</a>
               </div>
             </article>
@@ -47,13 +47,13 @@ useHead({
             <article class="surface-panel p-4 h-100">
               <h2 class="h4 mb-2">На что смотреть перед заявкой</h2>
               <ul class="comparison-list mb-4">
-                <li>Дисциплина, формат сезона и статус набора</li>
-                <li>Даты матчей, дедлайн заявки и требования к составу</li>
-                <li>Регламент, ограничения и условия участия</li>
+                <li>Какая дисциплина и какой формат</li>
+                <li>Когда дедлайн заявки и матчи</li>
+                <li>Сколько игроков нужно в составе</li>
               </ul>
               <div class="d-flex flex-wrap gap-2">
-                <a class="cta-button cta-button-primary" href="/register">Зарегистрироваться</a>
-                <a class="cta-button cta-button-secondary" href="/contacts">Связаться с организатором</a>
+                <a class="cta-button cta-button-primary" href="/register">Создать аккаунт</a>
+                <a class="cta-button cta-button-secondary" href="/contacts">Написать организатору</a>
               </div>
             </article>
           </div>

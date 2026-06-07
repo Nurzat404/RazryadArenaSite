@@ -12,24 +12,24 @@ await auth.loadCurrentUser()
 
 <template>
   <section>
-    <PageHead title="Админ-панель" subtitle="Центр управления турнирами, командами, заявками, пользователями и рейтингами." />
+    <PageHead title="Админ-панель" subtitle="Турниры, заявки, команды и спорные моменты — всё, что обычно висит на организаторе." />
     <div class="row g-3">
       <div class="col-md-4">
         <div class="entity-card">
           <h2 class="h5">Турниры</h2>
-          <p class="text-muted-strong mb-0">Создание, редактирование и заявки.</p>
+          <p class="text-muted-strong mb-0">Создать сезон, открыть набор, проверить заявки.</p>
         </div>
       </div>
       <div class="col-md-4">
         <div class="entity-card">
           <h2 class="h5">Команды</h2>
-          <p class="text-muted-strong mb-0">Составы, капитаны и блокировки.</p>
+          <p class="text-muted-strong mb-0">Составы, капитаны, заявки и ограничения.</p>
         </div>
       </div>
       <div class="col-md-4">
         <div class="entity-card">
           <h2 class="h5">Рейтинги</h2>
-          <p class="text-muted-strong mb-0">Ручные корректировки и сезоны.</p>
+          <p class="text-muted-strong mb-0">Очки, сезоны и спорные результаты.</p>
         </div>
       </div>
     </div>

@@ -1,13 +1,13 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'admin', middleware: 'admin' })
-useHead({ title: 'Админка турниров' })
+useHead({ title: 'Турниры в админке' })
 </script>
 
 <template>
   <section>
-    <PageHead title="Турниры" subtitle="Создавайте сезоны, настраивайте формат, дедлайны и условия участия." />
+    <PageHead title="Турниры" subtitle="Сезоны, формат, дедлайны и заявки команд." />
     <div class="surface-panel p-4 text-muted-strong">
-      Турниры ещё не добавлены. После создания сезона здесь появятся карточки с настройками, заявками и статусом набора.
+      Турниров пока нет. Создайте сезон, чтобы открыть набор и принимать заявки.
     </div>
   </section>
 </template>

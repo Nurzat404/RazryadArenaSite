@@ -12,7 +12,7 @@ await auth.loadCurrentUser()
 
 <template>
   <section>
-    <PageHead title="Профиль" subtitle="Ваши данные, статус почты и быстрый доступ к участию в турнирах." />
+    <PageHead title="Профиль" subtitle="Ваши данные, почта и быстрый переход к командам и турнирам." />
     <div class="surface-panel p-4">
       <h2 class="h4">{{ auth.user?.name }}</h2>
       <p class="text-muted-strong mb-1">{{ auth.user?.email }}</p>
