@@ -1,16 +1,28 @@
 <script setup lang="ts">
-useHead({ title: 'Подтверждение почты' })
+useHead({
+  title: 'Подтверждение почты — РазрядАрена',
+  bodyAttrs: {
+    class: 'layout-public',
+    'data-page': 'verify-email',
+    'data-role': 'public'
+  }
+})
 </script>
 
 <template>
   <section class="section-padding">
     <div class="container">
       <div class="auth-wrapper">
-        <PageHead title="Подтверждение почты" subtitle="Статус подтверждения будет подключен после backend-авторизации." />
-        <div class="surface-panel p-4">
-          <p class="text-muted-strong mb-0">
-            Этот экран зарезервирован под ссылку подтверждения email.
+        <div class="surface-panel auth-card p-4 text-center">
+          <h1 class="section-title mb-2">
+            Подтверждение почты
+          </h1>
+          <p class="section-subtitle mx-auto mb-3">
+            Почта подтверждена. Теперь можно войти в аккаунт и пользоваться личным кабинетом.
           </p>
+          <a class="cta-button cta-button-primary" href="/login">
+            Перейти ко входу
+          </a>
         </div>
       </div>
     </div>

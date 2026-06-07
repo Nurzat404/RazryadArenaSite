@@ -22,14 +22,14 @@ const year = new Date().getFullYear()
             <NuxtLink class="site-footer-link" to="/tournaments">
               Турниры
             </NuxtLink>
-            <NuxtLink class="site-footer-link" to="/teams">
-              Команды
-            </NuxtLink>
-            <NuxtLink class="site-footer-link" to="/matches">
-              Матчи
-            </NuxtLink>
             <NuxtLink class="site-footer-link" to="/ratings">
               Рейтинг
+            </NuxtLink>
+            <NuxtLink class="site-footer-link" to="/rules">
+              Правила
+            </NuxtLink>
+            <NuxtLink class="site-footer-link" to="/partners">
+              Партнёрам
             </NuxtLink>
           </div>
         </div>
@@ -38,14 +38,14 @@ const year = new Date().getFullYear()
             Документы
           </div>
           <div class="d-flex flex-column gap-1">
-            <NuxtLink class="site-footer-link" to="/rules">
-              Правила
-            </NuxtLink>
             <NuxtLink class="site-footer-link" to="/user-agreement">
               Пользовательское соглашение
             </NuxtLink>
             <NuxtLink class="site-footer-link" to="/privacy-consent">
               Согласие на обработку данных
+            </NuxtLink>
+            <NuxtLink class="site-footer-link" to="/contacts">
+              Контакты
             </NuxtLink>
           </div>
         </div>
@@ -55,9 +55,17 @@ const year = new Date().getFullYear()
           </div>
           <div class="d-flex flex-column gap-2">
             <a class="site-footer-link" href="mailto:razryadarena@ya.ru">razryadarena@ya.ru</a>
-            <NuxtLink class="site-footer-link" to="/contacts">
-              Все контакты
-            </NuxtLink>
+            <div class="footer-socials">
+              <NuxtLink class="footer-social-link" to="/contacts" aria-label="Telegram">
+                <span>Telegram</span>
+              </NuxtLink>
+              <NuxtLink class="footer-social-link" to="/contacts" aria-label="VK">
+                <span>VK</span>
+              </NuxtLink>
+              <NuxtLink class="footer-social-link" to="/contacts" aria-label="MAX">
+                <span>MAX</span>
+              </NuxtLink>
+            </div>
           </div>
         </div>
       </div>

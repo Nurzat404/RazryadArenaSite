@@ -12,7 +12,7 @@ await auth.loadCurrentUser()
 
 <template>
   <section>
-    <PageHead title="Админ-панель" subtitle="Каркас админки v1 для будущего управления турнирами, заявками и пользователями." />
+    <PageHead title="Админ-панель" subtitle="Центр управления турнирами, командами, заявками, пользователями и рейтингами." />
     <div class="row g-3">
       <div class="col-md-4">
         <div class="entity-card">

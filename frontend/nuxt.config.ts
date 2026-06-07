@@ -8,15 +8,15 @@ export default defineNuxtConfig({
     '~/assets/css/components.css',
     '~/assets/css/layouts.css',
     '~/assets/css/pages.css',
-    '~/assets/css/responsive.css'
+    '~/assets/css/responsive.css',
+    '~/assets/css/home.css'
   ],
   app: {
     head: {
       htmlAttrs: {
         lang: 'ru'
       },
-      titleTemplate: (titleChunk) =>
-        titleChunk ? `${titleChunk} - РазрядАрена` : 'РазрядАрена',
+      titleTemplate: '%s - РазрядАрена',
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         {

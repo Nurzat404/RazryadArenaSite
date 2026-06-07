@@ -4,19 +4,17 @@ const auth = useAuthStore()
 const publicLinks = [
   { to: '/', label: 'Главная' },
   { to: '/tournaments', label: 'Турниры' },
-  { to: '/teams', label: 'Команды' },
-  { to: '/matches', label: 'Матчи' },
   { to: '/ratings', label: 'Рейтинг' },
   { to: '/rules', label: 'Правила' },
-  { to: '/partners', label: 'Партнерам' }
+  { to: '/partners', label: 'Партнёрам' }
 ]
 </script>
 
 <template>
-  <header class="site-header">
+  <header class="site-header site-header-public" data-component="site-header">
     <nav class="navbar navbar-expand-lg navbar-dark" aria-label="Основная навигация">
       <div class="container py-2">
-        <NuxtLink class="navbar-brand site-navbar-brand" to="/" aria-label="РазрядАрена, перейти на главную">
+        <NuxtLink class="navbar-brand site-navbar-brand" to="/" aria-label="РазрядАрена, перейти на главную страницу">
           <img class="site-logo" src="/assets/img/logo/razryad_logo_clean.png" alt="Логотип РазрядАрена">
           <span>РазрядАрена</span>
         </NuxtLink>
