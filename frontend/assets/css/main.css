@@ -1,0 +1,108 @@
+:root {
+  --color-bg: #0f0b1f;
+  --color-bg-secondary: #1a1333;
+  --color-bg-elevated: #231a47;
+  --color-surface: rgba(255, 255, 255, 0.04);
+  --color-surface-strong: rgba(255, 255, 255, 0.08);
+  --color-accent-orange: #ff8c00;
+  --color-accent-yellow: #ffd700;
+  --color-accent-violet: #8a2be2;
+  --color-accent-cyan: #26d9ff;
+  --color-text: #ffffff;
+  --color-text-muted: #b0b0b0;
+  --color-border: rgba(255, 255, 255, 0.16);
+  --color-success: #19c37d;
+  --color-danger: #ff5f75;
+  --color-info: #33c7ff;
+  --shadow-soft: 0 10px 34px rgba(0, 0, 0, 0.28);
+  --shadow-elevated: 0 22px 60px rgba(0, 0, 0, 0.35);
+  --shadow-glow-orange: 0 0 24px rgba(255, 140, 0, 0.28);
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.35rem;
+  --radius-button: 0.72rem;
+  --radius-badge: 0.62rem;
+  --radius-card: 0.82rem;
+  --radius-panel: 1.05rem;
+  --section-space: clamp(3.2rem, 6vw, 5.25rem);
+  --transition-fast: 0.18s ease-out;
+  --transition-base: 0.26s ease-out;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 8% -12%, rgba(138, 43, 226, 0.25), transparent 34%),
+    radial-gradient(circle at 100% 0%, rgba(255, 140, 0, 0.2), transparent 28%),
+    radial-gradient(circle at 50% 118%, rgba(38, 217, 255, 0.08), transparent 30%),
+    var(--color-bg);
+  color: var(--color-text);
+  font-family: "Manrope", "Segoe UI", sans-serif;
+  line-height: 1.55;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.heading-font {
+  margin-top: 0;
+  font-family: "Sora", "Trebuchet MS", sans-serif;
+  letter-spacing: 0.01em;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  color: inherit;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+.section-padding {
+  padding: var(--section-space) 0;
+}
+
+.section-title {
+  font-size: clamp(1.55rem, 2.8vw, 2.4rem);
+  font-weight: 700;
+}
+
+.section-subtitle,
+.text-muted-strong {
+  color: var(--color-text-muted);
+}
+
+.surface-panel {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.015));
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  box-shadow: var(--shadow-soft);
+}
+
+.brand-gradient-text {
+  background: linear-gradient(90deg, var(--color-accent-orange), var(--color-accent-yellow), var(--color-accent-violet));
+  background-clip: text;
+  color: transparent;
+  -webkit-background-clip: text;
+}

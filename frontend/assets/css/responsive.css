@@ -1,0 +1,34 @@
+@media (max-width: 991.98px) {
+  .home-hero__shell,
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .app-sidebar {
+    position: static;
+    height: auto;
+  }
+
+  .home-hero__media {
+    min-height: 340px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .home-hero__shell {
+    padding: 1rem;
+  }
+
+  .home-hero__title {
+    max-width: 9ch;
+    font-size: clamp(2rem, 11vw, 3.2rem);
+  }
+
+  .home-hero__media {
+    min-height: 280px;
+  }
+
+  .home-hero__actions .cta-button {
+    width: 100%;
+  }
+}
