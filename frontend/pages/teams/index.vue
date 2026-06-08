@@ -1,4 +1,21 @@
 <script setup lang="ts">
+import { teamService, userService } from '~/services'
+import type { SportKey } from '~/types/domain'
+
+const sportLabels: Record<SportKey, string> = {
+  cs2: 'CS2',
+  football: 'Футбол',
+  basketball: 'Баскетбол',
+  volleyball: 'Волейбол'
+}
+
+const [teams, users] = await Promise.all([
+  teamService.list(),
+  userService.list()
+])
+
+const userById = new Map(users.map((user) => [user.id, user]))
+
 useHead({
   title: 'Команды — РазрядАрена',
   bodyAttrs: {
@@ -13,55 +30,43 @@ useHead({
   <div class="section-padding">
     <div class="container">
       <div class="page-head">
-        <h1 class="section-title">
-          Команды
-        </h1>
+        <h1 class="section-title">Команды</h1>
         <p class="section-subtitle">
-          Соберите состав, назначьте капитана и подавайте заявку без списков в сообщениях.
+          Составы, капитаны и команды, которые уже готовы к заявкам на турниры.
         </p>
       </div>
 
-      <div class="row g-3">
-        <div class="col-lg-6">
-          <article class="team-card">
-            <div class="card-status-row">
-              <strong>Volt5</strong>
-              <span class="status-badge is-active">Капитан</span>
+      <div class="profile-grid">
+        <article v-for="team in teams" :key="team.id" class="profile-card">
+          <div class="profile-card__head">
+            <div>
+              <span class="profile-card__badge">{{ sportLabels[team.sport] }}</span>
+              <h2>{{ team.name }}</h2>
             </div>
-            <p class="text-muted-strong mb-1">
-              Киберспорт • Участников: 5/5
-            </p>
-            <p class="text-muted-strong">
-              Состав полный, можно заявляться на ближайший турнир.
-            </p>
-            <a class="cta-button cta-button-secondary w-100" href="/register">Создать аккаунт</a>
-          </article>
-        </div>
-        <div class="col-lg-6">
-          <article class="team-card">
-            <div class="card-status-row">
-              <strong>North Hoops</strong>
-              <span class="status-badge is-pending">Набор</span>
-            </div>
-            <p class="text-muted-strong mb-1">
-              Баскетбол • Участников: 6/8
-            </p>
-            <p class="text-muted-strong">
-              Команда добирает игроков перед заявкой.
-            </p>
-            <a class="cta-button cta-button-secondary w-100" href="/contacts">Написать организатору</a>
-          </article>
-        </div>
-      </div>
+            <strong>{{ team.rating }}</strong>
+          </div>
 
-      <article class="surface-panel p-4 mt-3">
-        <h2 class="h4 mb-2">
-          Что делает капитан
-        </h2>
-        <p class="text-muted-strong mb-0">
-          Приглашает игроков, проверяет состав и видит, принята заявка или её нужно исправить.
-        </p>
-      </article>
+          <dl class="profile-card__meta">
+            <div>
+              <dt>Капитан</dt>
+              <dd>{{ userById.get(team.captainId)?.name ?? 'Не найден' }}</dd>
+            </div>
+            <div>
+              <dt>Состав</dt>
+              <dd>{{ team.memberIds.length }}/{{ team.maxMembers }}</dd>
+            </div>
+            <div>
+              <dt>Заявки</dt>
+              <dd>{{ team.isOpenForRequests ? 'Открыты' : 'Закрыты' }}</dd>
+            </div>
+          </dl>
+
+          <div class="profile-card__actions">
+            <NuxtLink class="cta-button cta-button-primary" :to="`/teams/${team.id}`">Открыть команду</NuxtLink>
+            <NuxtLink class="cta-button cta-button-secondary" to="/tournaments">Смотреть турниры</NuxtLink>
+          </div>
+        </article>
+      </div>
     </div>
   </div>
 </template>

@@ -4,6 +4,8 @@ import type { RatingRow, SportKey } from '~/types/domain'
 export interface RatingFilters {
   sport?: SportKey
   entityType?: RatingRow['entityType']
+  ratingScope?: RatingRow['ratingScope']
+  seasonId?: string
 }
 
 export const ratingService = {
@@ -15,7 +17,9 @@ export const ratingService = {
     return mockRatings
       .filter((row) => (filters.sport ? row.sport === filters.sport : true))
       .filter((row) => (filters.entityType ? row.entityType === filters.entityType : true))
-      .sort((a, b) => a.position - b.position)
+      .filter((row) => (filters.ratingScope ? row.ratingScope === filters.ratingScope : true))
+      .filter((row) => (filters.seasonId ? row.seasonId === filters.seasonId : true))
+      .sort((a, b) => a.position - b.position || b.points - a.points)
   },
 
   async getByEntity(entityId: string) {

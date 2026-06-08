@@ -1,4 +1,37 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
+import { applicationService, tournamentService } from '~/services'
+import type { SportKey, TournamentStatus } from '~/types/domain'
+
+const sportLabels: Record<SportKey, string> = {
+  cs2: 'CS2',
+  football: 'Футбол',
+  basketball: 'Баскетбол',
+  volleyball: 'Волейбол'
+}
+
+const statusLabels: Record<TournamentStatus, string> = {
+  draft: 'Готовится',
+  registration_open: 'Идут заявки',
+  registration_closed: 'Заявки закрыты',
+  active: 'Идёт турнир',
+  finished: 'Завершён'
+}
+
+const formatDate = (value: string) =>
+  new Intl.DateTimeFormat('ru-RU', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  }).format(new Date(value))
+
+const tournaments = await tournamentService.list()
+const applicationsByTournament = new Map(
+  await Promise.all(tournaments.map(async (tournament) => [
+    tournament.id,
+    await applicationService.list({ tournamentId: tournament.id })
+  ] as const))
+)
+
 useHead({
   title: 'Турниры — РазрядАрена',
   bodyAttrs: {
@@ -11,53 +44,57 @@ useHead({
 
 <template>
   <div class="section-padding">
-<div class="container">
-        <div class="page-head">
-          <h1 class="section-title">Турниры</h1>
-          <p class="section-subtitle">Посмотрите дисциплину, даты и требования к составу до того, как отправлять заявку.</p>
-        </div>
-
-        <section class="filter-panel mb-3" data-filter-group>
-          <div class="d-flex flex-wrap gap-2">
-            <button class="filter-chip is-active" type="button" data-filter-chip>Все дисциплины</button>
-            <button class="filter-chip" type="button" data-filter-chip>Киберспорт</button>
-            <button class="filter-chip" type="button" data-filter-chip>Футбол</button>
-            <button class="filter-chip" type="button" data-filter-chip>Баскетбол</button>
-            <button class="filter-chip" type="button" data-filter-chip>Волейбол</button>
-          </div>
-        </section>
-
-        <div class="row g-3">
-          <div class="col-lg-7">
-            <article class="empty-state-panel h-100">
-              <span class="empty-state-panel__icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><path d="M5 6h14v12H5z" /><path d="M8 3v6M16 3v6M5 10h14" /></svg>
-              </span>
-              <h2 class="h4 mb-2">Выберите турнир и готовьте состав</h2>
-              <p class="mb-0">
-                Сначала зарегистрируйтесь. После входа можно собрать команду и подать заявку без переписки с организатором.
-              </p>
-              <div class="empty-state-panel__actions">
-                <a class="cta-button cta-button-primary" href="/register">Подать заявку</a>
-                <a class="cta-button cta-button-secondary" href="/rules">Посмотреть правила</a>
-              </div>
-            </article>
-          </div>
-          <div class="col-lg-5">
-            <article class="surface-panel p-4 h-100">
-              <h2 class="h4 mb-2">На что смотреть перед заявкой</h2>
-              <ul class="comparison-list mb-4">
-                <li>Какая дисциплина и какой формат</li>
-                <li>Когда дедлайн заявки и матчи</li>
-                <li>Сколько игроков нужно в составе</li>
-              </ul>
-              <div class="d-flex flex-wrap gap-2">
-                <a class="cta-button cta-button-primary" href="/register">Создать аккаунт</a>
-                <a class="cta-button cta-button-secondary" href="/contacts">Написать организатору</a>
-              </div>
-            </article>
-          </div>
-        </div>
+    <div class="container">
+      <div class="page-head">
+        <h1 class="section-title">Турниры</h1>
+        <p class="section-subtitle">
+          Даты, дисциплины, заявки и требования к составу. Сначала смотрите условия, потом собирайте команду.
+        </p>
       </div>
+
+      <section class="filter-panel mb-3" aria-label="Фильтры турниров">
+        <div class="d-flex flex-wrap gap-2">
+          <span class="filter-chip is-active">Все дисциплины</span>
+          <span class="filter-chip">CS2</span>
+          <span class="filter-chip">Футбол</span>
+          <span class="filter-chip">Баскетбол</span>
+          <span class="filter-chip">Волейбол</span>
+        </div>
+      </section>
+
+      <div class="profile-grid">
+        <article v-for="tournament in tournaments" :key="tournament.id" class="profile-card">
+          <div class="profile-card__head">
+            <div>
+              <span class="profile-card__badge">{{ sportLabels[tournament.sport] }}</span>
+              <h2>{{ tournament.name }}</h2>
+            </div>
+            <StatusBadge :status="tournament.status" :label="statusLabels[tournament.status]" />
+          </div>
+
+          <p class="profile-card__note">{{ tournament.description }}</p>
+
+          <dl class="profile-card__meta">
+            <div>
+              <dt>Старт</dt>
+              <dd>{{ formatDate(tournament.eventStartDate) }}</dd>
+            </div>
+            <div>
+              <dt>Состав</dt>
+              <dd>{{ tournament.requiredTeamSize }} игроков</dd>
+            </div>
+            <div>
+              <dt>Заявок</dt>
+              <dd>{{ applicationsByTournament.get(tournament.id)?.length ?? 0 }}/{{ tournament.maxTeams }}</dd>
+            </div>
+          </dl>
+
+          <div class="profile-card__actions">
+            <NuxtLink class="cta-button cta-button-primary" :to="`/tournaments/${tournament.id}`">Открыть турнир</NuxtLink>
+            <NuxtLink class="cta-button cta-button-secondary" to="/teams">Найти команду</NuxtLink>
+          </div>
+        </article>
+      </div>
+    </div>
   </div>
 </template>

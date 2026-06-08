@@ -1,6 +1,165 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
+import { ratingService } from '~/services'
+import type { RatingRow, RatingSeason, SportKey } from '~/types/domain'
+
+type SportTabValue = 'all' | SportKey
+
+const sportLabels: Record<SportKey, string> = {
+  cs2: 'CS2',
+  football: 'Футбол',
+  basketball: 'Баскетбол',
+  volleyball: 'Волейбол'
+}
+
+const entityTypeLabels: Record<RatingRow['entityType'], string> = {
+  player: 'Игрок',
+  team: 'Команда'
+}
+
+const entityHeadingLabels: Record<RatingRow['entityType'], string> = {
+  player: 'Игроки',
+  team: 'Команды'
+}
+
+const sportTabs: { label: string; value: SportTabValue }[] = [
+  { label: 'Все спорты', value: 'all' },
+  { label: 'CS2', value: 'cs2' },
+  { label: 'Футбол', value: 'football' },
+  { label: 'Баскетбол', value: 'basketball' },
+  { label: 'Волейбол', value: 'volleyball' }
+]
+
+const entityTabs: { label: string; value: RatingRow['entityType'] }[] = [
+  { label: 'Команды', value: 'team' },
+  { label: 'Игроки', value: 'player' }
+]
+
+const ratingColumns = [
+  { key: 'position', label: 'Место' },
+  { key: 'entityName', label: 'Участник' },
+  { key: 'entityType', label: 'Тип' },
+  { key: 'sport', label: 'Спорт' },
+  { key: 'points', label: 'Очки', align: 'end' as const }
+]
+
+const [ratings, seasons] = await Promise.all([
+  ratingService.leaderboard(),
+  ratingService.seasons()
+])
+
+const selectedSport = ref<SportTabValue>('all')
+const selectedEntity = ref<RatingRow['entityType']>('team')
+const selectedSeasonBySport = reactive<Partial<Record<SportKey, string>>>({})
+
+const seasonsBySport = computed(() => {
+  return seasons.reduce<Record<SportKey, RatingSeason[]>>((acc, season) => {
+    acc[season.sport].push(season)
+    return acc
+  }, {
+    cs2: [],
+    football: [],
+    basketball: [],
+    volleyball: []
+  })
+})
+
+const selectedSportLabel = computed(() => {
+  return sportTabs.find((tab) => tab.value === selectedSport.value)?.label ?? 'Все спорты'
+})
+
+const activeSportSeasons = computed(() => {
+  if (selectedSport.value === 'all') {
+    return []
+  }
+
+  return seasonsBySport.value[selectedSport.value]
+})
+
+const selectedSeason = computed(() => {
+  if (selectedSport.value === 'all') {
+    return null
+  }
+
+  const sportSeasons = activeSportSeasons.value
+  const selectedId = selectedSeasonBySport[selectedSport.value]
+  return sportSeasons.find((season) => season.id === selectedId)
+    ?? sportSeasons.find((season) => season.active)
+    ?? sportSeasons[0]
+    ?? null
+})
+
+const selectedSeasonIndex = computed(() => {
+  if (!selectedSeason.value) {
+    return -1
+  }
+
+  return activeSportSeasons.value.findIndex((season) => season.id === selectedSeason.value?.id)
+})
+
+const hasPreviousSeason = computed(() => selectedSeasonIndex.value >= 0 && selectedSeasonIndex.value < activeSportSeasons.value.length - 1)
+const hasNextSeason = computed(() => selectedSeasonIndex.value > 0)
+
+const filteredRatings = computed(() => {
+  return ratings
+    .filter((row) => row.entityType === selectedEntity.value)
+    .filter((row) => {
+      if (selectedSport.value === 'all') {
+        return row.ratingScope === 'overall'
+      }
+
+      return row.sport === selectedSport.value
+        && row.ratingScope === 'seasonal'
+        && row.seasonId === selectedSeason.value?.id
+    })
+})
+
+const ratingRows = computed(() => {
+  return filteredRatings.value.map((row) => ({
+    id: row.id,
+    position: row.position,
+    entityName: row.entityName,
+    entityType: entityTypeLabels[row.entityType],
+    sport: sportLabels[row.sport],
+    points: row.points
+  }))
+})
+
+const setAdjacentSeason = (direction: 'previous' | 'next') => {
+  if (selectedSport.value === 'all' || selectedSeasonIndex.value < 0) {
+    return
+  }
+
+  const nextIndex = direction === 'previous'
+    ? selectedSeasonIndex.value + 1
+    : selectedSeasonIndex.value - 1
+  const season = activeSportSeasons.value[nextIndex]
+
+  if (season) {
+    selectedSeasonBySport[selectedSport.value] = season.id
+  }
+}
+
+watch(selectedSport, (sport) => {
+  if (sport === 'all' || selectedSeasonBySport[sport]) {
+    return
+  }
+
+  const activeSeason = seasonsBySport.value[sport].find((season) => season.active)
+    ?? seasonsBySport.value[sport][0]
+
+  if (activeSeason) {
+    selectedSeasonBySport[sport] = activeSeason.id
+  }
+}, { immediate: true })
+
 useHead({
   title: 'Рейтинг — РазрядАрена',
+  meta: [
+    {
+      name: 'description',
+      content: 'Рейтинг команд и игроков РазрядАрены по видам спорта и сезонам.'
+    }
+  ],
   bodyAttrs: {
     class: 'layout-public',
     'data-page': 'ratings',
@@ -11,47 +170,60 @@ useHead({
 
 <template>
   <div class="section-padding">
-<div class="container">
-        <div class="page-head">
-          <h1 class="section-title">Рейтинг команд</h1>
-          <p class="section-subtitle">Очки и места меняются после принятых результатов, а не по слухам из чата.</p>
+    <div class="container">
+      <div class="page-head">
+        <h1 class="section-title">Рейтинг</h1>
+        <p class="section-subtitle">
+          Таблица команд и игроков по сыгранным матчам. Выберите спорт и нужный список.
+        </p>
+      </div>
+
+      <section class="ratings-board mt-3" aria-label="Рейтинг участников">
+        <div class="ratings-board__controls">
+          <div>
+            <p class="eyebrow mb-2">Спорт</p>
+            <BaseTabs v-model="selectedSport" :tabs="sportTabs" aria-label="Виды спорта в рейтинге" />
+          </div>
+
+          <div>
+            <p class="eyebrow mb-2">Список</p>
+            <BaseTabs v-model="selectedEntity" :tabs="entityTabs" aria-label="Тип участников рейтинга" />
+          </div>
         </div>
 
-        <section class="filter-panel mb-3" data-filter-group>
-          <div class="d-flex flex-wrap gap-2">
-            <button class="filter-chip is-active" type="button" data-filter-chip>Общий рейтинг</button>
-            <button class="filter-chip" type="button" data-filter-chip>Киберспорт</button>
-            <button class="filter-chip" type="button" data-filter-chip>Футбол</button>
-            <button class="filter-chip" type="button" data-filter-chip>Баскетбол</button>
+        <div v-if="selectedSport !== 'all' && selectedSeason" class="ratings-season-switcher">
+          <button
+            class="ratings-season-switcher__button"
+            type="button"
+            :disabled="!hasPreviousSeason"
+            @click="setAdjacentSeason('previous')"
+          >
+            Предыдущий
+          </button>
+          <div>
+            <span>Сезон</span>
+            <strong>{{ selectedSeason.title }}</strong>
           </div>
-        </section>
+          <button
+            class="ratings-season-switcher__button"
+            type="button"
+            :disabled="!hasNextSeason"
+            @click="setAdjacentSeason('next')"
+          >
+            Следующий
+          </button>
+        </div>
 
-        <section class="empty-state-panel mb-3">
-          <span class="empty-state-panel__icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M6 18h12" /><path d="M8 18V9m4 9V5m4 13v-7" /></svg>
-          </span>
-          <h2 class="h4 mb-2">Рейтинг сезона</h2>
-          <p class="mb-0">
-            Сыграли, результат приняли — таблица обновилась. Без ручных пересчётов после каждой игры.
-          </p>
-          <div class="empty-state-panel__actions">
-            <a class="cta-button cta-button-primary" href="/tournaments">Смотреть турниры</a>
-            <a class="cta-button cta-button-secondary" href="/rules">Как считается рейтинг</a>
-          </div>
-        </section>
+        <div class="ratings-board__title">
+          <h2>{{ selectedSportLabel }} · {{ entityHeadingLabels[selectedEntity] }}</h2>
+        </div>
 
-        <article class="surface-panel p-4">
-          <h2 class="h4 mb-2">Что влияет на место в таблице</h2>
-          <ul class="comparison-list mb-3">
-            <li>Победы, поражения и технические результаты</li>
-            <li>Формат турнира и стадия сезона</li>
-            <li>Принятый протокол матча</li>
-          </ul>
-          <div class="d-flex flex-wrap gap-2">
-            <a class="cta-button cta-button-primary" href="/rules">Открыть правила</a>
-            <a class="cta-button cta-button-secondary" href="/contacts">Написать организатору</a>
-          </div>
-        </article>
-      </div>
+        <BaseTable
+          :columns="ratingColumns"
+          :rows="ratingRows"
+          empty-text="В этом разделе пока нет участников."
+        />
+      </section>
+    </div>
   </div>
 </template>

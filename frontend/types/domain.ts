@@ -185,6 +185,9 @@ export interface RatingRow {
   entityName: string
   entityType: 'player' | 'team'
   sport: SportKey
+  ratingScope?: 'overall' | 'seasonal'
+  seasonId?: string
+  formatKey?: string
   points: number
   position: number
 }
@@ -193,6 +196,7 @@ export interface RatingSeason {
   id: string
   title: string
   sport: SportKey
+  sequenceNo?: number
   startsAt: string
   endsAt?: string
   active: boolean

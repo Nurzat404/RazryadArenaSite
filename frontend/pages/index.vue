@@ -95,18 +95,15 @@ const getOpponentName = (match: Match) => {
 const dashboardStats = [
   {
     label: 'Моих команд',
-    value: userTeams.length,
-    hint: userTeams.length ? 'составы уже в профиле' : 'можно создать первую'
+    value: userTeams.length
   },
   {
     label: 'Ближайших матчей',
-    value: userMatches.length,
-    hint: userMatches.length ? 'без поиска по чатам' : 'появятся после заявки'
+    value: userMatches.length
   },
   {
     label: 'Турниров открыто',
-    value: tournaments.filter((tournament) => tournament.status === 'registration_open').length,
-    hint: 'можно подать заявку'
+    value: tournaments.filter((tournament) => tournament.status === 'registration_open').length
   }
 ]
 
@@ -187,7 +184,6 @@ useHead({
             <article v-for="item in dashboardStats" :key="item.label" class="home-dashboard-stat">
               <span>{{ item.label }}</span>
               <strong>{{ item.value }}</strong>
-              <small>{{ item.hint }}</small>
             </article>
           </div>
 
@@ -318,7 +314,7 @@ useHead({
               </div>
             </section>
 
-            <section class="home-dashboard-card" aria-labelledby="home-news-title">
+            <section class="home-dashboard-card home-dashboard-card--wide" aria-labelledby="home-news-title">
               <div class="home-dashboard-card__head">
                 <div>
                   <p class="home-kicker">Новости</p>
