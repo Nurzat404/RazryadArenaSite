@@ -1,4 +1,115 @@
 ﻿<script setup lang="ts">
+import { matchService, newsService, ratingService, teamService, tournamentService } from '~/services'
+import type { Match, SiteNewsType, SportKey, TournamentStatus } from '~/types/domain'
+
+const auth = useAuthStore()
+
+if (!auth.initialized) {
+  await auth.loadCurrentUser()
+}
+
+const sportLabels: Record<SportKey, string> = {
+  cs2: 'CS2',
+  football: 'Футбол',
+  basketball: 'Баскетбол',
+  volleyball: 'Волейбол'
+}
+
+const tournamentStatusLabels: Record<TournamentStatus, string> = {
+  draft: 'Готовится',
+  registration_open: 'Идут заявки',
+  registration_closed: 'Заявки закрыты',
+  active: 'Идёт турнир',
+  finished: 'Завершён'
+}
+
+const newsTypeLabels: Record<SiteNewsType, string> = {
+  announcement: 'Важно',
+  tournament: 'Турнир',
+  update: 'Обновление'
+}
+
+const formatDate = (value: string) =>
+  new Intl.DateTimeFormat('ru-RU', {
+    day: 'numeric',
+    month: 'long'
+  }).format(new Date(value))
+
+const formatDateTime = (value: string) =>
+  new Intl.DateTimeFormat('ru-RU', {
+    day: 'numeric',
+    month: 'long',
+    hour: '2-digit',
+    minute: '2-digit'
+  }).format(new Date(value))
+
+const [tournaments, allTeams, ratingRows, newsItems] = await Promise.all([
+  tournamentService.list(),
+  teamService.list(),
+  ratingService.leaderboard(),
+  newsService.list(3)
+])
+
+const userTeams = auth.user ? await teamService.listByUser(auth.user.id) : []
+const userTeamIds = new Set(userTeams.map((team) => team.id))
+const teamById = new Map(allTeams.map((team) => [team.id, team]))
+const tournamentById = new Map(tournaments.map((tournament) => [tournament.id, tournament]))
+
+const uniqueMatches = (matches: Match[]) => {
+  const seen = new Set<string>()
+
+  return matches.filter((match) => {
+    if (seen.has(match.id)) {
+      return false
+    }
+
+    seen.add(match.id)
+    return true
+  })
+}
+
+const userMatches = auth.user && userTeams.length
+  ? uniqueMatches((await Promise.all(userTeams.map((team) => matchService.list({ teamId: team.id })))).flat())
+      .filter((match) => match.status !== 'finished')
+      .slice(0, 3)
+  : []
+
+const upcomingTournaments = tournaments
+  .filter((tournament) => tournament.status !== 'finished')
+  .sort((a, b) => a.eventStartDate.localeCompare(b.eventStartDate))
+  .slice(0, 3)
+
+const topRatingRows = ratingRows.slice(0, 5)
+const popularTeams = [...allTeams].sort((a, b) => b.rating - a.rating).slice(0, 4)
+
+const getTeamName = (teamId: string) => teamById.get(teamId)?.name ?? 'Команда уточняется'
+const getTournamentName = (tournamentId: string) => tournamentById.get(tournamentId)?.name ?? 'Турнир'
+
+const getOpponentName = (match: Match) => {
+  const ownTeamId = [match.team1Id, match.team2Id].find((teamId) => userTeamIds.has(teamId))
+  const opponentId = ownTeamId === match.team1Id ? match.team2Id : match.team1Id
+
+  return getTeamName(opponentId)
+}
+
+const dashboardStats = [
+  {
+    label: 'Моих команд',
+    value: userTeams.length,
+    hint: userTeams.length ? 'составы уже в профиле' : 'можно создать первую'
+  },
+  {
+    label: 'Ближайших матчей',
+    value: userMatches.length,
+    hint: userMatches.length ? 'без поиска по чатам' : 'появятся после заявки'
+  },
+  {
+    label: 'Турниров открыто',
+    value: tournaments.filter((tournament) => tournament.status === 'registration_open').length,
+    hint: 'можно подать заявку'
+  }
+]
+
 const faqItems = [
   {
     question: 'Зачем нужен аккаунт?',
@@ -39,17 +150,197 @@ const toggleFaq = (index: number) => {
 }
 
 useHead({
-  title: 'РазрядАрена — турниры, команды и матчи без путаницы',
+  title: auth.isAuthenticated
+    ? 'РазрядАрена — главная'
+    : 'РазрядАрена — турниры, команды и матчи без путаницы',
   bodyAttrs: {
     class: 'layout-public home-landing',
     'data-page': 'home',
-    'data-role': 'public'
+    'data-role': auth.isAuthenticated ? 'user' : 'public'
   }
 })
 </script>
 
 <template>
   <div>
+    <template v-if="auth.isAuthenticated">
+      <section class="home-dashboard section-padding" aria-labelledby="dashboard-title">
+        <div class="container">
+          <div class="home-dashboard__hero">
+            <div>
+              <p class="home-kicker">Главная</p>
+              <h1 id="dashboard-title" class="home-dashboard__title">
+                {{ auth.user?.name }}, вот что сейчас происходит
+              </h1>
+              <p class="home-dashboard__lead">
+                Ближайшие игры, открытые заявки и команды рядом. Без поиска по чатам и старым таблицам.
+              </p>
+            </div>
+            <div class="home-dashboard__actions" aria-label="Быстрые действия">
+              <NuxtLink class="cta-button cta-button-primary" to="/matches">Открыть расписание</NuxtLink>
+              <NuxtLink class="cta-button cta-button-secondary" to="/tournaments">Подать заявку</NuxtLink>
+              <NuxtLink class="cta-button cta-button-secondary" to="/teams">Создать команду</NuxtLink>
+            </div>
+          </div>
+
+          <div class="home-dashboard__stats" aria-label="Короткая сводка">
+            <article v-for="item in dashboardStats" :key="item.label" class="home-dashboard-stat">
+              <span>{{ item.label }}</span>
+              <strong>{{ item.value }}</strong>
+              <small>{{ item.hint }}</small>
+            </article>
+          </div>
+
+          <div class="home-dashboard-grid">
+            <section class="home-dashboard-card home-dashboard-card--wide" aria-labelledby="home-tournaments-title">
+              <div class="home-dashboard-card__head">
+                <div>
+                  <p class="home-kicker">Ближайшие турниры</p>
+                  <h2 id="home-tournaments-title">Куда можно успеть</h2>
+                </div>
+                <NuxtLink to="/tournaments">Все турниры</NuxtLink>
+              </div>
+
+              <div class="home-dashboard-list">
+                <article v-for="tournament in upcomingTournaments" :key="tournament.id" class="home-dashboard-item">
+                  <div>
+                    <span class="home-dashboard-badge">{{ sportLabels[tournament.sport] }}</span>
+                    <h3>{{ tournament.name }}</h3>
+                    <p>{{ tournament.city }} · старт {{ formatDate(tournament.eventStartDate) }}</p>
+                  </div>
+                  <div class="home-dashboard-item__meta">
+                    <strong>{{ tournamentStatusLabels[tournament.status] }}</strong>
+                    <span>{{ tournament.requiredTeamSize }} игроков в составе</span>
+                  </div>
+                </article>
+              </div>
+            </section>
+
+            <section class="home-dashboard-card" aria-labelledby="home-matches-title">
+              <div class="home-dashboard-card__head">
+                <div>
+                  <p class="home-kicker">Мои матчи</p>
+                  <h2 id="home-matches-title">Что играть дальше</h2>
+                </div>
+                <NuxtLink to="/matches">Матчи</NuxtLink>
+              </div>
+
+              <div v-if="userMatches.length" class="home-dashboard-list">
+                <article v-for="match in userMatches" :key="match.id" class="home-dashboard-item home-dashboard-item--compact">
+                  <div>
+                    <span class="home-dashboard-badge">{{ sportLabels[match.sport] }}</span>
+                    <h3>Против {{ getOpponentName(match) }}</h3>
+                    <p>{{ getTournamentName(match.tournamentId) }}</p>
+                  </div>
+                  <div class="home-dashboard-item__meta">
+                    <strong>{{ formatDateTime(match.scheduledAt) }}</strong>
+                    <span>{{ match.location }}</span>
+                  </div>
+                </article>
+              </div>
+
+              <div v-else class="home-dashboard-empty">
+                <h3>Матчей пока нет</h3>
+                <p>Когда команда попадёт в турнир, здесь появятся соперник, время и место игры.</p>
+                <NuxtLink to="/tournaments">Смотреть турниры</NuxtLink>
+              </div>
+            </section>
+
+            <section class="home-dashboard-card" aria-labelledby="home-teams-title">
+              <div class="home-dashboard-card__head">
+                <div>
+                  <p class="home-kicker">Мои команды</p>
+                  <h2 id="home-teams-title">С кем играешь</h2>
+                </div>
+                <NuxtLink to="/profile/teams">Профиль</NuxtLink>
+              </div>
+
+              <div v-if="userTeams.length" class="home-dashboard-list">
+                <article v-for="team in userTeams" :key="team.id" class="home-dashboard-item home-dashboard-item--compact">
+                  <div>
+                    <span class="home-dashboard-badge">{{ sportLabels[team.sport] }}</span>
+                    <h3>{{ team.name }}</h3>
+                    <p>{{ team.city }} · {{ team.memberIds.length }}/{{ team.maxMembers }} игроков</p>
+                  </div>
+                  <div class="home-dashboard-item__meta">
+                    <strong>{{ team.rating }}</strong>
+                    <span>рейтинг</span>
+                  </div>
+                </article>
+              </div>
+
+              <div v-else class="home-dashboard-empty">
+                <h3>Команды ещё нет</h3>
+                <p>Можно собрать свою команду или найти открытую под нужный вид спорта.</p>
+                <NuxtLink to="/teams">Открыть команды</NuxtLink>
+              </div>
+            </section>
+
+            <section class="home-dashboard-card" aria-labelledby="home-ratings-title">
+              <div class="home-dashboard-card__head">
+                <div>
+                  <p class="home-kicker">Рейтинг</p>
+                  <h2 id="home-ratings-title">Топ сейчас</h2>
+                </div>
+                <NuxtLink to="/ratings">Весь рейтинг</NuxtLink>
+              </div>
+
+              <ol class="home-dashboard-ranking">
+                <li v-for="row in topRatingRows" :key="row.id">
+                  <span>{{ row.position }}</span>
+                  <strong>{{ row.entityName }}</strong>
+                  <small>{{ sportLabels[row.sport] }} · {{ row.points }} очков</small>
+                </li>
+              </ol>
+            </section>
+
+            <section class="home-dashboard-card" aria-labelledby="home-popular-teams-title">
+              <div class="home-dashboard-card__head">
+                <div>
+                  <p class="home-kicker">Команды</p>
+                  <h2 id="home-popular-teams-title">Кто на виду</h2>
+                </div>
+                <NuxtLink to="/teams">Все команды</NuxtLink>
+              </div>
+
+              <div class="home-dashboard-list">
+                <article v-for="team in popularTeams" :key="team.id" class="home-dashboard-item home-dashboard-item--compact">
+                  <div>
+                    <span class="home-dashboard-badge">{{ sportLabels[team.sport] }}</span>
+                    <h3>{{ team.name }}</h3>
+                    <p>{{ team.isOpenForRequests ? 'Принимают заявки' : 'Состав закрыт' }}</p>
+                  </div>
+                  <div class="home-dashboard-item__meta">
+                    <strong>{{ team.rating }}</strong>
+                    <span>очков</span>
+                  </div>
+                </article>
+              </div>
+            </section>
+
+            <section class="home-dashboard-card" aria-labelledby="home-news-title">
+              <div class="home-dashboard-card__head">
+                <div>
+                  <p class="home-kicker">Новости</p>
+                  <h2 id="home-news-title">Что поменялось</h2>
+                </div>
+              </div>
+
+              <div class="home-dashboard-news">
+                <article v-for="item in newsItems" :key="item.id">
+                  <span>{{ newsTypeLabels[item.type] }} · {{ formatDate(item.publishedAt) }}</span>
+                  <h3>{{ item.title }}</h3>
+                  <p>{{ item.body }}</p>
+                  <NuxtLink v-if="item.actionUrl" :to="item.actionUrl">Открыть</NuxtLink>
+                </article>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+    </template>
+
+    <template v-else>
 <!-- Главный экран с более компактной продуктовой подачей -->
       <section class="home-hero" aria-labelledby="hero-title">
         <div class="container">
@@ -502,5 +793,6 @@ useHead({
           </div>
         </div>
       </section>
+    </template>
   </div>
 </template>

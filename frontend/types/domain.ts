@@ -41,6 +41,8 @@ export type AdminActionType =
   | 'team_excluded'
   | 'rating_adjusted'
 
+export type SiteNewsType = 'announcement' | 'tournament' | 'update'
+
 export type UiStatus =
   | TournamentStatus
   | ApplicationStatus
@@ -257,4 +259,13 @@ export interface AdminAction {
   targetId: string
   comment?: string
   createdAt: string
+}
+
+export interface SiteNews {
+  id: string
+  title: string
+  body: string
+  type: SiteNewsType
+  publishedAt: string
+  actionUrl?: string
 }
