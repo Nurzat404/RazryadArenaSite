@@ -1,5 +1,6 @@
 import { mockUsers } from '~/data/mock/users'
 import type { SportKey, User } from '~/types/domain'
+import type { UserProfilePayload } from '~/services/userService'
 
 export interface RegisterPayload {
   name: string
@@ -14,12 +15,12 @@ export interface RegisterPayload {
 const mockUserIdCookie = 'ra_mock_user_id'
 const mockUserCookie = 'ra_mock_user'
 
-const saveSession = (user: User) => {
+const saveSession = (user: User, persistSnapshot = false) => {
   const userId = useCookie<string | null>(mockUserIdCookie, { sameSite: 'lax' })
   const customUser = useCookie<User | null>(mockUserCookie, { sameSite: 'lax' })
 
   userId.value = user.id
-  customUser.value = mockUsers.some((item) => item.id === user.id) ? null : user
+  customUser.value = persistSnapshot || !mockUsers.some((item) => item.id === user.id) ? user : null
 }
 
 const clearSession = () => {
@@ -34,7 +35,7 @@ const readSession = () => {
   const userId = useCookie<string | null>(mockUserIdCookie, { sameSite: 'lax' })
   const customUser = useCookie<User | null>(mockUserCookie, { sameSite: 'lax' })
 
-  return mockUsers.find((item) => item.id === userId.value) ?? customUser.value ?? null
+  return customUser.value ?? mockUsers.find((item) => item.id === userId.value) ?? null
 }
 
 export const authService = {
@@ -51,6 +52,22 @@ export const authService = {
 
   async currentUser() {
     return readSession()
+  },
+
+  async updateCurrentUser(payload: UserProfilePayload) {
+    const user = readSession()
+
+    if (!user) {
+      return null
+    }
+
+    const updatedUser = {
+      ...user,
+      ...payload
+    }
+
+    saveSession(updatedUser, true)
+    return updatedUser
   },
 
   async register(payload: RegisterPayload): Promise<User> {

@@ -236,6 +236,56 @@ body.layout-public[data-page="partners"] .page-head {
   gap: 1rem;
 }
 
+.profile-overview {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.profile-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.profile-summary-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 150px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-card);
+  background:
+    linear-gradient(145deg, rgba(38, 217, 255, 0.08), rgba(255, 140, 0, 0.08)),
+    rgba(26, 19, 51, 0.76);
+  padding: 1rem;
+  box-shadow: var(--shadow-soft);
+}
+
+.profile-summary-card span {
+  color: var(--color-text);
+  font-size: 2rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.profile-summary-card p {
+  margin: 0.75rem 0;
+  color: rgba(246, 240, 234, 0.82);
+  line-height: 1.45;
+}
+
+.profile-summary-card a {
+  color: #ffd18e;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.profile-summary-card a:hover {
+  color: #fff2dd;
+}
+
 .profile-card {
   display: flex;
   flex-direction: column;
@@ -248,6 +298,10 @@ body.layout-public[data-page="partners"] .page-head {
     linear-gradient(145deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.018)),
     rgba(26, 19, 51, 0.72);
   box-shadow: var(--shadow-soft);
+}
+
+.profile-card--wide {
+  min-height: 100%;
 }
 
 .profile-card__head {
@@ -325,6 +379,61 @@ body.layout-public[data-page="partners"] .page-head {
   flex-wrap: wrap;
   gap: 0.75rem;
   margin-top: auto;
+}
+
+.profile-edit-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.profile-sport-picker {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.profile-sport-option {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 3.4rem;
+  padding: 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-card);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--color-text);
+  cursor: pointer;
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.profile-sport-option:hover,
+.profile-sport-option--active {
+  border-color: rgba(255, 140, 0, 0.36);
+  background: rgba(255, 140, 0, 0.13);
+}
+
+.profile-sport-option:hover {
+  transform: translateY(-1px);
+}
+
+.profile-sport-option input {
+  width: 1rem;
+  height: 1rem;
+  accent-color: #ff8c00;
+}
+
+.profile-sport-option span {
+  font-weight: 800;
+}
+
+.profile-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
 }
 
 .ratings-board {
@@ -466,8 +575,10 @@ body.layout-public[data-page="partners"] .page-head {
 }
 
 @media (max-width: 991.98px) {
+  .profile-overview,
   .profile-grid,
   .profile-card__meta,
+  .profile-sport-picker,
   .ratings-board__controls,
   .ratings-board__info,
   .ratings-seasons {
@@ -480,12 +591,18 @@ body.layout-public[data-page="partners"] .page-head {
 }
 
 @media (max-width: 575.98px) {
+  .profile-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
   .profile-card__head,
-  .profile-card__actions {
+  .profile-card__actions,
+  .profile-form-actions {
     flex-direction: column;
   }
 
-  .profile-card__actions .cta-button {
+  .profile-card__actions .cta-button,
+  .profile-form-actions .cta-button {
     width: 100%;
   }
 }
@@ -604,6 +721,16 @@ body.layout-public[data-page="partners"] .page-head {
   border: 1px solid rgba(25, 195, 125, 0.34);
   background: rgba(25, 195, 125, 0.12);
   color: #b7f4d7;
+  line-height: 1.55;
+}
+
+.form-error {
+  margin-top: 0.9rem;
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-card);
+  border: 1px solid rgba(255, 82, 82, 0.34);
+  background: rgba(255, 82, 82, 0.12);
+  color: #ffd3d3;
   line-height: 1.55;
 }
 

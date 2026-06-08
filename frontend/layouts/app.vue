@@ -10,6 +10,7 @@ const links = [
   { to: '/profile', label: 'Профиль' },
   { to: '/profile/teams', label: 'Мои команды' },
   { to: '/profile/tournaments', label: 'Мои турниры' },
+  { to: '/profile/matches', label: 'Мои матчи' },
   { to: '/profile/stats', label: 'Статистика' },
   { to: '/profile/referrals', label: 'Рефералка' }
 ]

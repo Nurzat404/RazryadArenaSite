@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import type { User } from '~/types/domain'
 import { authService, type RegisterPayload } from '~/services/authService'
+import type { UserProfilePayload } from '~/services/userService'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -22,6 +23,10 @@ export const useAuthStore = defineStore('auth', {
     },
     async register(payload: RegisterPayload) {
       this.user = await authService.register(payload)
+      this.initialized = true
+    },
+    async updateProfile(payload: UserProfilePayload) {
+      this.user = await authService.updateCurrentUser(payload)
       this.initialized = true
     },
     async logout() {
