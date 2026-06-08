@@ -1,4 +1,11 @@
 <script setup lang="ts">
+const auth = useAuthStore()
+
+const handleLogout = async () => {
+  await auth.logout()
+  await navigateTo('/')
+}
+
 const links = [
   { to: '/profile', label: 'Профиль' },
   { to: '/profile/teams', label: 'Мои команды' },
@@ -26,7 +33,12 @@ const links = [
         <NuxtLink class="site-footer-link" to="/">
           На сайт
         </NuxtLink>
-        <span class="text-muted-strong">Личный кабинет</span>
+        <div class="d-flex align-items-center gap-3">
+          <span class="text-muted-strong">Личный кабинет</span>
+          <button class="site-footer-link border-0 bg-transparent p-0" type="button" @click="handleLogout">
+            Выйти
+          </button>
+        </div>
       </div>
       <slot />
     </main>

@@ -1,6 +1,11 @@
 <script setup lang="ts">
 const auth = useAuthStore()
 
+const handleLogout = async () => {
+  await auth.logout()
+  await navigateTo('/')
+}
+
 const publicLinks = [
   { to: '/', label: 'Главная' },
   { to: '/tournaments', label: 'Турниры' },
@@ -48,6 +53,9 @@ const publicLinks = [
               <NuxtLink v-if="auth.isAdmin" class="cta-button cta-button-primary" to="/admin">
                 Админка
               </NuxtLink>
+              <button class="cta-button cta-button-secondary" type="button" @click="handleLogout">
+                Выйти
+              </button>
             </template>
             <template v-else>
               <NuxtLink class="cta-button cta-button-secondary" to="/login">

@@ -1,4 +1,14 @@
 <script setup lang="ts">
+import { authService } from '~/services/authService'
+
+const route = useRoute()
+const verified = ref(false)
+
+onMounted(async () => {
+  const result = await authService.verifyEmail(String(route.query.token ?? 'mock-token'))
+  verified.value = result.success
+})
+
 useHead({
   title: 'Подтверждение почты — РазрядАрена',
   bodyAttrs: {
@@ -18,7 +28,7 @@ useHead({
             Подтверждение почты
           </h1>
           <p class="section-subtitle mx-auto mb-3">
-            Почта подтверждена. Теперь можно войти.
+            {{ verified ? 'Почта подтверждена. Теперь можно войти.' : 'Проверяем ссылку подтверждения.' }}
           </p>
           <a class="cta-button cta-button-primary" href="/login">
             Войти

@@ -1,11 +1,31 @@
 <script setup lang="ts">
-const sports = ['Футбол', 'Баскетбол', 'Волейбол', 'CS2', 'Настольный теннис', 'Шахматы']
+import type { SportKey } from '~/types/domain'
 
-const selectedSports = ref<string[]>(['Футбол'])
-const submitted = ref(false)
+const auth = useAuthStore()
 
-const toggleSport = (sport: string) => {
-  submitted.value = false
+const sports: Array<{ label: string; value: SportKey }> = [
+  { label: 'Футбол', value: 'football' },
+  { label: 'Баскетбол', value: 'basketball' },
+  { label: 'Волейбол', value: 'volleyball' },
+  { label: 'CS2', value: 'cs2' }
+]
+
+const form = reactive({
+  name: '',
+  city: '',
+  email: '',
+  age: '',
+  password: '',
+  passwordConfirm: '',
+  steamId: ''
+})
+
+const selectedSports = ref<SportKey[]>(['football'])
+const isSubmitting = ref(false)
+const errorMessage = ref('')
+
+const toggleSport = (sport: SportKey) => {
+  errorMessage.value = ''
 
   if (selectedSports.value.includes(sport)) {
     selectedSports.value = selectedSports.value.filter((item) => item !== sport)
@@ -15,8 +35,36 @@ const toggleSport = (sport: string) => {
   selectedSports.value = [...selectedSports.value, sport]
 }
 
-const handleSubmit = () => {
-  submitted.value = true
+const handleSubmit = async () => {
+  if (!selectedSports.value.length) {
+    errorMessage.value = 'Выберите хотя бы один вид спорта.'
+    return
+  }
+
+  if (form.password !== form.passwordConfirm) {
+    errorMessage.value = 'Пароли не совпадают.'
+    return
+  }
+
+  isSubmitting.value = true
+  errorMessage.value = ''
+
+  try {
+    await auth.register({
+      name: form.name.trim(),
+      email: form.email.trim(),
+      password: form.password,
+      city: form.city.trim(),
+      age: Number(form.age),
+      favoriteSports: selectedSports.value,
+      steamId: form.steamId.trim() || undefined
+    })
+    await navigateTo('/profile')
+  } catch {
+    errorMessage.value = 'Не получилось создать аккаунт. Проверьте поля и попробуйте ещё раз.'
+  } finally {
+    isSubmitting.value = false
+  }
 }
 
 useHead({
@@ -50,31 +98,38 @@ useHead({
               </h2>
               <div class="row g-3">
                 <div class="col-md-6">
-                  <label class="form-label" for="name">Имя</label>
-                  <input id="name" class="form-control" type="text" placeholder="Например, Артём" autocomplete="given-name" required>
+                  <label class="form-label" for="name">Имя <span class="text-muted-strong">(обязательно)</span></label>
+                  <input id="name" v-model="form.name" class="form-control" type="text" placeholder="Например, Артём" autocomplete="given-name" required>
                 </div>
                 <div class="col-md-6">
-                  <label class="form-label" for="city">Город</label>
-                  <input id="city" class="form-control" type="text" placeholder="Ваш город" autocomplete="address-level2" required>
+                  <label class="form-label" for="city">Город <span class="text-muted-strong">(обязательно)</span></label>
+                  <input id="city" v-model="form.city" class="form-control" type="text" placeholder="Ваш город" autocomplete="address-level2" required>
                 </div>
                 <div class="col-md-8">
-                  <label class="form-label" for="email">Email</label>
-                  <input id="email" class="form-control" type="email" placeholder="you@example.com" autocomplete="email" required>
+                  <label class="form-label" for="email">Email <span class="text-muted-strong">(обязательно)</span></label>
+                  <input id="email" v-model="form.email" class="form-control" type="email" placeholder="you@example.com" autocomplete="email" required>
                   <div class="form-text">
                     На этот адрес придёт письмо для подтверждения.
                   </div>
                 </div>
                 <div class="col-md-4">
-                  <label class="form-label" for="age">Возраст</label>
-                  <input id="age" class="form-control" type="number" min="10" max="100" placeholder="18" required>
+                  <label class="form-label" for="age">Возраст <span class="text-muted-strong">(обязательно)</span></label>
+                  <input id="age" v-model="form.age" class="form-control" type="number" min="10" max="100" placeholder="18" required>
                 </div>
                 <div class="col-md-6">
-                  <label class="form-label" for="password">Пароль</label>
-                  <input id="password" class="form-control" type="password" autocomplete="new-password" placeholder="Минимум 8 символов" minlength="8" required>
+                  <label class="form-label" for="password">Пароль <span class="text-muted-strong">(обязательно)</span></label>
+                  <input id="password" v-model="form.password" class="form-control" type="password" autocomplete="new-password" placeholder="Минимум 8 символов" minlength="8" required>
                 </div>
                 <div class="col-md-6">
-                  <label class="form-label" for="password-confirm">Повторите пароль</label>
-                  <input id="password-confirm" class="form-control" type="password" autocomplete="new-password" placeholder="Повторите пароль" minlength="8" required>
+                  <label class="form-label" for="password-confirm">Повторите пароль <span class="text-muted-strong">(обязательно)</span></label>
+                  <input id="password-confirm" v-model="form.passwordConfirm" class="form-control" type="password" autocomplete="new-password" placeholder="Повторите пароль" minlength="8" required>
+                </div>
+                <div class="col-12">
+                  <label class="form-label" for="steam-id">Ссылка на Steam-профиль <span class="text-muted-strong">(по желанию)</span></label>
+                  <input id="steam-id" v-model="form.steamId" class="form-control" type="url" placeholder="https://steamcommunity.com/id/..." autocomplete="off">
+                  <div class="form-text">
+                    Нужна только для CS2-турниров. Можно добавить позже в профиле.
+                  </div>
                 </div>
               </div>
             </section>
@@ -88,18 +143,17 @@ useHead({
               <div class="sport-picker" role="group" aria-label="Выбор дисциплин">
                 <button
                   v-for="sport in sports"
-                  :key="sport"
+                  :key="sport.value"
                   class="filter-chip sport-chip"
-                  :class="{ 'is-active': selectedSports.includes(sport) }"
+                  :class="{ 'is-active': selectedSports.includes(sport.value) }"
                   type="button"
-                  :aria-pressed="selectedSports.includes(sport)"
-                  @click="toggleSport(sport)"
+                  :aria-pressed="selectedSports.includes(sport.value)"
+                  @click="toggleSport(sport.value)"
                 >
-                  {{ sport }}
+                  {{ sport.label }}
                 </button>
               </div>
             </section>
-
 
             <div class="form-check mb-2">
               <input id="agreement" class="form-check-input" type="checkbox" required>
@@ -114,13 +168,11 @@ useHead({
               </label>
             </div>
 
-            <button class="cta-button cta-button-primary w-100" type="submit">
-              Создать аккаунт
-            </button>
+            <p v-if="errorMessage" class="form-error" role="alert">{{ errorMessage }}</p>
 
-            <p v-if="submitted" class="form-success mb-0" role="status">
-              Готово. Аккаунт создан, теперь можно войти и выбрать турнир.
-            </p>
+            <button class="cta-button cta-button-primary w-100" type="submit" :disabled="isSubmitting">
+              {{ isSubmitting ? 'Создаём...' : 'Создать аккаунт' }}
+            </button>
           </form>
         </article>
       </div>

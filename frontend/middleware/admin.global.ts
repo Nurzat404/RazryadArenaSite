@@ -1,6 +1,8 @@
-import { useAuthStore } from '~/stores/auth'
+export default defineNuxtRouteMiddleware(async (to) => {
+  if (!to.path.startsWith('/admin')) {
+    return
+  }
 
-export default defineNuxtRouteMiddleware(async () => {
   const auth = useAuthStore()
 
   if (!auth.initialized) {
@@ -9,5 +11,9 @@ export default defineNuxtRouteMiddleware(async () => {
 
   if (!auth.isAuthenticated) {
     return navigateTo('/login')
+  }
+
+  if (!auth.isAdmin) {
+    return navigateTo('/')
   }
 })

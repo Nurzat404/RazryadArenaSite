@@ -11,21 +11,51 @@ export interface RegisterPayload {
   steamId?: string
 }
 
-let mockSessionUser: User | null = null
+const mockUserIdCookie = 'ra_mock_user_id'
+const mockUserCookie = 'ra_mock_user'
+
+const saveSession = (user: User) => {
+  const userId = useCookie<string | null>(mockUserIdCookie, { sameSite: 'lax' })
+  const customUser = useCookie<User | null>(mockUserCookie, { sameSite: 'lax' })
+
+  userId.value = user.id
+  customUser.value = mockUsers.some((item) => item.id === user.id) ? null : user
+}
+
+const clearSession = () => {
+  const userId = useCookie<string | null>(mockUserIdCookie, { sameSite: 'lax' })
+  const customUser = useCookie<User | null>(mockUserCookie, { sameSite: 'lax' })
+
+  userId.value = null
+  customUser.value = null
+}
+
+const readSession = () => {
+  const userId = useCookie<string | null>(mockUserIdCookie, { sameSite: 'lax' })
+  const customUser = useCookie<User | null>(mockUserCookie, { sameSite: 'lax' })
+
+  return mockUsers.find((item) => item.id === userId.value) ?? customUser.value ?? null
+}
 
 export const authService = {
   async login(email: string, _password: string) {
-    mockSessionUser = mockUsers.find((user) => user.email === email) ?? mockUsers[0]
-    return mockSessionUser
+    const user = mockUsers.find((item) => item.email.toLowerCase() === email.toLowerCase())
+
+    if (!user) {
+      throw new Error('User not found')
+    }
+
+    saveSession(user)
+    return user
   },
 
   async currentUser() {
-    return mockSessionUser ?? mockUsers[0]
+    return readSession()
   },
 
   async register(payload: RegisterPayload): Promise<User> {
-    mockSessionUser = {
-      id: 'mock-new-user',
+    const user: User = {
+      id: `mock-user-${Date.now()}`,
       name: payload.name,
       email: payload.email,
       city: payload.city,
@@ -36,11 +66,12 @@ export const authService = {
       steamId: payload.steamId
     }
 
-    return mockSessionUser
+    saveSession(user)
+    return user
   },
 
   async logout() {
-    mockSessionUser = null
+    clearSession()
   },
 
   async requestPasswordReset(email: string) {
