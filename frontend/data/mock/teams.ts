@@ -1,4 +1,4 @@
-import type { Team, TeamInvite, TeamMember } from '~/types/domain'
+import type { Team, TeamInvite, TeamJoinRequest, TeamMember } from '~/types/domain'
 
 export const mockTeams: Team[] = [
   {
@@ -10,6 +10,9 @@ export const mockTeams: Team[] = [
     memberIds: ['u1', 'u2'],
     maxMembers: 5,
     isOpenForRequests: true,
+    notifyOnRequests: true,
+    inviteJoinMode: 'request',
+    inviteEnabled: true,
     rating: 142
   },
   {
@@ -21,6 +24,9 @@ export const mockTeams: Team[] = [
     memberIds: ['u1'],
     maxMembers: 11,
     isOpenForRequests: true,
+    notifyOnRequests: true,
+    inviteJoinMode: 'direct',
+    inviteEnabled: true,
     rating: 118
   },
   {
@@ -32,6 +38,9 @@ export const mockTeams: Team[] = [
     memberIds: ['u3', 'u5'],
     maxMembers: 5,
     isOpenForRequests: true,
+    notifyOnRequests: false,
+    inviteJoinMode: 'request',
+    inviteEnabled: true,
     rating: 131
   },
   {
@@ -43,6 +52,9 @@ export const mockTeams: Team[] = [
     memberIds: ['u6'],
     maxMembers: 8,
     isOpenForRequests: false,
+    notifyOnRequests: false,
+    inviteJoinMode: 'request',
+    inviteEnabled: false,
     rating: 96
   }
 ]
@@ -109,5 +121,35 @@ export const mockTeamInvites: TeamInvite[] = [
     createdByUserId: 'u3',
     createdAt: '2026-06-03T15:00:00.000Z',
     status: 'used'
+  }
+]
+
+export const mockTeamJoinRequests: TeamJoinRequest[] = [
+  {
+    id: 'req1',
+    teamId: 't1',
+    userId: 'u5',
+    message: 'Играю CS2 вечером, могу быть запасным на первые матчи.',
+    status: 'pending',
+    createdAt: '2026-06-07T13:20:00.000Z',
+    updatedAt: '2026-06-07T13:20:00.000Z'
+  },
+  {
+    id: 'req2',
+    teamId: 't2',
+    userId: 'u4',
+    message: 'Хочу сыграть в нападении, по выходным свободна.',
+    status: 'pending',
+    createdAt: '2026-06-06T09:15:00.000Z',
+    updatedAt: '2026-06-06T09:15:00.000Z'
+  },
+  {
+    id: 'req3',
+    teamId: 't3',
+    userId: 'u1',
+    message: 'Могу помочь на квалификации.',
+    status: 'rejected',
+    createdAt: '2026-06-04T18:00:00.000Z',
+    updatedAt: '2026-06-05T10:00:00.000Z'
   }
 ]

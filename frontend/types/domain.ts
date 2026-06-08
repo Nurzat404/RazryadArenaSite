@@ -14,6 +14,10 @@ export type TeamMemberRole = 'captain' | 'member' | 'substitute'
 
 export type TeamInviteStatus = 'active' | 'used' | 'expired' | 'revoked'
 
+export type TeamJoinRequestStatus = 'pending' | 'accepted' | 'rejected'
+
+export type TeamInviteJoinMode = 'request' | 'direct'
+
 export type BracketMatchStatus = 'pending' | 'scheduled' | 'finished'
 
 export type VetoActionType = 'ban' | 'pick' | 'decider'
@@ -71,6 +75,9 @@ export interface Team {
   memberIds: string[]
   maxMembers: number
   isOpenForRequests: boolean
+  notifyOnRequests?: boolean
+  inviteJoinMode?: TeamInviteJoinMode
+  inviteEnabled?: boolean
   rating: number
 }
 
@@ -91,6 +98,16 @@ export interface TeamInvite {
   createdAt: string
   expiresAt?: string
   status: TeamInviteStatus
+}
+
+export interface TeamJoinRequest {
+  id: string
+  teamId: string
+  userId: string
+  message?: string
+  status: TeamJoinRequestStatus
+  createdAt: string
+  updatedAt: string
 }
 
 export interface Tournament {

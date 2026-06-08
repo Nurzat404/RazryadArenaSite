@@ -1,5 +1,5 @@
-import { mockTeamInvites, mockTeamMembers, mockTeams } from '~/data/mock/teams'
-import type { SportKey, Team } from '~/types/domain'
+import { mockTeamInvites, mockTeamJoinRequests, mockTeamMembers, mockTeams } from '~/data/mock/teams'
+import type { SportKey, Team, TeamInviteJoinMode, TeamJoinRequestStatus } from '~/types/domain'
 
 export interface TeamListFilters {
   sport?: SportKey
@@ -15,6 +15,15 @@ export interface TeamPayload {
   captainId: string
   maxMembers: number
   isOpenForRequests: boolean
+  notifyOnRequests?: boolean
+  inviteJoinMode?: TeamInviteJoinMode
+  inviteEnabled?: boolean
+}
+
+export interface TeamJoinRequestPayload {
+  teamId: string
+  userId: string
+  message?: string
 }
 
 export const teamService = {
@@ -48,9 +57,16 @@ export const teamService = {
     return mockTeamInvites.filter((invite) => invite.teamId === teamId)
   },
 
+  async listRequests(teamId: string, status?: TeamJoinRequestStatus) {
+    return mockTeamJoinRequests
+      .filter((request) => request.teamId === teamId)
+      .filter((request) => (status ? request.status === status : true))
+      .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+  },
+
   async create(payload: TeamPayload): Promise<Team> {
     return {
-      id: 'mock-new-team',
+      id: `mock-team-${Date.now()}`,
       name: payload.name,
       sport: payload.sport,
       city: payload.city,
@@ -58,6 +74,9 @@ export const teamService = {
       memberIds: [payload.captainId],
       maxMembers: payload.maxMembers,
       isOpenForRequests: payload.isOpenForRequests,
+      notifyOnRequests: payload.notifyOnRequests ?? true,
+      inviteJoinMode: payload.inviteJoinMode ?? 'request',
+      inviteEnabled: payload.inviteEnabled ?? true,
       rating: 0
     }
   },
@@ -65,5 +84,40 @@ export const teamService = {
   async update(id: string, payload: Partial<TeamPayload>) {
     const team = mockTeams.find((item) => item.id === id)
     return team ? { ...team, ...payload } : null
+  },
+
+  async createRequest(payload: TeamJoinRequestPayload) {
+    const now = new Date().toISOString()
+
+    return {
+      id: `mock-team-request-${Date.now()}`,
+      status: 'pending' as const,
+      createdAt: now,
+      updatedAt: now,
+      ...payload
+    }
+  },
+
+  async updateRequestStatus(id: string, status: TeamJoinRequestStatus) {
+    const request = mockTeamJoinRequests.find((item) => item.id === id)
+    return request ? { ...request, status, updatedAt: new Date().toISOString() } : null
+  },
+
+  async regenerateInvite(teamId: string, createdByUserId: string) {
+    const team = mockTeams.find((item) => item.id === teamId)
+    const prefix = team?.name
+      .toUpperCase()
+      .replace(/[^A-ZА-Я0-9]+/gi, '-')
+      .replace(/^-|-$/g, '')
+      .slice(0, 18) || 'TEAM'
+
+    return {
+      id: `mock-invite-${Date.now()}`,
+      teamId,
+      code: `${prefix}-${Math.floor(1000 + Math.random() * 9000)}`,
+      createdByUserId,
+      createdAt: new Date().toISOString(),
+      status: 'active' as const
+    }
   }
 }
