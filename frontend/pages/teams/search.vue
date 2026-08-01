@@ -2,14 +2,16 @@
 import { teamService, userService } from '~/services'
 import type { SportKey } from '~/types/domain'
 
-useHead({
-  title: 'Поиск команд — РазрядАрена',
+const auth = useAuthStore()
+
+useHead(() => ({
+  title: 'Поиск команд',
   bodyAttrs: {
-    class: 'layout-public',
+    class: auth.isAuthenticated ? 'layout-user' : 'layout-public',
     'data-page': 'teams-search',
-    'data-role': 'public'
+    'data-role': auth.isAuthenticated ? 'user' : 'public'
   }
-})
+}))
 
 const sportLabels: Record<SportKey, string> = {
   cs2: 'CS2',
@@ -44,7 +46,7 @@ const results = computed(() => teams.filter((team) => {
 </script>
 
 <template>
-  <section class="section-padding">
+  <section class="section-padding workspace-page workspace-page--teams">
     <div class="container">
       <PageHead
         title="Поиск команд"
@@ -86,7 +88,7 @@ const results = computed(() => teams.filter((team) => {
               <span class="profile-card__badge">{{ sportLabels[team.sport] }}</span>
               <h2>{{ team.name }}</h2>
             </div>
-            <strong>{{ team.rating }}</strong>
+            <span class="profile-card__rating">Рейтинг <strong>{{ team.rating }}</strong></span>
           </div>
 
           <dl class="profile-card__meta">

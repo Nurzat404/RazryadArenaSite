@@ -5,7 +5,7 @@ import type { MatchStatus, SportKey } from '~/types/domain'
 definePageMeta({ layout: 'app', middleware: 'auth' })
 
 useHead({
-  title: 'Мои матчи | РазрядАрена',
+  title: 'Мои матчи',
   meta: [
     {
       name: 'description',
@@ -71,7 +71,7 @@ const ownTeamId = (team1Id: string, team2Id: string) =>
 </script>
 
 <template>
-  <section>
+  <section class="workspace-page workspace-page--profile">
     <PageHead
       title="Мои матчи"
       subtitle="Матчи ваших команд: где играем, против кого и какой результат уже внесён."

@@ -7,7 +7,7 @@ const handleLogout = async () => {
 }
 
 const links = [
-  { to: '/admin', label: 'Dashboard' },
+  { to: '/admin', label: 'Сводка' },
   { to: '/admin/tournaments', label: 'Турниры' },
   { to: '/admin/users', label: 'Пользователи' },
   { to: '/admin/teams', label: 'Команды' },

@@ -10,7 +10,7 @@ export const mockUsers: User[] = [
     role: 'admin',
     favoriteSports: ['cs2', 'football'],
     emailVerified: false,
-    steamId: '76561198000000000'
+    steamProfileUrl: 'https://steamcommunity.com/profiles/76561198000000000'
   },
   {
     id: 'u2',
@@ -31,7 +31,7 @@ export const mockUsers: User[] = [
     role: 'player',
     favoriteSports: ['cs2', 'basketball'],
     emailVerified: true,
-    steamId: '76561198000000003'
+    steamProfileUrl: 'https://steamcommunity.com/profiles/76561198000000003'
   },
   {
     id: 'u4',
@@ -52,7 +52,7 @@ export const mockUsers: User[] = [
     role: 'player',
     favoriteSports: ['cs2'],
     emailVerified: false,
-    steamId: '76561198000000005'
+    steamProfileUrl: 'https://steamcommunity.com/profiles/76561198000000005'
   },
   {
     id: 'u6',

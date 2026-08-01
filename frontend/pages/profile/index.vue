@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { applicationService, ratingService, statsService, teamService, tournamentService } from '~/services'
+import { applicationService, ratingService, teamService, tournamentService } from '~/services'
 import type { SportKey } from '~/types/domain'
 
 definePageMeta({
@@ -8,7 +8,7 @@ definePageMeta({
 })
 
 useHead({
-  title: 'Профиль | РазрядАрена',
+  title: 'Профиль',
   meta: [
     {
       name: 'description',
@@ -28,6 +28,12 @@ const sportLabels: Record<SportKey, string> = {
 }
 
 const currentUser = auth.user
+const userInitials = currentUser?.name
+  .split(/\s+/)
+  .slice(0, 2)
+  .map((part) => part[0])
+  .join('')
+  .toUpperCase() ?? 'РА'
 const userTeams = currentUser ? await teamService.listByUser(currentUser.id) : []
 const teamIds = userTeams.map((team) => team.id)
 const applications = (
@@ -35,7 +41,6 @@ const applications = (
 ).flat()
 const tournaments = await tournamentService.list()
 const tournamentById = new Map(tournaments.map((tournament) => [tournament.id, tournament]))
-const stats = currentUser ? await statsService.list({ userId: currentUser.id }) : []
 const playerRatings = currentUser
   ? (await Promise.all(currentUser.favoriteSports.map((sport) => ratingService.leaderboard({
       sport,
@@ -44,8 +49,6 @@ const playerRatings = currentUser
     })))).flat().filter((row) => row.entityId === currentUser.id)
   : []
 
-const approvedApplications = applications.filter((application) => application.status === 'approved')
-const pendingApplications = applications.filter((application) => application.status === 'pending')
 const now = new Date()
 const nextTournament = applications
   .map((application) => tournamentById.get(application.tournamentId))
@@ -63,120 +66,63 @@ const formatDate = (value?: string) => value
 </script>
 
 <template>
-  <section>
+  <section class="workspace-page workspace-page--profile">
     <PageHead
       title="Профиль"
-      subtitle="Ваши данные, команды, заявки и быстрые переходы к тому, что обычно ищут перед матчем."
+      subtitle="Данные аккаунта, ближайший турнир и рейтинг."
     />
 
-    <div class="profile-overview">
-      <article class="profile-card profile-card--wide">
-        <div class="profile-card__head">
+    <section class="profile-identity" aria-labelledby="profile-name">
+      <div class="profile-identity__avatar" aria-hidden="true">{{ userInitials }}</div>
+      <div class="profile-identity__main">
+        <div class="profile-identity__title">
           <div>
-            <span class="profile-card__badge">{{ auth.user?.role === 'admin' ? 'Админ' : 'Игрок' }}</span>
-            <h2>{{ auth.user?.name }}</h2>
+            <span>{{ auth.user?.role === 'admin' ? 'Админ' : 'Игрок' }}</span>
+            <h2 id="profile-name">{{ auth.user?.name }}</h2>
           </div>
           <StatusBadge
             :status="auth.user?.emailVerified ? 'approved' : 'pending'"
-            :label="auth.user?.emailVerified ? 'Почта подтверждена' : 'Почту подтвердим позже'"
+            :label="auth.user?.emailVerified ? 'Почта подтверждена' : 'Почта не подтверждена'"
           />
         </div>
 
-        <dl class="profile-card__meta">
+        <dl class="profile-identity__facts">
+          <div><dt>Email</dt><dd>{{ auth.user?.email }}</dd></div>
+          <div><dt>Город</dt><dd>{{ auth.user?.city || 'Не указан' }}</dd></div>
+          <div><dt>Возраст</dt><dd>{{ auth.user?.age ? `${auth.user.age} лет` : 'Не указан' }}</dd></div>
           <div>
-            <dt>Email</dt>
-            <dd>{{ auth.user?.email }}</dd>
-          </div>
-          <div>
-            <dt>Город</dt>
-            <dd>{{ auth.user?.city || 'Не указан' }}</dd>
-          </div>
-          <div>
-            <dt>Возраст</dt>
-            <dd>{{ auth.user?.age ? `${auth.user.age} лет` : 'Не указан' }}</dd>
+            <dt>Спорт</dt>
+            <dd>{{ auth.user?.favoriteSports.length ? auth.user.favoriteSports.map((sport) => sportLabels[sport]).join(', ') : 'Не выбран' }}</dd>
           </div>
         </dl>
 
-        <p class="profile-card__note">
-          Любимые виды спорта:
-          <strong v-if="auth.user?.favoriteSports.length">
-            {{ auth.user.favoriteSports.map((sport) => sportLabels[sport]).join(', ') }}
-          </strong>
-          <span v-else>пока не выбраны</span>.
-          Steam profile: {{ auth.user?.steamId || 'не указан' }}.
-        </p>
-
-        <div class="profile-card__actions">
-          <NuxtLink class="cta-button cta-button-primary" to="/profile/edit">Редактировать профиль</NuxtLink>
-          <NuxtLink class="cta-button cta-button-secondary" to="/profile/matches">Мои матчи</NuxtLink>
+        <div v-if="auth.user?.steamProfileUrl" class="profile-identity__external">
+          <span>Steam</span>
+          <a class="site-footer-link" :href="auth.user.steamProfileUrl" target="_blank" rel="noopener noreferrer">Открыть профиль</a>
         </div>
-      </article>
 
-      <div class="profile-summary-grid">
-        <article class="profile-summary-card">
-          <span>{{ userTeams.length }}</span>
-          <p>Команд</p>
-          <NuxtLink to="/profile/teams">Открыть</NuxtLink>
-        </article>
-        <article class="profile-summary-card">
-          <span>{{ approvedApplications.length }}</span>
-          <p>Допущенных заявок</p>
-          <NuxtLink to="/profile/tournaments">Открыть</NuxtLink>
-        </article>
-        <article class="profile-summary-card">
-          <span>{{ pendingApplications.length }}</span>
-          <p>Заявок на проверке</p>
-          <NuxtLink to="/profile/tournaments">Открыть</NuxtLink>
-        </article>
-        <article class="profile-summary-card">
-          <span>{{ stats.reduce((sum, item) => sum + item.matchesPlayed, 0) }}</span>
-          <p>Матчей в статистике</p>
-          <NuxtLink to="/profile/stats">Открыть</NuxtLink>
-        </article>
+        <div class="profile-identity__actions">
+          <NuxtLink class="cta-button cta-button-primary" to="/profile/edit">Редактировать</NuxtLink>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <div class="profile-grid mt-3">
-      <article class="profile-card">
-        <div class="profile-card__head">
-          <div>
-            <span class="profile-card__badge">Ближайшее</span>
-            <h2>{{ nextTournament?.name || 'Турниров по заявкам пока нет' }}</h2>
-          </div>
-        </div>
-        <p class="profile-card__note">
-          <template v-if="nextTournament">
-            Старт: {{ formatDate(nextTournament.eventStartDate) }}. Команда уже будет видна в разделе турниров.
-          </template>
-          <template v-else>
-            Когда команда подаст заявку, здесь появится ближайший турнир.
-          </template>
-        </p>
-        <div class="profile-card__actions">
-          <NuxtLink class="cta-button cta-button-primary" to="/tournaments">Смотреть турниры</NuxtLink>
-        </div>
-      </article>
+    <div class="profile-focus">
+      <section class="profile-next-event">
+        <p>Ближайший турнир</p>
+        <h2>{{ nextTournament?.name || 'Заявок пока нет' }}</h2>
+        <strong v-if="nextTournament">{{ formatDate(nextTournament.eventStartDate) }}</strong>
+        <span v-else>Откройте турниры и выберите подходящий.</span>
+        <NuxtLink to="/tournaments">Открыть турниры</NuxtLink>
+      </section>
 
-      <article class="profile-card">
-        <div class="profile-card__head">
-          <div>
-            <span class="profile-card__badge">Рейтинг</span>
-            <h2>{{ playerRatings[0]?.points ?? 'Пока нет' }}</h2>
-          </div>
-          <strong v-if="playerRatings[0]">#{{ playerRatings[0].position }}</strong>
-        </div>
-        <p class="profile-card__note">
-          <template v-if="playerRatings.length">
-            Лучший текущий рейтинг: {{ sportLabels[playerRatings[0].sport] }}.
-          </template>
-          <template v-else>
-            Рейтинг появится после матчей и турниров.
-          </template>
-        </p>
-        <div class="profile-card__actions">
-          <NuxtLink class="cta-button cta-button-secondary" to="/ratings">Посмотреть рейтинг</NuxtLink>
-        </div>
-      </article>
+      <aside class="profile-rating" aria-label="Лучший рейтинг">
+        <span>Рейтинг</span>
+        <strong>{{ playerRatings[0]?.points ?? '—' }}</strong>
+        <p v-if="playerRatings[0]">#{{ playerRatings[0].position }} · {{ sportLabels[playerRatings[0].sport] }}</p>
+        <p v-else>Появится после первых матчей.</p>
+        <NuxtLink to="/ratings">Открыть рейтинг</NuxtLink>
+      </aside>
     </div>
   </section>
 </template>

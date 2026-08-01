@@ -17,7 +17,7 @@ const form = reactive({
   age: '',
   password: '',
   passwordConfirm: '',
-  steamId: ''
+  steamProfileUrl: ''
 })
 
 const selectedSports = ref<SportKey[]>(['football'])
@@ -57,18 +57,22 @@ const handleSubmit = async () => {
       city: form.city.trim(),
       age: Number(form.age),
       favoriteSports: selectedSports.value,
-      steamId: form.steamId.trim() || undefined
+      steamProfileUrl: selectedSports.value.includes('cs2') && form.steamProfileUrl.trim()
+        ? form.steamProfileUrl.trim()
+        : undefined
     })
     await navigateTo('/profile')
-  } catch {
-    errorMessage.value = 'Не получилось создать аккаунт. Проверьте поля и попробуйте ещё раз.'
+  } catch (error) {
+    errorMessage.value = error instanceof Error && error.message === 'Email already exists'
+      ? 'Аккаунт с таким email уже существует.'
+      : 'Не получилось создать аккаунт. Проверьте поля и попробуйте ещё раз.'
   } finally {
     isSubmitting.value = false
   }
 }
 
 useHead({
-  title: 'Регистрация — РазрядАрена',
+  title: 'Регистрация',
   bodyAttrs: {
     class: 'layout-public',
     'data-page': 'register',
@@ -108,9 +112,7 @@ useHead({
                 <div class="col-md-8">
                   <label class="form-label" for="email">Email <span class="text-muted-strong">(обязательно)</span></label>
                   <input id="email" v-model="form.email" class="form-control" type="email" placeholder="you@example.com" autocomplete="email" required>
-                  <div class="form-text">
-                    На этот адрес придёт письмо для подтверждения.
-                  </div>
+                  <div class="form-text">Этот адрес понадобится для входа.</div>
                 </div>
                 <div class="col-md-4">
                   <label class="form-label" for="age">Возраст <span class="text-muted-strong">(обязательно)</span></label>
@@ -124,23 +126,23 @@ useHead({
                   <label class="form-label" for="password-confirm">Повторите пароль <span class="text-muted-strong">(обязательно)</span></label>
                   <input id="password-confirm" v-model="form.passwordConfirm" class="form-control" type="password" autocomplete="new-password" placeholder="Повторите пароль" minlength="8" required>
                 </div>
-                <div class="col-12">
+                <div v-if="selectedSports.includes('cs2')" class="col-12">
                   <label class="form-label" for="steam-id">Ссылка на Steam-профиль <span class="text-muted-strong">(по желанию)</span></label>
-                  <input id="steam-id" v-model="form.steamId" class="form-control" type="url" placeholder="https://steamcommunity.com/id/..." autocomplete="off">
+                  <input id="steam-id" v-model="form.steamProfileUrl" class="form-control" type="url" placeholder="https://steamcommunity.com/id/..." autocomplete="off">
                   <div class="form-text">
-                    Нужна только для CS2-турниров. Можно добавить позже в профиле.
+                    Поможет организатору сверить игрока перед CS2-матчем. Ссылку можно добавить позже.
                   </div>
                 </div>
               </div>
             </section>
             <section class="form-section" aria-labelledby="sports-title">
               <h2 id="sports-title" class="form-section__title">
-                Что вам интересно?
+                Любимые виды спорта
               </h2>
               <p class="form-section__hint">
-                Выберите несколько дисциплин, чтобы потом быстрее находить подходящие турниры.
+                Выберите виды спорта, в которых хотите участвовать.
               </p>
-              <div class="sport-picker" role="group" aria-label="Выбор дисциплин">
+              <div class="sport-picker" role="group" aria-label="Выбор видов спорта">
                 <button
                   v-for="sport in sports"
                   :key="sport.value"
@@ -164,7 +166,7 @@ useHead({
             <div class="form-check mb-3">
               <input id="privacy" class="form-check-input" type="checkbox" required>
               <label class="form-check-label" for="privacy">
-                Я согласен на обработку персональных данных.
+                Я согласен на <a class="link-light" href="/privacy-consent">обработку персональных данных</a>.
               </label>
             </div>
 

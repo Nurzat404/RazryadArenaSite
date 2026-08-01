@@ -19,15 +19,12 @@ const sportLabels: Record<SportKey, string> = {
 }
 
 const links = auth.user ? await referralService.listByOwner(auth.user.id) : []
-const attributionsByLink = new Map(
-  await Promise.all(links.map(async (link) => [link.id, await referralService.listAttributions(link.id)] as const))
-)
 
 const statusLabel = (link: ReferralLink) => link.status === 'active' ? 'Активна' : 'Отключена'
 </script>
 
 <template>
-  <section>
+  <section class="workspace-page workspace-page--profile">
     <PageHead
       title="Приглашения"
       subtitle="Ссылки для игроков и команд, которых вы зовёте на сайт."
@@ -63,8 +60,7 @@ const statusLabel = (link: ReferralLink) => link.status === 'active' ? 'Акти
         </dl>
 
         <p class="profile-card__note">
-          Первых матчей: {{ link.firstMatchesCount }}.
-          Записей по ссылке: {{ attributionsByLink.get(link.id)?.length ?? 0 }}.
+          По приглашению сыграли первый матч: {{ link.firstMatchesCount }}.
         </p>
       </article>
     </div>

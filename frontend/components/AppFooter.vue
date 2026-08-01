@@ -55,17 +55,7 @@ const year = new Date().getFullYear()
           </div>
           <div class="d-flex flex-column gap-2">
             <a class="site-footer-link" href="mailto:razryadarena@ya.ru">razryadarena@ya.ru</a>
-            <div class="footer-socials">
-              <NuxtLink class="footer-social-link" to="/contacts" aria-label="Telegram">
-                <span>Telegram</span>
-              </NuxtLink>
-              <NuxtLink class="footer-social-link" to="/contacts" aria-label="VK">
-                <span>VK</span>
-              </NuxtLink>
-              <NuxtLink class="footer-social-link" to="/contacts" aria-label="MAX">
-                <span>MAX</span>
-              </NuxtLink>
-            </div>
+            <NuxtLink class="site-footer-link" to="/contacts">Все контакты</NuxtLink>
           </div>
         </div>
       </div>

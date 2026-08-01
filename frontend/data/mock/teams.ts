@@ -1,4 +1,4 @@
-import type { Team, TeamInvite, TeamJoinRequest, TeamMember } from '~/types/domain'
+import type { Team, TeamInvite, TeamJoinRequest, TeamMember, TeamMemberBlock } from '~/types/domain'
 
 export const mockTeams: Team[] = [
   {
@@ -111,7 +111,6 @@ export const mockTeamInvites: TeamInvite[] = [
     code: 'ARENA-FIVE-JOIN',
     createdByUserId: 'u2',
     createdAt: '2026-06-04T10:00:00.000Z',
-    expiresAt: '2026-06-20T10:00:00.000Z',
     status: 'active'
   },
   {
@@ -153,3 +152,5 @@ export const mockTeamJoinRequests: TeamJoinRequest[] = [
     updatedAt: '2026-06-05T10:00:00.000Z'
   }
 ]
+
+export const mockTeamMemberBlocks: TeamMemberBlock[] = []

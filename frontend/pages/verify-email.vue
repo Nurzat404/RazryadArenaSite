@@ -10,7 +10,7 @@ onMounted(async () => {
 })
 
 useHead({
-  title: 'Подтверждение почты — РазрядАрена',
+  title: 'Подтверждение почты',
   bodyAttrs: {
     class: 'layout-public',
     'data-page': 'verify-email',

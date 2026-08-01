@@ -63,7 +63,7 @@ export interface User {
   role: UserRole
   favoriteSports: SportKey[]
   emailVerified: boolean
-  steamId?: string
+  steamProfileUrl?: string
 }
 
 export interface Team {
@@ -88,6 +88,15 @@ export interface TeamMember {
   role: TeamMemberRole
   joinedAt: string
   isBlocked?: boolean
+}
+
+export interface TeamMemberBlock {
+  id: string
+  teamId: string
+  userId: string
+  blockedByUserId: string
+  reason?: string
+  createdAt: string
 }
 
 export interface TeamInvite {

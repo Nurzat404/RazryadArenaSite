@@ -46,6 +46,7 @@ const [ratings, seasons] = await Promise.all([
   ratingService.leaderboard(),
   ratingService.seasons()
 ])
+const auth = useAuthStore()
 
 const selectedSport = ref<SportTabValue>('all')
 const selectedEntity = ref<RatingRow['entityType']>('team')
@@ -152,8 +153,8 @@ watch(selectedSport, (sport) => {
   }
 }, { immediate: true })
 
-useHead({
-  title: 'Рейтинг — РазрядАрена',
+useHead(() => ({
+  title: 'Рейтинг',
   meta: [
     {
       name: 'description',
@@ -161,15 +162,15 @@ useHead({
     }
   ],
   bodyAttrs: {
-    class: 'layout-public',
+    class: auth.isAuthenticated ? 'layout-user' : 'layout-public',
     'data-page': 'ratings',
-    'data-role': 'public'
+    'data-role': auth.isAuthenticated ? 'user' : 'public'
   }
-})
+}))
 </script>
 
 <template>
-  <div class="section-padding">
+  <div class="section-padding workspace-page workspace-page--ratings">
     <div class="container">
       <div class="page-head">
         <h1 class="section-title">Рейтинг</h1>

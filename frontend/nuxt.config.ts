@@ -16,7 +16,7 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: 'ru'
       },
-      titleTemplate: '%s - РазрядАрена',
+      titleTemplate: '%s | РазрядАрена',
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         {

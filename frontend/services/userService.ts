@@ -1,4 +1,4 @@
-import { mockUsers } from '~/data/mock/users'
+import { useMockUsers } from '~/data/mock/state'
 import type { SportKey, User, UserRole } from '~/types/domain'
 
 export interface UserListFilters {
@@ -7,11 +7,11 @@ export interface UserListFilters {
   search?: string
 }
 
-export type UserProfilePayload = Partial<Pick<User, 'name' | 'email' | 'city' | 'age' | 'favoriteSports' | 'steamId'>>
+export type UserProfilePayload = Partial<Pick<User, 'name' | 'email' | 'city' | 'age' | 'favoriteSports' | 'steamProfileUrl'>>
 
 export const userService = {
   async list(filters: UserListFilters = {}) {
-    return mockUsers.filter((user) => {
+    return useMockUsers().value.filter((user) => {
       const matchesRole = filters.role ? user.role === filters.role : true
       const matchesSport = filters.sport ? user.favoriteSports.includes(filters.sport) : true
       const matchesSearch = filters.search
@@ -23,16 +23,24 @@ export const userService = {
   },
 
   async getById(id: string) {
-    return mockUsers.find((user) => user.id === id) ?? null
+    return useMockUsers().value.find((user) => user.id === id) ?? null
   },
 
   async updateProfile(id: string, payload: UserProfilePayload) {
-    const user = mockUsers.find((item) => item.id === id)
-    return user ? { ...user, ...payload } : null
+    const users = useMockUsers()
+    const user = users.value.find((item) => item.id === id)
+    if (!user) return null
+    const updated = { ...user, ...payload }
+    users.value = users.value.map((item) => item.id === id ? updated : item)
+    return updated
   },
 
   async changeRole(id: string, role: UserRole) {
-    const user = mockUsers.find((item) => item.id === id)
-    return user ? { ...user, role } : null
+    const users = useMockUsers()
+    const user = users.value.find((item) => item.id === id)
+    if (!user) return null
+    const updated = { ...user, role }
+    users.value = users.value.map((item) => item.id === id ? updated : item)
+    return updated
   }
 }

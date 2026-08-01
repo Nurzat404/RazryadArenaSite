@@ -248,6 +248,8 @@
 
 /* ===== Tables ===== */
 .table-block {
+  min-width: 0;
+  max-width: 100%;
   border-radius: var(--radius-card);
   border: 1px solid var(--color-border);
   overflow: hidden;
@@ -394,6 +396,12 @@
 
 .footer-social-link svg {
   flex-shrink: 0;
+}
+
+.table-block .table-responsive {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 /* ===== Design System / Base UI ===== */

@@ -12,7 +12,7 @@ await auth.loadCurrentUser()
 
 <template>
   <section>
-    <PageHead title="Админ-панель" subtitle="Турниры, заявки, команды и спорные моменты — всё, что обычно висит на организаторе." />
+    <PageHead title="Админ-панель" subtitle="Создание турниров, проверка заявок, команды и результаты матчей." />
     <div class="row g-3">
       <div class="col-md-4">
         <div class="entity-card">

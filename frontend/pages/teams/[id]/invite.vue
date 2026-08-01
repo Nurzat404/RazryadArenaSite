@@ -18,24 +18,27 @@ const [team, invites] = await Promise.all([
 ])
 
 useHead({
-  title: team ? `Invite ${team.name}` : 'Invite команды'
+  title: team ? `Приглашение в ${team.name}` : 'Приглашение в команду'
 })
 
+const canManage = Boolean(team && auth.user && team.captainId === auth.user.id)
+const inviteHistory = ref<TeamInvite[]>(invites)
 const activeInvite = ref<TeamInvite | null>(invites.find((invite) => invite.status === 'active') ?? null)
 const copied = ref(false)
 const regenerated = ref(false)
 
 const inviteUrl = computed(() => activeInvite.value
-  ? `https://razryadarena.ru/teams/join/${activeInvite.value.code}`
+  ? `${import.meta.client ? window.location.origin : ''}/teams/join/${activeInvite.value.code}`
   : ''
 )
 
 const regenerate = async () => {
-  if (!team || !auth.user) {
+  if (!team || !auth.user || !canManage) {
     return
   }
 
   activeInvite.value = await teamService.regenerateInvite(team.id, auth.user.id)
+  inviteHistory.value = await teamService.listInvites(team.id)
   regenerated.value = true
   copied.value = false
 }
@@ -56,17 +59,17 @@ const copyInvite = async () => {
 </script>
 
 <template>
-  <section>
+  <section class="workspace-page workspace-page--team">
     <PageHead
-      :title="team ? `Invite: ${team.name}` : 'Команда не найдена'"
-      subtitle="Ссылка для приглашения игроков. Сейчас это мок, после backend ссылка будет работать для других аккаунтов."
+      :title="team ? `Приглашение: ${team.name}` : 'Команда не найдена'"
+      subtitle="Отправьте ссылку игроку и выберите, вступит он сразу или после одобрения заявки."
     />
 
-    <div v-if="team" class="profile-grid">
+    <div v-if="team && canManage" class="profile-grid">
       <article class="profile-card profile-card--wide">
         <div class="profile-card__head">
           <div>
-            <span class="profile-card__badge">{{ team.inviteEnabled ? 'Invite включён' : 'Invite выключен' }}</span>
+            <span class="profile-card__badge">{{ team.inviteEnabled ? 'Ссылка включена' : 'Ссылка выключена' }}</span>
             <h2>{{ activeInvite?.code ?? 'Активной ссылки нет' }}</h2>
           </div>
         </div>
@@ -91,11 +94,11 @@ const copyInvite = async () => {
         </div>
 
         <p class="profile-card__note">
-          Если режим стоит “сначала заявка”, игрок появится во входящих заявках. Если “сразу в команду”, после backend он будет добавляться без ручного подтверждения.
+          В режиме заявки капитан сначала проверит игрока. При прямом вступлении свободное место займётся сразу после перехода по ссылке.
         </p>
 
         <p v-if="copied" class="form-success">Ссылка скопирована.</p>
-        <p v-if="regenerated" class="form-success">Новая ссылка создана в мок-режиме.</p>
+        <p v-if="regenerated" class="form-success">Новая ссылка создана. Предыдущая больше не работает.</p>
 
         <div class="profile-card__actions">
           <button class="cta-button cta-button-primary" type="button" :disabled="!activeInvite" @click="copyInvite">
@@ -104,7 +107,7 @@ const copyInvite = async () => {
           <button class="cta-button cta-button-secondary" type="button" @click="regenerate">
             Создать новую
           </button>
-          <NuxtLink class="cta-button cta-button-secondary" :to="`/teams/${team.id}/edit`">Настройки invite</NuxtLink>
+          <NuxtLink class="cta-button cta-button-secondary" :to="`/teams/${team.id}/edit`">Настройки вступления</NuxtLink>
         </div>
       </article>
 
@@ -112,20 +115,26 @@ const copyInvite = async () => {
         <div class="profile-card__head">
           <div>
             <span class="profile-card__badge">История</span>
-            <h2>{{ invites.length }} ссылок</h2>
+            <h2>{{ inviteHistory.length }} ссылок</h2>
           </div>
         </div>
 
         <div class="team-list-stack">
-          <div v-for="invite in invites" :key="invite.id" class="team-list-row">
+          <div v-for="invite in inviteHistory" :key="invite.id" class="team-list-row">
             <div>
               <strong>{{ invite.code }}</strong>
-              <span>{{ invite.status }}</span>
+              <span>{{ invite.status === 'active' ? 'Работает' : invite.status === 'revoked' ? 'Отозвана' : invite.status === 'expired' ? 'Истекла' : 'Использована' }}</span>
             </div>
             <small>{{ new Date(invite.createdAt).toLocaleDateString('ru-RU') }}</small>
           </div>
         </div>
       </article>
+    </div>
+
+    <div v-else-if="team" class="empty-state-panel">
+      <h2>Нет доступа к приглашениям</h2>
+      <p>Ссылкой для вступления управляет капитан команды.</p>
+      <NuxtLink class="cta-button cta-button-primary" :to="`/teams/${team.id}`">Открыть команду</NuxtLink>
     </div>
 
     <div v-else class="empty-state-panel">

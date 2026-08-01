@@ -26,7 +26,7 @@ const handleSubmit = async () => {
 }
 
 useHead({
-  title: 'Вход — РазрядАрена',
+  title: 'Вход',
   bodyAttrs: {
     class: 'layout-public',
     'data-page': 'login',
@@ -61,7 +61,7 @@ useHead({
                 v-model="password"
                 class="form-control"
                 type="password"
-                placeholder="Любой пароль для мок-входа"
+                placeholder="Введите пароль"
                 autocomplete="current-password"
               >
             </div>

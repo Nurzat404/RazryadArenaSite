@@ -25,7 +25,7 @@ const winRate = (item: PlayerStats) =>
 </script>
 
 <template>
-  <section>
+  <section class="workspace-page workspace-page--profile">
     <PageHead
       title="Моя статистика"
       subtitle="Матчи, победы и игровые показатели по видам спорта."
@@ -51,7 +51,7 @@ const winRate = (item: PlayerStats) =>
             <dd>{{ item.losses }}</dd>
           </div>
           <div>
-            <dt>Winrate</dt>
+            <dt>Процент побед</dt>
             <dd>{{ winRate(item) }}%</dd>
           </div>
         </dl>
@@ -91,9 +91,6 @@ const winRate = (item: PlayerStats) =>
     <div v-else class="empty-state-panel">
       <h2>Статистика появится после матчей</h2>
       <p>Когда сыграете первые матчи и результаты подтвердят, здесь появятся победы, рейтинг и игровые показатели.</p>
-      <div class="empty-state-panel__actions">
-        <NuxtLink class="cta-button cta-button-primary" to="/matches">Открыть матчи</NuxtLink>
-      </div>
     </div>
   </section>
 </template>

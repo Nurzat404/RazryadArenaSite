@@ -6,6 +6,12 @@ definePageMeta({ layout: 'app', middleware: 'auth' })
 
 const route = useRoute()
 const teamId = String(route.params.id)
+const auth = useAuthStore()
+
+if (!auth.initialized) {
+  await auth.loadCurrentUser()
+}
+
 const [team, initialRequests, users] = await Promise.all([
   teamService.getById(teamId),
   teamService.listRequests(teamId),
@@ -17,6 +23,8 @@ useHead({
 })
 
 const requests = ref<TeamJoinRequest[]>(initialRequests)
+const canManage = Boolean(team && auth.user && team.captainId === auth.user.id)
+const actionError = ref('')
 const userById = new Map(users.map((user) => [user.id, user]))
 
 const statusLabels = {
@@ -34,7 +42,18 @@ const formatDate = (value: string) =>
   }).format(new Date(value))
 
 const setStatus = async (requestId: string, status: TeamJoinRequest['status']) => {
-  const updated = await teamService.updateRequestStatus(requestId, status)
+  actionError.value = ''
+  if (!canManage) return
+
+  let updated
+  try {
+    updated = await teamService.updateRequestStatus(requestId, status)
+  } catch (error) {
+    actionError.value = error instanceof Error && error.message === 'team_full'
+      ? 'В составе нет свободных мест. Сначала увеличьте лимит или освободите место.'
+      : 'Не получилось обработать заявку.'
+    return
+  }
 
   if (!updated) {
     return
@@ -45,13 +64,15 @@ const setStatus = async (requestId: string, status: TeamJoinRequest['status']) =
 </script>
 
 <template>
-  <section>
+  <section class="workspace-page workspace-page--team">
     <PageHead
       :title="team ? `Заявки: ${team.name}` : 'Команда не найдена'"
       subtitle="Игроки, которые хотят попасть в команду. Капитан принимает или отклоняет заявку."
     />
 
-    <div v-if="team && requests.length" class="profile-grid">
+    <p v-if="actionError" class="form-error">{{ actionError }}</p>
+
+    <div v-if="team && canManage && requests.length" class="profile-grid">
       <article v-for="request in requests" :key="request.id" class="profile-card">
         <div class="profile-card__head">
           <div>
@@ -89,13 +110,19 @@ const setStatus = async (requestId: string, status: TeamJoinRequest['status']) =
       </article>
     </div>
 
-    <div v-else-if="team" class="empty-state-panel">
+    <div v-else-if="team && canManage" class="empty-state-panel">
       <h2>Заявок пока нет</h2>
-      <p>Когда игроки отправят заявку или перейдут по invite-ссылке в режиме заявки, они появятся здесь.</p>
+      <p>Когда игрок отправит заявку напрямую или по ссылке, она появится здесь.</p>
       <div class="empty-state-panel__actions">
-        <NuxtLink class="cta-button cta-button-primary" :to="`/teams/${team.id}/invite`">Открыть invite</NuxtLink>
+        <NuxtLink class="cta-button cta-button-primary" :to="`/teams/${team.id}/invite`">Открыть ссылку для вступления</NuxtLink>
         <NuxtLink class="cta-button cta-button-secondary" :to="`/teams/${team.id}`">К команде</NuxtLink>
       </div>
+    </div>
+
+    <div v-else-if="team" class="empty-state-panel">
+      <h2>Нет доступа к заявкам</h2>
+      <p>Заявки видит капитан команды.</p>
+      <NuxtLink class="cta-button cta-button-primary" :to="`/teams/${team.id}`">Открыть команду</NuxtLink>
     </div>
 
     <div v-else class="empty-state-panel">

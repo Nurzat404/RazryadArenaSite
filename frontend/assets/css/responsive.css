@@ -65,8 +65,31 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 
+  .app-sidebar .site-navbar-brand {
+    margin-bottom: 0.8rem !important;
+  }
+
+  .app-sidebar nav {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+  }
+
   .app-sidebar-group {
-    margin-bottom: 0.8rem;
+    display: flex;
+    flex: 0 0 auto;
+    gap: 0.35rem;
+    margin-bottom: 0;
+  }
+
+  .app-sidebar-group-title {
+    display: none;
+  }
+
+  .app-sidebar-link {
+    white-space: nowrap;
+    margin-bottom: 0;
   }
 }
 

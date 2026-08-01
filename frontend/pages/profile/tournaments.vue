@@ -59,7 +59,7 @@ const tournamentItems = applications
 </script>
 
 <template>
-  <section>
+  <section class="workspace-page workspace-page--profile">
     <PageHead
       title="Мои турниры"
       subtitle="Здесь видны заявки ваших команд, статус допуска и ближайшие даты турниров."
@@ -106,7 +106,7 @@ const tournamentItems = applications
 
     <div v-else class="empty-state-panel">
       <h2>Заявок пока нет</h2>
-      <p>Выберите турнир и подайте заявку от команды. После этого турнир появится в этом разделе.</p>
+      <p>Здесь будут заявки ваших команд и решения организатора.</p>
       <div class="empty-state-panel__actions">
         <NuxtLink class="cta-button cta-button-primary" to="/tournaments">Смотреть турниры</NuxtLink>
         <NuxtLink class="cta-button cta-button-secondary" to="/profile/teams">Мои команды</NuxtLink>

@@ -1,5 +1,7 @@
 import type { Tournament } from '~/types/domain'
 
+const dateFromNow = (days: number) => new Date(Date.now() + days * 86_400_000).toISOString().slice(0, 10)
+
 export const mockTournaments: Tournament[] = [
   {
     id: 'tr1',
@@ -7,12 +9,12 @@ export const mockTournaments: Tournament[] = [
     sport: 'cs2',
     city: 'Онлайн',
     status: 'registration_open',
-    registrationStartDate: '2026-06-01',
-    registrationEndDate: '2026-06-20',
-    eventStartDate: '2026-06-22',
+    registrationStartDate: dateFromNow(-7),
+    registrationEndDate: dateFromNow(14),
+    eventStartDate: dateFromNow(18),
     maxTeams: 16,
     requiredTeamSize: 5,
-    description: 'CS2-турнир на выходные: собрали состав, подали заявку, играете по сетке single elimination.'
+    description: 'CS2-турнир на выходные. Матчи проходят по сетке на выбывание.'
   },
   {
     id: 'tr2',
@@ -20,10 +22,10 @@ export const mockTournaments: Tournament[] = [
     sport: 'football',
     city: 'Екатеринбург',
     status: 'active',
-    registrationStartDate: '2026-05-10',
-    registrationEndDate: '2026-05-28',
-    eventStartDate: '2026-06-02',
-    eventEndDate: '2026-06-30',
+    registrationStartDate: dateFromNow(-30),
+    registrationEndDate: dateFromNow(-10),
+    eventStartDate: dateFromNow(-5),
+    eventEndDate: dateFromNow(15),
     maxTeams: 8,
     requiredTeamSize: 7,
     description: 'Городской турнир для любительских команд. Матчи проходят по вечерам на одной площадке.'
@@ -34,10 +36,10 @@ export const mockTournaments: Tournament[] = [
     sport: 'volleyball',
     city: 'Екатеринбург',
     status: 'registration_closed',
-    registrationStartDate: '2026-05-20',
-    registrationEndDate: '2026-06-05',
-    eventStartDate: '2026-06-12',
-    eventEndDate: '2026-06-18',
+    registrationStartDate: dateFromNow(-20),
+    registrationEndDate: dateFromNow(-2),
+    eventStartDate: dateFromNow(5),
+    eventEndDate: dateFromNow(11),
     maxTeams: 6,
     requiredTeamSize: 6,
     description: 'Короткий волейбольный турнир для студенческих и дворовых команд.'
@@ -48,9 +50,9 @@ export const mockTournaments: Tournament[] = [
     sport: 'basketball',
     city: 'Екатеринбург',
     status: 'draft',
-    registrationStartDate: '2026-07-01',
-    registrationEndDate: '2026-07-14',
-    eventStartDate: '2026-07-18',
+    registrationStartDate: dateFromNow(20),
+    registrationEndDate: dateFromNow(34),
+    eventStartDate: dateFromNow(40),
     maxTeams: 12,
     requiredTeamSize: 3,
     description: 'Вечерний баскетбол 3x3. Турнир пока готовится, заявки откроются позже.'

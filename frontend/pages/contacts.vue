@@ -1,6 +1,6 @@
 ﻿<script setup lang="ts">
 useHead({
-  title: 'Контакты — РазрядАрена',
+  title: 'Контакты',
   bodyAttrs: {
     class: 'layout-public',
     'data-page': 'contacts',
@@ -14,7 +14,7 @@ useHead({
 <div class="container">
         <div class="page-head">
           <h1 class="section-title">Контакты</h1>
-          <p class="text-muted-strong mb-0">Напишите, если хотите заявиться, провести турнир или нашли ошибку на сайте.</p>
+          <p class="text-muted-strong mb-0">Напишите, если хотите провести турнир, обсудить партнёрство или сообщить об ошибке.</p>
         </div>
         <div class="row g-3">
           <div class="col-lg-4 col-md-6">
@@ -39,12 +39,12 @@ useHead({
           </div>
           <div class="col-lg-4 col-md-6">
             <article class="contacts-card h-100">
-              <h2 class="h5">Другие каналы</h2>
+              <h2 class="h5">Что указать в письме</h2>
               <ul class="comparison-list mb-0">
-                <li>Телефон: по запросу через почту</li>
-                <li>Telegram: через поддержку</li>
-                <li>VK: через поддержку</li>
-                <li>MAX: через поддержку</li>
+                <li>Как к вам обращаться</li>
+                <li>Название команды или турнира</li>
+                <li>Ссылку на страницу, если нашли ошибку</li>
+                <li>Короткое описание вопроса</li>
               </ul>
             </article>
           </div>

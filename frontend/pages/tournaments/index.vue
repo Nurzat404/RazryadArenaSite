@@ -25,6 +25,22 @@ const formatDate = (value: string) =>
   }).format(new Date(value))
 
 const tournaments = await tournamentService.list()
+const auth = useAuthStore()
+const selectedSport = ref<'all' | SportKey>('all')
+const selectedStatus = ref<'all' | TournamentStatus>('all')
+const selectedCity = ref('')
+const openOnly = ref(false)
+const search = ref('')
+const cityOptions = [...new Set(tournaments.map((tournament) => tournament.city))]
+
+const filteredTournaments = computed(() => tournaments.filter((tournament) => {
+  const query = search.value.trim().toLowerCase()
+  return (selectedSport.value === 'all' || tournament.sport === selectedSport.value)
+    && (selectedStatus.value === 'all' || tournament.status === selectedStatus.value)
+    && (!selectedCity.value || tournament.city === selectedCity.value)
+    && (!openOnly.value || tournament.status === 'registration_open')
+    && (!query || tournament.name.toLowerCase().includes(query))
+}))
 const applicationsByTournament = new Map(
   await Promise.all(tournaments.map(async (tournament) => [
     tournament.id,
@@ -32,68 +48,88 @@ const applicationsByTournament = new Map(
   ] as const))
 )
 
-useHead({
-  title: 'Турниры — РазрядАрена',
+useHead(() => ({
+  title: 'Турниры',
   bodyAttrs: {
-    class: 'layout-public',
+    class: auth.isAuthenticated ? 'layout-user' : 'layout-public',
     'data-page': 'tournaments',
-    'data-role': 'public'
+    'data-role': auth.isAuthenticated ? 'user' : 'public'
   }
-})
+}))
 </script>
 
 <template>
-  <div class="section-padding">
+  <div class="section-padding workspace-page workspace-page--tournaments">
     <div class="container">
       <div class="page-head">
         <h1 class="section-title">Турниры</h1>
         <p class="section-subtitle">
-          Даты, дисциплины, заявки и требования к составу. Сначала смотрите условия, потом собирайте команду.
+          Сроки регистрации, место проведения и требования к составу. Проверьте условия до подачи заявки.
         </p>
       </div>
 
-      <section class="filter-panel mb-3" aria-label="Фильтры турниров">
-        <div class="d-flex flex-wrap gap-2">
-          <span class="filter-chip is-active">Все дисциплины</span>
-          <span class="filter-chip">CS2</span>
-          <span class="filter-chip">Футбол</span>
-          <span class="filter-chip">Баскетбол</span>
-          <span class="filter-chip">Волейбол</span>
-        </div>
+      <section class="teams-toolbar tournament-toolbar" aria-label="Фильтры турниров">
+        <label class="teams-toolbar__search" for="tournamentSearch">
+          <span>Название</span>
+          <input id="tournamentSearch" v-model="search" class="form-control" type="search" placeholder="Найти турнир">
+        </label>
+        <label class="teams-toolbar__select" for="tournamentCity">
+          <span>Город</span>
+          <select id="tournamentCity" v-model="selectedCity" class="form-select">
+            <option value="">Все города</option>
+            <option v-for="city in cityOptions" :key="city" :value="city">{{ city }}</option>
+          </select>
+        </label>
+        <label class="teams-toolbar__select" for="tournamentSport">
+          <span>Вид спорта</span>
+          <select id="tournamentSport" v-model="selectedSport" class="form-select">
+            <option value="all">Все виды</option>
+            <option v-for="(label, sport) in sportLabels" :key="sport" :value="sport">{{ label }}</option>
+          </select>
+        </label>
+        <label class="teams-toolbar__select" for="tournamentStatus">
+          <span>Статус</span>
+          <select id="tournamentStatus" v-model="selectedStatus" class="form-select">
+            <option value="all">Любой статус</option>
+            <option v-for="(label, status) in statusLabels" :key="status" :value="status">{{ label }}</option>
+          </select>
+        </label>
+        <label class="teams-open-toggle">
+          <input v-model="openOnly" type="checkbox">
+          <span>Только открытые заявки</span>
+        </label>
       </section>
 
-      <div class="profile-grid">
-        <article v-for="tournament in tournaments" :key="tournament.id" class="profile-card">
-          <div class="profile-card__head">
-            <div>
-              <span class="profile-card__badge">{{ sportLabels[tournament.sport] }}</span>
-              <h2>{{ tournament.name }}</h2>
-            </div>
-            <StatusBadge :status="tournament.status" :label="statusLabels[tournament.status]" />
+      <div v-if="filteredTournaments.length" class="tournament-directory">
+        <article v-for="tournament in filteredTournaments" :key="tournament.id" class="tournament-directory-row">
+          <div class="tournament-directory-row__date">
+            <span>Старт</span>
+            <strong>{{ formatDate(tournament.eventStartDate) }}</strong>
           </div>
 
-          <p class="profile-card__note">{{ tournament.description }}</p>
+          <div class="tournament-directory-row__main">
+            <div class="tournament-directory-row__labels">
+              <span>{{ sportLabels[tournament.sport] }}</span>
+              <StatusBadge :status="tournament.status" :label="statusLabels[tournament.status]" />
+            </div>
+            <h2>{{ tournament.name }}</h2>
+            <p>{{ tournament.description }}</p>
+          </div>
 
-          <dl class="profile-card__meta">
-            <div>
-              <dt>Старт</dt>
-              <dd>{{ formatDate(tournament.eventStartDate) }}</dd>
-            </div>
-            <div>
-              <dt>Состав</dt>
-              <dd>{{ tournament.requiredTeamSize }} игроков</dd>
-            </div>
-            <div>
-              <dt>Заявок</dt>
-              <dd>{{ applicationsByTournament.get(tournament.id)?.length ?? 0 }}/{{ tournament.maxTeams }}</dd>
-            </div>
+          <dl class="tournament-directory-row__facts">
+            <div><dt>Город</dt><dd>{{ tournament.city }}</dd></div>
+            <div><dt>Состав</dt><dd>{{ tournament.requiredTeamSize }} игроков</dd></div>
+            <div><dt>Заявки</dt><dd>{{ applicationsByTournament.get(tournament.id)?.length ?? 0 }}/{{ tournament.maxTeams }}</dd></div>
           </dl>
 
-          <div class="profile-card__actions">
-            <NuxtLink class="cta-button cta-button-primary" :to="`/tournaments/${tournament.id}`">Открыть турнир</NuxtLink>
-            <NuxtLink class="cta-button cta-button-secondary" to="/teams">Найти команду</NuxtLink>
-          </div>
+          <NuxtLink class="tournament-directory-row__link" :to="`/tournaments/${tournament.id}`">Открыть</NuxtLink>
         </article>
+      </div>
+
+      <div v-else class="empty-state-panel">
+        <h2>Турниры не найдены</h2>
+        <p>Попробуйте убрать город, статус или выбранный вид спорта.</p>
+        <button class="cta-button cta-button-primary" type="button" @click="selectedSport = 'all'; selectedStatus = 'all'; selectedCity = ''; openOnly = false; search = ''">Сбросить фильтры</button>
       </div>
     </div>
   </div>

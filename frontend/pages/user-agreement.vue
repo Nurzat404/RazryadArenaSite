@@ -1,6 +1,6 @@
 ﻿<script setup lang="ts">
 useHead({
-  title: 'Пользовательское соглашение — РазрядАрена',
+  title: 'Пользовательское соглашение',
   bodyAttrs: {
     class: 'layout-public',
     'data-page': 'user-agreement',

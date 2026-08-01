@@ -1,19 +1,31 @@
 <script setup lang="ts">
 const auth = useAuthStore()
+const route = useRoute()
+
+if (!auth.initialized) {
+  await auth.loadCurrentUser()
+}
 
 const handleLogout = async () => {
   await auth.logout()
   await navigateTo('/')
 }
 
-const links = [
-  { to: '/profile', label: 'Профиль' },
+const sectionLinks = [
+  { to: '/tournaments', label: 'Турниры' },
+  { to: '/teams', label: 'Команды' },
+  { to: '/ratings', label: 'Рейтинг' }
+]
+
+const accountLinks: Array<{ to: string, label: string, exact?: boolean }> = [
+  { to: '/profile', label: 'Профиль', exact: true },
   { to: '/profile/teams', label: 'Мои команды' },
   { to: '/profile/tournaments', label: 'Мои турниры' },
-  { to: '/profile/matches', label: 'Мои матчи' },
   { to: '/profile/stats', label: 'Статистика' },
-  { to: '/profile/referrals', label: 'Рефералка' }
+  { to: '/profile/referrals', label: 'Приглашения' }
 ]
+
+const isActive = (to: string, exact = false) => exact ? route.path === to : route.path === to || route.path.startsWith(`${to}/`)
 </script>
 
 <template>
@@ -23,19 +35,40 @@ const links = [
         <img class="site-logo" src="/assets/img/logo/razryad_logo_clean.png" alt="">
         <span>РазрядАрена</span>
       </NuxtLink>
-      <nav aria-label="Личный кабинет">
-        <NuxtLink v-for="link in links" :key="link.to" class="app-sidebar-link" :to="link.to">
-          {{ link.label }}
-        </NuxtLink>
+      <nav aria-label="Навигация">
+        <div class="app-sidebar-group">
+          <p class="app-sidebar-group-title">Разделы</p>
+          <NuxtLink
+            v-for="link in sectionLinks"
+            :key="link.to"
+            class="app-sidebar-link"
+            :class="{ 'is-active': isActive(link.to) }"
+            :to="link.to"
+          >
+            {{ link.label }}
+          </NuxtLink>
+        </div>
+        <div class="app-sidebar-group">
+          <p class="app-sidebar-group-title">Аккаунт</p>
+          <NuxtLink
+            v-for="link in accountLinks"
+            :key="link.to"
+            class="app-sidebar-link"
+            :class="{ 'is-active': isActive(link.to, link.exact) }"
+            :to="link.to"
+          >
+            {{ link.label }}
+          </NuxtLink>
+        </div>
       </nav>
     </aside>
     <main class="app-content">
       <div class="app-topbar d-flex justify-content-between align-items-center gap-3">
         <NuxtLink class="site-footer-link" to="/">
-          На сайт
+          Главная
         </NuxtLink>
         <div class="d-flex align-items-center gap-3">
-          <span class="text-muted-strong">Личный кабинет</span>
+          <span class="text-muted-strong">{{ auth.user?.name }}</span>
           <button class="site-footer-link border-0 bg-transparent p-0" type="button" @click="handleLogout">
             Выйти
           </button>

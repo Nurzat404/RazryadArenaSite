@@ -1,6 +1,6 @@
 ﻿<script setup lang="ts">
-import { matchService, newsService, ratingService, teamService, tournamentService } from '~/services'
-import type { Match, SiteNewsType, SportKey, TournamentStatus } from '~/types/domain'
+import { newsService, ratingService, teamService, tournamentService } from '~/services'
+import type { SiteNewsType, SportKey, TournamentStatus } from '~/types/domain'
 
 const auth = useAuthStore()
 
@@ -35,14 +35,6 @@ const formatDate = (value: string) =>
     month: 'long'
   }).format(new Date(value))
 
-const formatDateTime = (value: string) =>
-  new Intl.DateTimeFormat('ru-RU', {
-    day: 'numeric',
-    month: 'long',
-    hour: '2-digit',
-    minute: '2-digit'
-  }).format(new Date(value))
-
 const [tournaments, allTeams, ratingRows, newsItems] = await Promise.all([
   tournamentService.list(),
   teamService.list(),
@@ -51,29 +43,6 @@ const [tournaments, allTeams, ratingRows, newsItems] = await Promise.all([
 ])
 
 const userTeams = auth.user ? await teamService.listByUser(auth.user.id) : []
-const userTeamIds = new Set(userTeams.map((team) => team.id))
-const teamById = new Map(allTeams.map((team) => [team.id, team]))
-const tournamentById = new Map(tournaments.map((tournament) => [tournament.id, tournament]))
-
-const uniqueMatches = (matches: Match[]) => {
-  const seen = new Set<string>()
-
-  return matches.filter((match) => {
-    if (seen.has(match.id)) {
-      return false
-    }
-
-    seen.add(match.id)
-    return true
-  })
-}
-
-const userMatches = auth.user && userTeams.length
-  ? uniqueMatches((await Promise.all(userTeams.map((team) => matchService.list({ teamId: team.id })))).flat())
-      .filter((match) => match.status !== 'finished')
-      .slice(0, 3)
-  : []
-
 const upcomingTournaments = tournaments
   .filter((tournament) => tournament.status !== 'finished')
   .sort((a, b) => a.eventStartDate.localeCompare(b.eventStartDate))
@@ -82,24 +51,10 @@ const upcomingTournaments = tournaments
 const topRatingRows = ratingRows.slice(0, 5)
 const popularTeams = [...allTeams].sort((a, b) => b.rating - a.rating).slice(0, 4)
 
-const getTeamName = (teamId: string) => teamById.get(teamId)?.name ?? 'Команда уточняется'
-const getTournamentName = (tournamentId: string) => tournamentById.get(tournamentId)?.name ?? 'Турнир'
-
-const getOpponentName = (match: Match) => {
-  const ownTeamId = [match.team1Id, match.team2Id].find((teamId) => userTeamIds.has(teamId))
-  const opponentId = ownTeamId === match.team1Id ? match.team2Id : match.team1Id
-
-  return getTeamName(opponentId)
-}
-
 const dashboardStats = [
   {
     label: 'Моих команд',
     value: userTeams.length
-  },
-  {
-    label: 'Ближайших матчей',
-    value: userMatches.length
   },
   {
     label: 'Турниров открыто',
@@ -116,12 +71,12 @@ const faqItems = [
   {
     question: 'Можно ли создать команду после регистрации?',
     answer:
-      'Да. Сначала регистрируетесь как игрок, а команду создаёте позже в кабинете. Права организатора выдаёт админ.'
+      'Да. После регистрации откройте раздел команд и соберите свою. Турниры создаёт администратор.'
   },
   {
     question: 'Как команда подаёт заявку на турнир?',
     answer:
-      'Капитан выбирает турнир, проверяет состав и отправляет заявку. Организатор сразу видит, что с ней делать.'
+      'Капитан выбирает турнир, проверяет состав и отправляет заявку. Её статус будет виден в личном кабинете.'
   },
   {
     question: 'Где смотреть расписание и результаты?',
@@ -146,16 +101,16 @@ const toggleFaq = (index: number) => {
   openFaqIndex.value = openFaqIndex.value === index ? -1 : index
 }
 
-useHead({
+useHead(() => ({
   title: auth.isAuthenticated
-    ? 'РазрядАрена — главная'
-    : 'РазрядАрена — турниры, команды и матчи без путаницы',
+    ? 'Главная'
+    : 'Турниры, команды и матчи без путаницы',
   bodyAttrs: {
-    class: 'layout-public home-landing',
+    class: auth.isAuthenticated ? 'layout-user home-dashboard-page' : 'layout-public home-landing',
     'data-page': 'home',
     'data-role': auth.isAuthenticated ? 'user' : 'public'
   }
-})
+}))
 </script>
 
 <template>
@@ -174,9 +129,8 @@ useHead({
               </p>
             </div>
             <div class="home-dashboard__actions" aria-label="Быстрые действия">
-              <NuxtLink class="cta-button cta-button-primary" to="/matches">Открыть расписание</NuxtLink>
-              <NuxtLink class="cta-button cta-button-secondary" to="/tournaments">Подать заявку</NuxtLink>
-              <NuxtLink class="cta-button cta-button-secondary" to="/teams">Создать команду</NuxtLink>
+              <NuxtLink class="cta-button cta-button-primary" to="/tournaments">Смотреть турниры</NuxtLink>
+              <NuxtLink class="cta-button cta-button-secondary" to="/teams/create">Создать команду</NuxtLink>
             </div>
           </div>
 
@@ -188,7 +142,7 @@ useHead({
           </div>
 
           <div class="home-dashboard-grid">
-            <section class="home-dashboard-card home-dashboard-card--wide" aria-labelledby="home-tournaments-title">
+            <section class="home-dashboard-card home-dashboard-card--wide home-dashboard-card--tournaments" aria-labelledby="home-tournaments-title">
               <div class="home-dashboard-card__head">
                 <div>
                   <p class="home-kicker">Ближайшие турниры</p>
@@ -198,7 +152,7 @@ useHead({
               </div>
 
               <div class="home-dashboard-list">
-                <article v-for="tournament in upcomingTournaments" :key="tournament.id" class="home-dashboard-item">
+                <article v-for="tournament in upcomingTournaments" :key="tournament.id" class="home-dashboard-item home-dashboard-item--tournament">
                   <div>
                     <span class="home-dashboard-badge">{{ sportLabels[tournament.sport] }}</span>
                     <h3>{{ tournament.name }}</h3>
@@ -212,37 +166,7 @@ useHead({
               </div>
             </section>
 
-            <section class="home-dashboard-card" aria-labelledby="home-matches-title">
-              <div class="home-dashboard-card__head">
-                <div>
-                  <p class="home-kicker">Мои матчи</p>
-                  <h2 id="home-matches-title">Что играть дальше</h2>
-                </div>
-                <NuxtLink to="/matches">Матчи</NuxtLink>
-              </div>
-
-              <div v-if="userMatches.length" class="home-dashboard-list">
-                <article v-for="match in userMatches" :key="match.id" class="home-dashboard-item home-dashboard-item--compact">
-                  <div>
-                    <span class="home-dashboard-badge">{{ sportLabels[match.sport] }}</span>
-                    <h3>Против {{ getOpponentName(match) }}</h3>
-                    <p>{{ getTournamentName(match.tournamentId) }}</p>
-                  </div>
-                  <div class="home-dashboard-item__meta">
-                    <strong>{{ formatDateTime(match.scheduledAt) }}</strong>
-                    <span>{{ match.location }}</span>
-                  </div>
-                </article>
-              </div>
-
-              <div v-else class="home-dashboard-empty">
-                <h3>Матчей пока нет</h3>
-                <p>Когда команда попадёт в турнир, здесь появятся соперник, время и место игры.</p>
-                <NuxtLink to="/tournaments">Смотреть турниры</NuxtLink>
-              </div>
-            </section>
-
-            <section class="home-dashboard-card" aria-labelledby="home-teams-title">
+            <section class="home-dashboard-card home-dashboard-card--my-teams" aria-labelledby="home-teams-title">
               <div class="home-dashboard-card__head">
                 <div>
                   <p class="home-kicker">Мои команды</p>
@@ -272,7 +196,7 @@ useHead({
               </div>
             </section>
 
-            <section class="home-dashboard-card" aria-labelledby="home-ratings-title">
+            <section class="home-dashboard-card home-dashboard-card--ranking" aria-labelledby="home-ratings-title">
               <div class="home-dashboard-card__head">
                 <div>
                   <p class="home-kicker">Рейтинг</p>
@@ -290,7 +214,7 @@ useHead({
               </ol>
             </section>
 
-            <section class="home-dashboard-card" aria-labelledby="home-popular-teams-title">
+            <section class="home-dashboard-card home-dashboard-card--popular" aria-labelledby="home-popular-teams-title">
               <div class="home-dashboard-card__head">
                 <div>
                   <p class="home-kicker">Команды</p>
@@ -314,7 +238,7 @@ useHead({
               </div>
             </section>
 
-            <section class="home-dashboard-card home-dashboard-card--wide" aria-labelledby="home-news-title">
+            <section class="home-dashboard-card home-dashboard-card--wide home-dashboard-card--news" aria-labelledby="home-news-title">
               <div class="home-dashboard-card__head">
                 <div>
                   <p class="home-kicker">Новости</p>
@@ -342,14 +266,14 @@ useHead({
         <div class="container">
           <div class="home-hero__shell">
             <div class="home-hero__content" data-animate="animate__fadeInUp">
-              <p class="home-kicker">Любительские турниры без хаоса</p>
+              <p class="home-kicker">Для игроков и команд</p>
               <h1 id="hero-title" class="home-hero__title">Турниры без хаоса в чатах.</h1>
               <p class="home-hero__lead">
                 Когда заявки живут в личке, расписание в таблице, а результаты в чате, всё быстро путается.
                 РазрядАрена помогает держать сезон в порядке: кто играет, когда матч и что уже сыграно.
               </p>
               <div class="home-hero__actions" aria-label="Основные действия">
-                <a class="cta-button cta-button-primary" href="/register">Подать заявку</a>
+                <a class="cta-button cta-button-primary" href="/register">Создать аккаунт</a>
                 <a class="cta-button cta-button-secondary" href="/tournaments">Смотреть турниры</a>
               </div>
             </div>
@@ -375,7 +299,7 @@ useHead({
       <section class="home-section home-benefits section-padding" aria-labelledby="benefits-title">
         <div class="container">
           <div class="home-section__heading" data-animate="animate__fadeInUp">
-            <p class="home-kicker">Что болит на турнирах</p>
+            <p class="home-kicker">Перед началом матча</p>
             <h2 id="benefits-title" class="section-title">Меньше вопросов перед игрой</h2>
             <p class="section-subtitle">Кто играет, когда дедлайн, какой состав заявлен и где результат — эти вещи должны быть видны сразу.</p>
           </div>
@@ -412,7 +336,7 @@ useHead({
                 <span class="benefit-card__icon" aria-hidden="true">
                   <svg viewBox="0 0 24 24"><path d="M6 18h12M8 18V9m4 9V5m4 13v-7" /></svg>
                 </span>
-                <h3>Рейтинг по делу</h3>
+                <h3>Результат без задержки</h3>
                 <p>Результаты видны после игры, а не через три дня в переписке.</p>
               </article>
             </div>
@@ -424,7 +348,7 @@ useHead({
       <section class="home-section home-process section-padding" aria-labelledby="process-title">
         <div class="container">
           <div class="home-section__heading" data-animate="animate__fadeInUp">
-            <p class="home-kicker">Как стартовать</p>
+            <p class="home-kicker">Как начать</p>
             <h2 id="process-title" class="section-title">От аккаунта до первого матча</h2>
           </div>
           <div class="process-grid">
@@ -437,7 +361,7 @@ useHead({
                   </span>
                   <h3>Зарегистрируйтесь</h3>
                 </div>
-                <p>Обычный аккаунт игрока. Без выбора “ролей” и лишних настроек на старте.</p>
+                <p>Укажите имя, город и виды спорта. Команду можно создать позже.</p>
               </div>
             </article>
             <article class="process-step" data-animate="animate__fadeInUp" data-animate-delay="110">
@@ -533,7 +457,7 @@ useHead({
                   </div>
                 </div>
                 <ul class="feature-panel__list">
-                  <li>Фильтры по дисциплине и формату</li>
+                  <li>Фильтры по виду спорта и статусу</li>
                   <li>Даты сезона, дедлайны и статус набора</li>
                   <li>Переход к заявке и регламенту</li>
                 </ul>
@@ -554,7 +478,7 @@ useHead({
                 <ul class="feature-panel__list">
                   <li>Очки, позиции и движение команд</li>
                   <li>Очки только по принятым результатам</li>
-                  <li>Правила подсчёта без сюрпризов</li>
+                  <li>Правила начисления очков</li>
                 </ul>
                 <a class="feature-panel__link" href="/ratings">Посмотреть рейтинг</a>
               </article>
@@ -567,7 +491,7 @@ useHead({
                   </span>
                   <div>
                     <h3>Результаты и правила</h3>
-                    <p>У матча есть время, соперники, статус и итоговый счёт. Всё коротко и по делу.</p>
+                    <p>До игры видны время и соперники, после игры — итоговый счёт.</p>
                   </div>
                 </div>
                 <ul class="feature-panel__list">
@@ -587,7 +511,7 @@ useHead({
         <div class="container">
           <div class="home-section__heading" data-animate="animate__fadeInUp">
             <p class="home-kicker">Кому что нужно</p>
-            <h2 id="roles-title" class="section-title">У каждого своя боль</h2>
+            <h2 id="roles-title" class="section-title">Что важно игроку, капитану и организатору</h2>
           </div>
           <div class="roles-grid">
             <article class="role-card role-card--players" data-animate="animate__fadeInUp">
@@ -597,7 +521,7 @@ useHead({
                 </span>
                 <p class="role-card__eyebrow">Игрокам</p>
               </div>
-              <h3>Быстрый доступ к игре</h3>
+              <h3>Понять, когда и с кем играть</h3>
               <p>Игрок открывает матч и видит главное: когда играем, с кем и по каким правилам.</p>
               <ul>
                 <li>Профиль и история участия</li>
@@ -615,7 +539,7 @@ useHead({
               <h3>Состав и заявка без ручных списков</h3>
               <p>Капитан видит, кто в составе, кто подтвердился и можно ли уже заявляться.</p>
               <ul>
-                <li>Приглашения и роли участников</li>
+                <li>Приглашения и список игроков</li>
                 <li>Проверка состава перед матчем</li>
                 <li>Подача в турнир и статус заявки</li>
               </ul>
@@ -628,11 +552,11 @@ useHead({
                 <p class="role-card__eyebrow">Организаторам</p>
               </div>
               <h3>Меньше таблиц и ручных сверок</h3>
-              <p>Организатор видит заявки, расписание и результаты там, где с ними реально работает.</p>
+              <p>Организатор проверяет заявки, назначает матчи и записывает результаты.</p>
               <ul>
                 <li>Публикация этапов и дедлайнов</li>
                 <li>Связь с командами</li>
-                <li>Матчи и таблицы без разъезда</li>
+                <li>Результаты матчей в турнирной таблице</li>
               </ul>
             </article>
           </div>
@@ -643,9 +567,9 @@ useHead({
       <section class="home-section section-padding" aria-labelledby="atmosphere-title">
         <div class="container">
           <div class="home-section__heading" data-animate="animate__fadeInUp">
-            <p class="home-kicker">Как это ощущается</p>
+            <p class="home-kicker">Что видит команда</p>
             <h2 id="atmosphere-title" class="section-title">Команда, матч, результат</h2>
-            <p class="section-subtitle">Любительский турнир может быть шумным, но не должен быть мутным: состав известен, матч назначен, результат записан.</p>
+            <p class="section-subtitle">Состав подтверждён, матч назначен, результат записан. За подробностями не нужно идти в общий чат.</p>
           </div>
           <div class="gallery-grid">
             <figure class="gallery-card gallery-card--wide" data-animate="animate__zoomIn">
@@ -707,7 +631,7 @@ useHead({
                   <ul>
                     <li>Анонсы турниров и сезонов</li>
                     <li>Локальные лиги и регулярные серии</li>
-                    <li>Площадку, клуб или бренд в сезоне</li>
+                    <li>Площадку, клуб или партнёра турнира</li>
                     <li>Контент для игроков и команд</li>
                   </ul>
                 </article>
@@ -716,7 +640,7 @@ useHead({
                   <ul>
                     <li>Спортивным площадкам и клубам</li>
                     <li>Локальным лигам и школьным турнирам</li>
-                    <li>Брендам с фокусом на локальное комьюнити</li>
+                    <li>Компаниям, которым интересен местный спорт</li>
                     <li>Организаторам регулярных сезонов</li>
                   </ul>
                 </article>
@@ -779,9 +703,9 @@ useHead({
       <section class="home-final-cta section-padding" aria-labelledby="final-cta-title">
         <div class="container">
           <div class="home-final-cta__panel" data-animate="animate__fadeInUp">
-            <p class="home-kicker">Начать сезон</p>
-            <h2 id="final-cta-title" class="section-title">Начните с команды и заявки</h2>
-            <p>Создайте аккаунт, выберите турнир и проверьте состав перед отправкой заявки.</p>
+            <p class="home-kicker">Первый шаг</p>
+            <h2 id="final-cta-title" class="section-title">Выберите турнир или соберите команду</h2>
+            <p>После регистрации можно создать команду, найти подходящий турнир и следить за заявкой.</p>
             <div class="home-final-cta__actions">
               <a class="cta-button cta-button-primary" href="/register">Создать аккаунт</a>
               <a class="cta-button cta-button-secondary" href="/tournaments">Смотреть турниры</a>

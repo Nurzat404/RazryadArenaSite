@@ -4,11 +4,11 @@ import type { SportKey } from '~/types/domain'
 definePageMeta({ layout: 'app', middleware: 'auth' })
 
 useHead({
-  title: 'Редактировать профиль | РазрядАрена',
+  title: 'Редактировать профиль',
   meta: [
     {
       name: 'description',
-      content: 'Редактирование профиля игрока РазрядАрены: имя, email, город, возраст, виды спорта и Steam profile.'
+      content: 'Имя, контакты, город, возраст, виды спорта и ссылка на Steam-профиль.'
     }
   ]
 })
@@ -32,7 +32,7 @@ const form = reactive({
   city: auth.user?.city ?? '',
   age: auth.user?.age?.toString() ?? '',
   favoriteSports: [...(auth.user?.favoriteSports ?? [])] as SportKey[],
-  steamId: auth.user?.steamId ?? ''
+  steamProfileUrl: auth.user?.steamProfileUrl ?? ''
 })
 
 const saving = ref(false)
@@ -75,7 +75,9 @@ const submitProfile = async () => {
       city: form.city.trim() || undefined,
       age,
       favoriteSports: form.favoriteSports,
-      steamId: form.steamId.trim() || undefined
+      steamProfileUrl: form.favoriteSports.includes('cs2') && form.steamProfileUrl.trim()
+        ? form.steamProfileUrl.trim()
+        : undefined
     })
     saved.value = true
   } finally {
@@ -85,7 +87,7 @@ const submitProfile = async () => {
 </script>
 
 <template>
-  <section>
+  <section class="workspace-page workspace-page--profile">
     <PageHead
       title="Редактировать профиль"
       subtitle="Здесь лежат данные, которые видят капитаны, организаторы и админы турниров."
@@ -106,7 +108,7 @@ const submitProfile = async () => {
           <div class="col-md-6">
             <label class="form-label" for="profileEmail">Email</label>
             <input id="profileEmail" v-model="form.email" class="form-control" type="email" required>
-            <p class="form-text">Обязательное поле. Подтверждение почты подключим позже.</p>
+            <p class="form-text">Обязательное поле для входа.</p>
           </div>
 
           <div class="col-md-6">
@@ -144,13 +146,13 @@ const submitProfile = async () => {
         </div>
       </div>
 
-      <div class="form-section">
-        <h2 class="form-section__title">Steam profile</h2>
-        <p class="form-section__hint">Поле по желанию. Для CS2 его лучше заполнить: так проще сверять игроков и demo-статистику.</p>
+      <div v-if="form.favoriteSports.includes('cs2')" class="form-section">
+        <h2 class="form-section__title">Steam-профиль</h2>
+        <p class="form-section__hint">Необязательное поле для игроков CS2.</p>
 
-        <label class="form-label" for="profileSteam">Ссылка на Steam profile или SteamID64</label>
-        <input id="profileSteam" v-model="form.steamId" class="form-control" type="text" placeholder="https://steamcommunity.com/id/example">
-        <p class="form-text">Не обязательно. Если CS2 не играете, поле можно оставить пустым.</p>
+        <label class="form-label" for="profileSteam">Ссылка на Steam-профиль</label>
+        <input id="profileSteam" v-model="form.steamProfileUrl" class="form-control" type="url" placeholder="https://steamcommunity.com/id/example">
+        <p class="form-text">Организатор сможет сверить аккаунт перед матчем.</p>
       </div>
 
       <p v-if="errorMessage" class="form-error">{{ errorMessage }}</p>

@@ -23,7 +23,7 @@ const handleSubmit = async () => {
 }
 
 useHead({
-  title: 'Новый пароль — РазрядАрена',
+  title: 'Новый пароль',
   bodyAttrs: {
     class: 'layout-public',
     'data-page': 'reset-password',

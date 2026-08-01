@@ -5,7 +5,7 @@ import type { SportKey, TeamInviteJoinMode } from '~/types/domain'
 definePageMeta({ layout: 'app', middleware: 'auth' })
 
 useHead({
-  title: 'Создать команду | РазрядАрена',
+  title: 'Создать команду',
   meta: [
     {
       name: 'description',
@@ -37,13 +37,11 @@ const form = reactive({
   inviteJoinMode: 'request' as TeamInviteJoinMode
 })
 
-const createdTeamId = ref('')
 const errorMessage = ref('')
 const saving = ref(false)
 
 const submitTeam = async () => {
   errorMessage.value = ''
-  createdTeamId.value = ''
 
   if (!auth.user) {
     errorMessage.value = 'Войдите в аккаунт, чтобы создать команду.'
@@ -74,7 +72,9 @@ const submitTeam = async () => {
       inviteJoinMode: form.inviteJoinMode,
       inviteEnabled: true
     })
-    createdTeamId.value = team.id
+    await navigateTo(`/teams/${team.id}`)
+  } catch {
+    errorMessage.value = 'Не получилось создать команду. Проверьте данные и попробуйте ещё раз.'
   } finally {
     saving.value = false
   }
@@ -82,10 +82,10 @@ const submitTeam = async () => {
 </script>
 
 <template>
-  <section>
+  <section class="workspace-page workspace-page--team">
     <PageHead
       title="Создать команду"
-      subtitle="Команду может создать обычный игрок. Роль аккаунта от этого не меняется."
+      subtitle="Укажите спорт, город и размер состава. После создания вы станете капитаном команды."
     />
 
     <form class="form-panel profile-edit-form" @submit.prevent="submitTeam">
@@ -119,7 +119,7 @@ const submitTeam = async () => {
       </div>
 
       <div class="form-section">
-        <h2 class="form-section__title">Заявки и invite</h2>
+        <h2 class="form-section__title">Заявки и приглашения</h2>
         <p class="form-section__hint">Эти настройки можно будет поменять позже в карточке команды.</p>
 
         <div class="team-settings-grid">
@@ -133,20 +133,16 @@ const submitTeam = async () => {
           </label>
           <label class="team-setting-switch">
             <input v-model="form.inviteJoinMode" type="radio" value="request">
-            <span>По invite сначала заявка капитану</span>
+            <span>По ссылке игрок отправляет заявку</span>
           </label>
           <label class="team-setting-switch">
             <input v-model="form.inviteJoinMode" type="radio" value="direct">
-            <span>По invite сразу вступление</span>
+            <span>По ссылке игрок сразу вступает</span>
           </label>
         </div>
       </div>
 
       <p v-if="errorMessage" class="form-error">{{ errorMessage }}</p>
-      <p v-if="createdTeamId" class="form-success">
-        Команда создана в мок-режиме. После backend она будет сохраняться в базе и появляться у всех игроков.
-      </p>
-
       <div class="profile-form-actions">
         <button class="cta-button cta-button-primary" type="submit" :disabled="saving">
           {{ saving ? 'Создаём...' : 'Создать команду' }}

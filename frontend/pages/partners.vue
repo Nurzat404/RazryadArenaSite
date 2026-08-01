@@ -1,6 +1,6 @@
 ﻿<script setup lang="ts">
 useHead({
-  title: 'Партнёрам — РазрядАрена',
+  title: 'Партнёрам',
   bodyAttrs: {
     class: 'layout-public',
     'data-page': 'partners',
@@ -19,7 +19,7 @@ useHead({
               <h1 class="section-title mb-2">Проведём турнир вместе</h1>
               <p class="text-muted-strong mb-3">
                 Если у вас есть площадка, клуб, лига или идея серии матчей — напишите.
-                Сначала разберём формат, потом уже детали.
+                Расскажите, кто будет играть, где и в какие сроки.
               </p>
               <a class="cta-button cta-button-primary" href="mailto:razryadarena@ya.ru">Написать на почту</a>
             </div>
@@ -90,7 +90,7 @@ useHead({
           </div>
           <div class="accordion" id="partnersFaqAccordion">
             <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#partnerFaq1">Уже можно писать?</button></h2><div id="partnerFaq1" class="accordion-collapse collapse" data-bs-parent="#partnersFaqAccordion"><div class="accordion-body text-muted-strong">Да. Напишите на почту, расскажите про формат — ответим и обсудим дальше.</div></div></div>
-            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#partnerFaq2">Есть готовые пакеты?</button></h2><div id="partnerFaq2" class="accordion-collapse collapse" data-bs-parent="#partnersFaqAccordion"><div class="accordion-body text-muted-strong">Есть базовые варианты, но обычно всё зависит от турнира, города и аудитории.</div></div></div>
+            <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#partnerFaq2">Есть готовые условия?</button></h2><div id="partnerFaq2" class="accordion-collapse collapse" data-bs-parent="#partnersFaqAccordion"><div class="accordion-body text-muted-strong">Условия зависят от формата, города и числа участников. Обсудим их после знакомства с идеей.</div></div></div>
             <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#partnerFaq3">Можно предложить свой формат?</button></h2><div id="partnerFaq3" class="accordion-collapse collapse" data-bs-parent="#partnersFaqAccordion"><div class="accordion-body text-muted-strong">Да. Лучше сразу описать идею простыми словами: кто играет, где и зачем.</div></div></div>
             <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#partnerFaq4">Куда писать по партнёрству?</button></h2><div id="partnerFaq4" class="accordion-collapse collapse" data-bs-parent="#partnersFaqAccordion"><div class="accordion-body text-muted-strong">На почту <a class="link-light" href="mailto:razryadarena@ya.ru">razryadarena@ya.ru</a>.</div></div></div>
           </div>

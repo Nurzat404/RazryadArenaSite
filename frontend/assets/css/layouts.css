@@ -61,7 +61,27 @@
 }
 
 .app-content {
+  min-width: 0;
   padding: 1.2rem;
+}
+
+.app-content > * {
+  min-width: 0;
+}
+
+.layout-app .section-padding {
+  padding: 0.35rem 0 2rem;
+}
+
+.layout-app .page-head {
+  margin-bottom: 1.15rem;
+  text-align: left;
+}
+
+.layout-app .page-head .section-subtitle,
+.layout-app .page-head .text-muted-strong {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 }
 
 .app-topbar {

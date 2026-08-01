@@ -1,28 +1,30 @@
 import type { SiteNews } from '~/types/domain'
 
+const dateTimeFromNow = (days: number) => new Date(Date.now() + days * 86_400_000).toISOString()
+
 export const mockNews: SiteNews[] = [
   {
     id: 'news1',
-    title: 'Заявки на CS2 Weekend Cup открыты до 20 июня',
-    body: 'Капитан может подать команду сейчас, а состав спокойно проверить перед стартом.',
+    title: 'Открыты заявки на CS2 Weekend Cup',
+    body: 'Заявку отправляет капитан. Перед отправкой проверьте состав команды.',
     type: 'tournament',
-    publishedAt: '2026-06-08T09:00:00.000Z',
+    publishedAt: dateTimeFromNow(-2),
     actionUrl: '/tournaments'
   },
   {
     id: 'news2',
     title: 'Расписание матчей теперь видно из профиля',
-    body: 'Если команда уже в турнире, ближайшая игра не потеряется в переписке.',
+    body: 'Если команда участвует в турнире, в профиле видны ближайшая игра, соперник и время.',
     type: 'update',
-    publishedAt: '2026-06-06T12:30:00.000Z',
+    publishedAt: dateTimeFromNow(-4),
     actionUrl: '/profile'
   },
   {
     id: 'news3',
-    title: 'Футбольный кубок идет по вечернему расписанию',
-    body: 'Результаты появляются после игры, а спорные моменты остаются у организатора.',
+    title: 'Матчи футбольного кубка проходят вечером',
+    body: 'Время и место каждой игры опубликованы в расписании. После матча там же появится счёт.',
     type: 'announcement',
-    publishedAt: '2026-06-04T17:20:00.000Z',
+    publishedAt: dateTimeFromNow(-6),
     actionUrl: '/matches'
   }
 ]

@@ -1,4 +1,4 @@
-import { mockUsers } from '~/data/mock/users'
+import { useMockUsers } from '~/data/mock/state'
 import type { SportKey, User } from '~/types/domain'
 import type { UserProfilePayload } from '~/services/userService'
 
@@ -9,43 +9,32 @@ export interface RegisterPayload {
   city?: string
   age?: number
   favoriteSports: SportKey[]
-  steamId?: string
+  steamProfileUrl?: string
 }
 
 const mockUserIdCookie = 'ra_mock_user_id'
-const mockUserCookie = 'ra_mock_user'
 
-const saveSession = (user: User, persistSnapshot = false) => {
-  const userId = useCookie<string | null>(mockUserIdCookie, { sameSite: 'lax' })
-  const customUser = useCookie<User | null>(mockUserCookie, { sameSite: 'lax' })
-
+const saveSession = (user: User) => {
+  const userId = useCookie<string | null>(mockUserIdCookie, { sameSite: 'lax', maxAge: 60 * 60 * 24 * 30 })
   userId.value = user.id
-  customUser.value = persistSnapshot || !mockUsers.some((item) => item.id === user.id) ? user : null
 }
 
 const clearSession = () => {
   const userId = useCookie<string | null>(mockUserIdCookie, { sameSite: 'lax' })
-  const customUser = useCookie<User | null>(mockUserCookie, { sameSite: 'lax' })
-
+  const oldUser = useCookie<User | null>('ra_mock_user', { sameSite: 'lax' })
   userId.value = null
-  customUser.value = null
+  oldUser.value = null
 }
 
 const readSession = () => {
   const userId = useCookie<string | null>(mockUserIdCookie, { sameSite: 'lax' })
-  const customUser = useCookie<User | null>(mockUserCookie, { sameSite: 'lax' })
-
-  return customUser.value ?? mockUsers.find((item) => item.id === userId.value) ?? null
+  return useMockUsers().value.find((item) => item.id === userId.value) ?? null
 }
 
 export const authService = {
   async login(email: string, _password: string) {
-    const user = mockUsers.find((item) => item.email.toLowerCase() === email.toLowerCase())
-
-    if (!user) {
-      throw new Error('User not found')
-    }
-
+    const user = useMockUsers().value.find((item) => item.email.toLowerCase() === email.toLowerCase())
+    if (!user) throw new Error('User not found')
     saveSession(user)
     return user
   },
@@ -55,24 +44,23 @@ export const authService = {
   },
 
   async updateCurrentUser(payload: UserProfilePayload) {
+    const users = useMockUsers()
     const user = readSession()
-
-    if (!user) {
-      return null
-    }
-
-    const updatedUser = {
-      ...user,
-      ...payload
-    }
-
-    saveSession(updatedUser, true)
+    if (!user) return null
+    const updatedUser = { ...user, ...payload }
+    users.value = users.value.map((item) => item.id === user.id ? updatedUser : item)
+    saveSession(updatedUser)
     return updatedUser
   },
 
   async register(payload: RegisterPayload): Promise<User> {
+    const users = useMockUsers()
+    if (users.value.some((item) => item.email.toLowerCase() === payload.email.toLowerCase())) {
+      throw new Error('Email already exists')
+    }
+
     const user: User = {
-      id: `mock-user-${Date.now()}`,
+      id: `user-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
       name: payload.name,
       email: payload.email,
       city: payload.city,
@@ -80,9 +68,9 @@ export const authService = {
       role: 'player',
       favoriteSports: payload.favoriteSports,
       emailVerified: false,
-      steamId: payload.steamId
+      steamProfileUrl: payload.steamProfileUrl
     }
-
+    users.value = [...users.value, user]
     saveSession(user)
     return user
   },

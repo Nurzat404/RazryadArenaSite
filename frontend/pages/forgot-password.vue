@@ -13,7 +13,7 @@ const handleSubmit = async () => {
 }
 
 useHead({
-  title: 'Восстановление пароля — РазрядАрена',
+  title: 'Восстановление пароля',
   bodyAttrs: {
     class: 'layout-public',
     'data-page': 'forgot-password',

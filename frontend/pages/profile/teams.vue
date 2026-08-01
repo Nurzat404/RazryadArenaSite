@@ -22,10 +22,10 @@ const teams = auth.user ? await teamService.listByUser(auth.user.id) : []
 </script>
 
 <template>
-  <section>
+  <section class="workspace-page workspace-page--profile">
     <PageHead
       title="Мои команды"
-      subtitle="Команды, где вы уже в составе. Капитанство не меняет роль аккаунта: капитаном может быть обычный игрок."
+      subtitle="Команды, в которых вы играете или отвечаете за состав."
     />
 
     <div v-if="teams.length" class="profile-grid">
@@ -55,7 +55,6 @@ const teams = auth.user ? await teamService.listByUser(auth.user.id) : []
 
         <div class="profile-card__actions">
           <NuxtLink class="cta-button cta-button-secondary" :to="`/teams/${team.id}`">Открыть команду</NuxtLink>
-          <NuxtLink class="cta-button cta-button-primary" to="/tournaments">Подать заявку</NuxtLink>
         </div>
       </article>
     </div>
@@ -65,7 +64,6 @@ const teams = auth.user ? await teamService.listByUser(auth.user.id) : []
       <p>Создайте свою команду или найдите открытую. После вступления она появится здесь.</p>
       <div class="empty-state-panel__actions">
         <NuxtLink class="cta-button cta-button-primary" to="/teams">Смотреть команды</NuxtLink>
-        <NuxtLink class="cta-button cta-button-secondary" to="/tournaments">Смотреть турниры</NuxtLink>
       </div>
     </div>
   </section>

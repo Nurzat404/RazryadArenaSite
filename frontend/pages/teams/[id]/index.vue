@@ -1,17 +1,21 @@
 <script setup lang="ts">
-import { applicationService, matchService, teamService, tournamentService, userService } from '~/services'
-import type { ApplicationStatus, MatchStatus, SportKey } from '~/types/domain'
+import { applicationService, teamService, tournamentService, userService } from '~/services'
+import type { ApplicationStatus, SportKey } from '~/types/domain'
 
 const route = useRoute()
 const teamId = String(route.params.id)
-const [team, users, members, invites, requests, applications, matches, tournaments] = await Promise.all([
+const auth = useAuthStore()
+
+if (!auth.initialized) {
+  await auth.loadCurrentUser()
+}
+
+const [team, users, members, requests, applications, tournaments] = await Promise.all([
   teamService.getById(teamId),
   userService.list(),
   teamService.listMembers(teamId),
-  teamService.listInvites(teamId),
   teamService.listRequests(teamId),
   applicationService.list({ teamId }),
-  matchService.list({ teamId }),
   tournamentService.list()
 ])
 
@@ -29,18 +33,49 @@ const applicationStatusLabels: Record<ApplicationStatus, string> = {
   excluded: 'Исключена'
 }
 
-const matchStatusLabels: Record<MatchStatus, string> = {
-  scheduled: 'Назначен',
-  active: 'Идёт',
-  finished: 'Завершён',
-  technical_win: 'Технический результат'
-}
-
 const userById = new Map(users.map((user) => [user.id, user]))
 const tournamentById = new Map(tournaments.map((tournament) => [tournament.id, tournament]))
-const activeInvite = invites.find((invite) => invite.status === 'active')
-const pendingRequests = requests.filter((request) => request.status === 'pending')
+const currentRequests = ref(requests)
+const pendingRequests = computed(() => currentRequests.value.filter((request) => request.status === 'pending'))
 const captain = team ? userById.get(team.captainId) : null
+const isMember = computed(() => Boolean(auth.user && members.some((member) => member.userId === auth.user?.id)))
+const canManage = computed(() => Boolean(team && auth.user && team.captainId === auth.user.id))
+const ownPendingRequest = computed(() => currentRequests.value.find((request) => request.userId === auth.user?.id && request.status === 'pending'))
+const requestMessage = ref('')
+const requestFeedback = ref('')
+const requestError = ref('')
+
+const submitRequest = async () => {
+  if (!team || !auth.user) return
+  requestError.value = ''
+  requestFeedback.value = ''
+
+  try {
+    const request = await teamService.createRequest({
+      teamId: team.id,
+      userId: auth.user.id,
+      message: requestMessage.value.trim() || undefined
+    })
+    currentRequests.value = [request, ...currentRequests.value]
+    requestMessage.value = ''
+    requestFeedback.value = 'Заявка отправлена капитану.'
+  } catch (error) {
+    const reason = error instanceof Error ? error.message : ''
+    requestError.value = reason === 'blocked'
+      ? 'Капитан ограничил вступление этого аккаунта.'
+      : reason === 'requests_closed'
+        ? 'Команда сейчас не принимает заявки.'
+        : 'Заявка уже отправлена или вы уже состоите в команде.'
+  }
+}
+
+const cancelRequest = async () => {
+  if (!team || !auth.user) return
+  if (await teamService.cancelRequest(team.id, auth.user.id)) {
+    currentRequests.value = currentRequests.value.filter((request) => request.id !== ownPendingRequest.value?.id)
+    requestFeedback.value = 'Заявка отменена.'
+  }
+}
 
 const formatDate = (value: string) =>
   new Intl.DateTimeFormat('ru-RU', {
@@ -56,11 +91,10 @@ useHead({
 </script>
 
 <template>
-  <section class="section-padding">
+  <section class="section-padding workspace-page workspace-page--team-detail">
     <div class="container">
       <PageHead
         :title="team?.name ?? 'Команда не найдена'"
-        subtitle="Состав, капитан, заявки, турниры и ближайшие матчи команды."
       />
 
       <div v-if="team" class="team-detail-layout">
@@ -68,9 +102,9 @@ useHead({
           <div class="profile-card__head">
             <div>
               <span class="profile-card__badge">{{ sportLabels[team.sport] }}</span>
-              <h2>{{ team.name }}</h2>
+              <h2>О команде</h2>
             </div>
-            <strong>{{ team.rating }}</strong>
+            <span class="profile-card__rating">Рейтинг <strong>{{ team.rating }}</strong></span>
           </div>
 
           <dl class="profile-card__meta">
@@ -88,37 +122,54 @@ useHead({
             </div>
           </dl>
 
-          <p class="profile-card__note">
-            Заявки в команду {{ team.isOpenForRequests ? 'открыты' : 'закрыты' }}.
-            Invite-ссылка {{ team.inviteEnabled ? 'включена' : 'выключена' }}.
-            Режим вступления: {{ team.inviteJoinMode === 'direct' ? 'сразу по ссылке' : 'через заявку капитану' }}.
-          </p>
-
-          <div class="profile-card__actions">
+          <div v-if="canManage" class="profile-card__actions team-management-actions">
             <NuxtLink class="cta-button cta-button-primary" :to="`/teams/${team.id}/members`">Состав</NuxtLink>
             <NuxtLink class="cta-button cta-button-secondary" :to="`/teams/${team.id}/requests`">Заявки</NuxtLink>
-            <NuxtLink class="cta-button cta-button-secondary" :to="`/teams/${team.id}/invite`">Invite</NuxtLink>
+            <NuxtLink class="cta-button cta-button-secondary" :to="`/teams/${team.id}/invite`">Пригласить</NuxtLink>
             <NuxtLink class="cta-button cta-button-secondary" :to="`/teams/${team.id}/edit`">Настройки</NuxtLink>
           </div>
         </article>
 
         <aside class="team-side-panel">
           <div>
-            <span>Новых заявок</span>
-            <strong>{{ pendingRequests.length }}</strong>
+            <span>{{ canManage ? `Заявки, новых: ${pendingRequests.length}` : 'Заявки в команду' }}</span>
+            <strong>{{ team.isOpenForRequests ? 'Открыты' : 'Закрыты' }}</strong>
+          </div>
+          <div v-if="canManage">
+            <span>Вступление</span>
+            <strong>{{ !team.inviteEnabled ? 'Закрыто' : team.inviteJoinMode === 'direct' ? 'По ссылке' : 'Через заявку' }}</strong>
           </div>
           <div>
-            <span>Активная ссылка</span>
-            <strong>{{ activeInvite?.code ?? 'Нет' }}</strong>
-          </div>
-          <div>
-            <span>Матчей в расписании</span>
-            <strong>{{ matches.length }}</strong>
+            <span>Свободных мест</span>
+            <strong>{{ Math.max(team.maxMembers - members.length, 0) }}</strong>
           </div>
         </aside>
       </div>
 
-      <div v-if="team" class="profile-grid mt-3">
+      <article v-if="team && !isMember && !canManage" class="surface-panel p-4 mt-3">
+        <template v-if="auth.isAuthenticated">
+          <h2 class="h4 mb-2">Заявка в команду</h2>
+          <template v-if="ownPendingRequest">
+            <p class="text-muted-strong">Заявка уже у капитана. Можно дождаться ответа или отменить её.</p>
+            <button class="cta-button cta-button-secondary" type="button" @click="cancelRequest">Отменить заявку</button>
+          </template>
+          <form v-else-if="team.isOpenForRequests" class="team-request-form" @submit.prevent="submitRequest">
+            <label class="form-label" for="joinMessage">Коротко о себе <span class="text-muted-strong">(по желанию)</span></label>
+            <textarea id="joinMessage" v-model="requestMessage" class="form-control" rows="3" placeholder="Когда играете и на какой позиции"></textarea>
+            <button class="cta-button cta-button-primary" type="submit">Подать заявку</button>
+          </form>
+          <p v-else class="text-muted-strong mb-0">Команда сейчас не принимает заявки.</p>
+          <p v-if="requestFeedback" class="form-success">{{ requestFeedback }}</p>
+          <p v-if="requestError" class="form-error">{{ requestError }}</p>
+        </template>
+        <template v-else>
+          <h2 class="h4 mb-2">Хотите вступить?</h2>
+          <p class="text-muted-strong">Войдите в аккаунт, чтобы отправить заявку капитану.</p>
+          <NuxtLink class="cta-button cta-button-primary" to="/login">Войти</NuxtLink>
+        </template>
+      </article>
+
+      <div v-if="team" class="profile-grid team-detail-sections mt-3">
         <article class="profile-card">
           <div class="profile-card__head">
             <div>
@@ -137,7 +188,7 @@ useHead({
           </div>
         </article>
 
-        <article class="profile-card">
+        <article v-if="canManage" class="profile-card">
           <div class="profile-card__head">
             <div>
               <span class="profile-card__badge">Турниры</span>
@@ -158,42 +209,6 @@ useHead({
           </p>
         </article>
 
-        <article class="profile-card">
-          <div class="profile-card__head">
-            <div>
-              <span class="profile-card__badge">Матчи</span>
-              <h2>{{ matches.length ? 'Расписание и результаты' : 'Матчей пока нет' }}</h2>
-            </div>
-          </div>
-          <div v-if="matches.length" class="team-list-stack">
-            <div v-for="match in matches" :key="match.id" class="team-list-row">
-              <div>
-                <strong>{{ tournamentById.get(match.tournamentId)?.name ?? 'Турнир не найден' }}</strong>
-                <span>{{ formatDate(match.scheduledAt) }} · {{ match.location }}</span>
-              </div>
-              <StatusBadge :status="match.status" :label="matchStatusLabels[match.status]" />
-            </div>
-          </div>
-          <p v-else class="profile-card__note">
-            Матчи появятся после допуска команды и генерации расписания.
-          </p>
-        </article>
-
-        <article class="profile-card">
-          <div class="profile-card__head">
-            <div>
-              <span class="profile-card__badge">Действия</span>
-              <h2>Что можно сделать дальше</h2>
-            </div>
-          </div>
-          <p class="profile-card__note">
-            Подайте заявку на турнир, откройте invite-ссылку или проверьте входящие заявки в команду.
-          </p>
-          <div class="profile-card__actions">
-            <NuxtLink class="cta-button cta-button-primary" to="/tournaments">Смотреть турниры</NuxtLink>
-            <NuxtLink class="cta-button cta-button-secondary" to="/teams">Все команды</NuxtLink>
-          </div>
-        </article>
       </div>
 
       <div v-else class="empty-state-panel">

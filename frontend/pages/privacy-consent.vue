@@ -1,6 +1,6 @@
 ﻿<script setup lang="ts">
 useHead({
-  title: 'Согласие на обработку данных — РазрядАрена',
+  title: 'Согласие на обработку данных',
   bodyAttrs: {
     class: 'layout-public',
     'data-page': 'privacy-consent',
