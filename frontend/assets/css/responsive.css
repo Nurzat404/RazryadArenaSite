@@ -16,12 +16,58 @@
 
 /* ===== Tablet ===== */
 @media (max-width: 991.98px) {
+  body.mobile-navigation-open {
+    overflow: hidden;
+  }
+
+  .mobile-navigation-backdrop {
+    display: block;
+  }
+
+  .mobile-navigation-panel {
+    position: fixed !important;
+    top: 0 !important;
+    right: 0;
+    bottom: 0;
+    left: auto;
+    z-index: 1060;
+    display: flex !important;
+    flex-direction: column;
+    width: min(88vw, 22.5rem) !important;
+    height: 100dvh !important;
+    padding: 1rem !important;
+    overflow-y: auto;
+    border: 0;
+    border-left: 1px solid rgba(255, 255, 255, 0.12);
+    background: #100c20;
+    box-shadow: -1.5rem 0 3.5rem rgba(0, 0, 0, 0.38);
+    visibility: hidden;
+    transform: translateX(100%);
+    transition: transform 180ms ease, visibility 180ms ease;
+  }
+
+  .mobile-navigation-panel.is-open {
+    visibility: visible;
+    transform: translateX(0);
+  }
+
+  .mobile-navigation-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 3rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
   .header-main-nav {
-    padding-top: 0.85rem;
-    padding-bottom: 0.35rem;
+    align-items: stretch;
   }
 
   .header-main-nav .navbar-nav {
+    width: 100%;
+    margin: 0 0 auto !important;
     gap: 0.35rem !important;
     padding: 0.2rem 0 0.35rem;
   }
@@ -33,6 +79,19 @@
   .header-main-nav .site-nav-link {
     display: block;
     padding: 0.72rem 0.85rem;
+  }
+
+  .site-header-public .header-main-nav > .d-flex {
+    align-items: stretch !important;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .site-header-public .header-main-nav > .d-flex .cta-button {
+    width: 100%;
   }
 
   .home-header__actions {
@@ -58,6 +117,31 @@
     grid-template-columns: 1fr;
   }
 
+  .layout-app .app-mobile-header {
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 0;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(16, 12, 32, 0.96);
+    backdrop-filter: blur(12px);
+  }
+
+  .layout-app .app-mobile-header .site-navbar-brand {
+    min-width: 0;
+    color: var(--color-text);
+  }
+
+  .layout-app .app-mobile-header .site-navbar-brand span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .app-sidebar {
     position: static;
     height: auto;
@@ -65,31 +149,60 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  .app-sidebar .site-navbar-brand {
+  .layout-app .app-sidebar.mobile-navigation-panel {
+    position: fixed;
+    display: flex;
+  }
+
+  .layout-app .app-sidebar .site-navbar-brand {
     margin-bottom: 0.8rem !important;
   }
 
-  .app-sidebar nav {
-    display: flex;
-    gap: 1rem;
-    overflow-x: auto;
-    padding-bottom: 0.25rem;
+  .layout-app .app-sidebar nav {
+    display: block;
+    flex: 1;
+    overflow: visible;
+    padding-bottom: 1rem;
   }
 
-  .app-sidebar-group {
-    display: flex;
-    flex: 0 0 auto;
-    gap: 0.35rem;
-    margin-bottom: 0;
+  .layout-app .app-sidebar-group {
+    display: block;
+    margin-bottom: 1.2rem;
   }
 
-  .app-sidebar-group-title {
-    display: none;
+  .layout-app .app-sidebar-group-title {
+    display: block;
   }
 
-  .app-sidebar-link {
+  .layout-app .app-sidebar-link {
+    margin-bottom: 0.25rem;
+    white-space: normal;
+  }
+
+  .layout-admin .app-sidebar-link {
     white-space: nowrap;
     margin-bottom: 0;
+  }
+
+  .layout-app .app-sidebar-account {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--color-text-muted);
+  }
+
+  .layout-app .app-sidebar-account button {
+    border: 0;
+    background: transparent;
+    color: var(--color-text);
+    font-weight: 700;
+  }
+
+  .layout-app .app-topbar {
+    display: none !important;
   }
 }
 

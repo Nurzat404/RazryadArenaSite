@@ -107,7 +107,7 @@ const ownTeamId = (team1Id: string, team2Id: string) =>
         </p>
 
         <div class="profile-card__actions">
-          <NuxtLink class="cta-button cta-button-primary" to="/matches">Открыть матчи</NuxtLink>
+          <NuxtLink class="cta-button cta-button-primary" to="/tournaments">Смотреть турниры</NuxtLink>
           <NuxtLink class="cta-button cta-button-secondary" :to="`/tournaments/${match.tournamentId}`">Открыть турнир</NuxtLink>
         </div>
       </article>

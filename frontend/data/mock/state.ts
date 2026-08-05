@@ -3,7 +3,9 @@ import { mockTournamentApplications } from './tournamentApplications'
 import { mockTournamentRosters } from './tournamentRosters'
 import { mockTournaments } from './tournaments'
 import { mockUsers } from './users'
-import type { Team, TeamInvite, TeamJoinRequest, TeamMember, TeamMemberBlock, Tournament, TournamentApplication, TournamentRoster, User } from '~/types/domain'
+import { mockBracketMatches } from './brackets'
+import { mockMatches } from './matches'
+import type { BracketMatch, Match, Team, TeamInvite, TeamJoinRequest, TeamMember, TeamMemberBlock, Tournament, TournamentApplication, TournamentRoster, User } from '~/types/domain'
 
 const copy = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T
 const loadedKeys = new Set<string>()
@@ -40,3 +42,5 @@ export const useMockTeamMemberBlocks = () => usePersistentMockState<TeamMemberBl
 export const useMockTournaments = () => usePersistentMockState<Tournament[]>('ra_mock_tournaments_v4', mockTournaments)
 export const useMockTournamentApplications = () => usePersistentMockState<TournamentApplication[]>('ra_mock_tournament_applications_v4', mockTournamentApplications)
 export const useMockTournamentRosters = () => usePersistentMockState<TournamentRoster[]>('ra_mock_tournament_rosters_v4', mockTournamentRosters)
+export const useMockMatches = () => usePersistentMockState<Match[]>('ra_mock_matches_v1', mockMatches)
+export const useMockBracketMatches = () => usePersistentMockState<BracketMatch[]>('ra_mock_brackets_v2', mockBracketMatches)

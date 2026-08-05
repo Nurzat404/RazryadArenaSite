@@ -1,7 +1,9 @@
 <script setup lang="ts">
 const auth = useAuthStore()
+const { isOpen, close, toggle } = useMobileNavigation()
 
 const handleLogout = async () => {
+  close()
   await auth.logout()
   await navigateTo('/')
 }
@@ -25,21 +27,32 @@ const publicLinks = [
         </NuxtLink>
 
         <button
-          class="navbar-toggler"
+          class="navbar-toggler mobile-menu-toggle"
           type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#publicNav"
           aria-controls="publicNav"
-          aria-expanded="false"
+          :aria-expanded="isOpen"
           aria-label="Открыть меню сайта"
+          @click="toggle"
         >
           <span class="navbar-toggler-icon" />
         </button>
 
-        <div id="publicNav" class="collapse navbar-collapse header-main-nav">
+        <button
+          v-if="isOpen"
+          class="mobile-navigation-backdrop"
+          type="button"
+          aria-label="Закрыть меню"
+          @click="close"
+        />
+
+        <div id="publicNav" class="navbar-collapse header-main-nav mobile-navigation-panel" :class="{ 'is-open': isOpen }">
+          <div class="mobile-navigation-head">
+            <strong>Меню</strong>
+            <button class="mobile-navigation-close" type="button" aria-label="Закрыть меню" @click="close">×</button>
+          </div>
           <ul class="navbar-nav mx-auto align-items-lg-center gap-lg-3">
             <li v-for="link in publicLinks" :key="link.to" class="nav-item">
-              <NuxtLink class="site-nav-link" :to="link.to">
+              <NuxtLink class="site-nav-link" :to="link.to" @click="close">
                 {{ link.label }}
               </NuxtLink>
             </li>
@@ -47,10 +60,10 @@ const publicLinks = [
 
           <div class="d-flex align-items-center gap-2 flex-wrap">
             <template v-if="auth.isAuthenticated">
-              <NuxtLink class="cta-button cta-button-secondary" to="/profile">
+              <NuxtLink class="cta-button cta-button-secondary" to="/profile" @click="close">
                 Кабинет
               </NuxtLink>
-              <NuxtLink v-if="auth.isAdmin" class="cta-button cta-button-primary" to="/admin">
+              <NuxtLink v-if="auth.isAdmin" class="cta-button cta-button-primary" to="/admin" @click="close">
                 Админка
               </NuxtLink>
               <button class="cta-button cta-button-secondary" type="button" @click="handleLogout">
@@ -58,10 +71,10 @@ const publicLinks = [
               </button>
             </template>
             <template v-else>
-              <NuxtLink class="cta-button cta-button-secondary" to="/login">
+              <NuxtLink class="cta-button cta-button-secondary" to="/login" @click="close">
                 Войти
               </NuxtLink>
-              <NuxtLink class="cta-button cta-button-primary" to="/register">
+              <NuxtLink class="cta-button cta-button-primary" to="/register" @click="close">
                 Регистрация
               </NuxtLink>
             </template>

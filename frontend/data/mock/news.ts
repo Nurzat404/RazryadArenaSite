@@ -25,6 +25,6 @@ export const mockNews: SiteNews[] = [
     body: 'Время и место каждой игры опубликованы в расписании. После матча там же появится счёт.',
     type: 'announcement',
     publishedAt: dateTimeFromNow(-6),
-    actionUrl: '/matches'
+    actionUrl: '/tournaments/tr1/bracket'
   }
 ]

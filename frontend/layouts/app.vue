@@ -1,12 +1,14 @@
 <script setup lang="ts">
 const auth = useAuthStore()
 const route = useRoute()
+const { isOpen, close, toggle } = useMobileNavigation()
 
 if (!auth.initialized) {
   await auth.loadCurrentUser()
 }
 
 const handleLogout = async () => {
+  close()
   await auth.logout()
   await navigateTo('/')
 }
@@ -35,8 +37,37 @@ const isActive = (to: string, exact = false) => {
 
 <template>
   <div class="layout-app app-shell">
-    <aside class="app-sidebar">
-      <NuxtLink class="site-navbar-brand mb-4" to="/">
+    <header class="app-mobile-header navbar-dark">
+      <NuxtLink class="site-navbar-brand" to="/" @click="close">
+        <img class="site-logo" src="/assets/img/logo/razryad_logo_clean.png" alt="">
+        <span>РазрядАрена</span>
+      </NuxtLink>
+      <button
+        class="navbar-toggler mobile-menu-toggle"
+        type="button"
+        aria-controls="accountNav"
+        :aria-expanded="isOpen"
+        aria-label="Открыть меню"
+        @click="toggle"
+      >
+        <span class="navbar-toggler-icon" />
+      </button>
+    </header>
+
+    <button
+      v-if="isOpen"
+      class="mobile-navigation-backdrop"
+      type="button"
+      aria-label="Закрыть меню"
+      @click="close"
+    />
+
+    <aside id="accountNav" class="app-sidebar mobile-navigation-panel" :class="{ 'is-open': isOpen }">
+      <div class="mobile-navigation-head">
+        <strong>Меню</strong>
+        <button class="mobile-navigation-close" type="button" aria-label="Закрыть меню" @click="close">×</button>
+      </div>
+      <NuxtLink class="site-navbar-brand mb-4" to="/" @click="close">
         <img class="site-logo" src="/assets/img/logo/razryad_logo_clean.png" alt="">
         <span>РазрядАрена</span>
       </NuxtLink>
@@ -49,6 +80,7 @@ const isActive = (to: string, exact = false) => {
             class="app-sidebar-link"
             :class="{ 'is-active': isActive(link.to) }"
             :to="link.to"
+            @click="close"
           >
             {{ link.label }}
           </NuxtLink>
@@ -61,11 +93,16 @@ const isActive = (to: string, exact = false) => {
             class="app-sidebar-link"
             :class="{ 'is-active': isActive(link.to, link.exact) }"
             :to="link.to"
+            @click="close"
           >
             {{ link.label }}
           </NuxtLink>
         </div>
       </nav>
+      <div class="app-sidebar-account">
+        <span>{{ auth.user?.name }}</span>
+        <button type="button" @click="handleLogout">Выйти</button>
+      </div>
     </aside>
     <main class="app-content">
       <div class="app-topbar d-flex justify-content-between align-items-center gap-3">

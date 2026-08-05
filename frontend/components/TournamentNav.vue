@@ -1,12 +1,13 @@
 <script setup lang="ts">
 const props = defineProps<{
   tournamentId: string
-  active: 'overview' | 'teams' | 'rules'
+  active: 'overview' | 'teams' | 'bracket' | 'rules'
 }>()
 
 const links = [
   { key: 'overview' as const, label: 'Обзор', to: `/tournaments/${props.tournamentId}` },
   { key: 'teams' as const, label: 'Команды', to: `/tournaments/${props.tournamentId}/teams` },
+  { key: 'bracket' as const, label: 'Сетка', to: `/tournaments/${props.tournamentId}/bracket` },
   { key: 'rules' as const, label: 'Правила', to: `/tournaments/${props.tournamentId}/rules` }
 ]
 </script>

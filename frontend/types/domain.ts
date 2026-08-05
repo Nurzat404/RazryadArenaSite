@@ -178,6 +178,8 @@ export interface BracketMatch {
   winnerId?: string
   nextMatchId?: string
   status: BracketMatchStatus
+  isThirdPlace?: boolean
+  isBye?: boolean
 }
 
 export interface Match {

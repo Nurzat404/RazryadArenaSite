@@ -12,10 +12,23 @@ export const mockMatches: Match[] = [
     tournamentId: 'tr1',
     sport: 'cs2',
     team1Id: 't1',
-    team2Id: 't2',
+    team2Id: 't3',
     scheduledAt: dateTimeFromNow(5, 18),
     location: 'Онлайн',
     status: 'scheduled'
+  },
+  {
+    id: 'm4',
+    tournamentId: 'tr1',
+    sport: 'cs2',
+    team1Id: 't2',
+    team2Id: 't4',
+    scheduledAt: dateTimeFromNow(-1, 20),
+    location: 'Онлайн',
+    status: 'finished',
+    score1: 2,
+    score2: 0,
+    winnerId: 't2'
   },
   {
     id: 'm2',
