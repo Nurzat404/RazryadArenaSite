@@ -39,7 +39,11 @@ const currentRequests = ref(requests)
 const pendingRequests = computed(() => currentRequests.value.filter((request) => request.status === 'pending'))
 const captain = team ? userById.get(team.captainId) : null
 const isMember = computed(() => Boolean(auth.user && members.some((member) => member.userId === auth.user?.id)))
-const canManage = computed(() => Boolean(team && auth.user && team.captainId === auth.user.id))
+const canManage = computed(() => Boolean(
+  team
+  && auth.user
+  && (team.captainId === auth.user.id || auth.user.role === 'admin')
+))
 const ownPendingRequest = computed(() => currentRequests.value.find((request) => request.userId === auth.user?.id && request.status === 'pending'))
 const requestMessage = ref('')
 const requestFeedback = ref('')
@@ -97,6 +101,8 @@ useHead({
         :title="team?.name ?? 'Команда не найдена'"
       />
 
+      <TeamNav v-if="team" :team-id="team.id" active="overview" :can-manage="canManage" />
+
       <div v-if="team" class="team-detail-layout">
         <article class="profile-card profile-card--wide">
           <div class="profile-card__head">
@@ -122,12 +128,6 @@ useHead({
             </div>
           </dl>
 
-          <div v-if="canManage" class="profile-card__actions team-management-actions">
-            <NuxtLink class="cta-button cta-button-primary" :to="`/teams/${team.id}/members`">Состав</NuxtLink>
-            <NuxtLink class="cta-button cta-button-secondary" :to="`/teams/${team.id}/requests`">Заявки</NuxtLink>
-            <NuxtLink class="cta-button cta-button-secondary" :to="`/teams/${team.id}/invite`">Пригласить</NuxtLink>
-            <NuxtLink class="cta-button cta-button-secondary" :to="`/teams/${team.id}/edit`">Настройки</NuxtLink>
-          </div>
         </article>
 
         <aside class="team-side-panel">

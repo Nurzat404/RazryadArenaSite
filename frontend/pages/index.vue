@@ -116,7 +116,8 @@ useHead(() => ({
 <template>
   <div>
     <template v-if="auth.isAuthenticated">
-      <section class="home-dashboard section-padding" aria-labelledby="dashboard-title">
+      <ClientOnly>
+        <section class="home-dashboard section-padding" aria-labelledby="dashboard-title">
         <div class="container">
           <div class="home-dashboard__hero">
             <div>
@@ -257,7 +258,8 @@ useHead(() => ({
             </section>
           </div>
         </div>
-      </section>
+        </section>
+      </ClientOnly>
     </template>
 
     <template v-else>

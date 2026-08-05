@@ -26,7 +26,11 @@ const blocks = ref<TeamMemberBlock[]>(initialBlocks)
 const playerEmail = ref('')
 const actionError = ref('')
 const actionMessage = ref('')
-const canManage = computed(() => Boolean(team && auth.user && team.captainId === auth.user.id))
+const canManage = computed(() => Boolean(
+  team
+  && auth.user
+  && (team.captainId === auth.user.id || auth.user.role === 'admin')
+))
 const isMember = computed(() => members.value.some((member) => member.userId === auth.user?.id))
 
 const roleLabels: Record<TeamMemberRole, string> = {
@@ -114,6 +118,8 @@ const deleteTeam = async () => {
     />
 
     <template v-if="team">
+      <TeamNav :team-id="team.id" active="members" :can-manage="canManage" />
+
       <p v-if="actionMessage" class="form-success">{{ actionMessage }}</p>
       <p v-if="actionError" class="form-error">{{ actionError }}</p>
 

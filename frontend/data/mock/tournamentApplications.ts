@@ -38,6 +38,7 @@ export const mockTournamentApplications: TournamentApplication[] = [
     status: 'rejected',
     createdAt: '2026-05-27T11:15:00.000Z',
     updatedAt: '2026-05-27T14:50:00.000Z',
-    rejectReason: 'Не хватает игроков в заявочном составе.'
+    rejectReason: 'Не хватает игроков в заявочном составе.',
+    reapplyAllowed: true
   }
 ]

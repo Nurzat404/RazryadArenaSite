@@ -1,41 +1,42 @@
 import { mockTeamInvites, mockTeamJoinRequests, mockTeamMemberBlocks, mockTeamMembers, mockTeams } from './teams'
+import { mockTournamentApplications } from './tournamentApplications'
+import { mockTournamentRosters } from './tournamentRosters'
+import { mockTournaments } from './tournaments'
 import { mockUsers } from './users'
-import type { Team, TeamInvite, TeamJoinRequest, TeamMember, TeamMemberBlock, User } from '~/types/domain'
-
-const cookieOptions = {
-  sameSite: 'lax' as const,
-  maxAge: 60 * 60 * 24 * 30,
-  watch: true as const
-}
+import type { Team, TeamInvite, TeamJoinRequest, TeamMember, TeamMemberBlock, Tournament, TournamentApplication, TournamentRoster, User } from '~/types/domain'
 
 const copy = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T
+const loadedKeys = new Set<string>()
 
-export const useMockUsers = () => useCookie<User[]>('ra_mock_users_v2', {
-  ...cookieOptions,
-  default: () => copy(mockUsers)
-})
+const usePersistentMockState = <T>(key: string, initialValue: T) => {
+  const state = useState<T>(key, () => copy(initialValue))
 
-export const useMockTeams = () => useCookie<Team[]>('ra_mock_teams_v2', {
-  ...cookieOptions,
-  default: () => copy(mockTeams)
-})
+  if (import.meta.client && !loadedKeys.has(key)) {
+    loadedKeys.add(key)
+    const stored = window.localStorage.getItem(key)
 
-export const useMockTeamMembers = () => useCookie<TeamMember[]>('ra_mock_team_members_v2', {
-  ...cookieOptions,
-  default: () => copy(mockTeamMembers)
-})
+    if (stored) {
+      try {
+        state.value = JSON.parse(stored) as T
+      } catch {
+        window.localStorage.removeItem(key)
+      }
+    }
 
-export const useMockTeamInvites = () => useCookie<TeamInvite[]>('ra_mock_team_invites_v2', {
-  ...cookieOptions,
-  default: () => copy(mockTeamInvites)
-})
+    watch(state, (value) => {
+      window.localStorage.setItem(key, JSON.stringify(value))
+    }, { deep: true })
+  }
 
-export const useMockTeamJoinRequests = () => useCookie<TeamJoinRequest[]>('ra_mock_team_requests_v2', {
-  ...cookieOptions,
-  default: () => copy(mockTeamJoinRequests)
-})
+  return state
+}
 
-export const useMockTeamMemberBlocks = () => useCookie<TeamMemberBlock[]>('ra_mock_team_blocks_v2', {
-  ...cookieOptions,
-  default: () => copy(mockTeamMemberBlocks)
-})
+export const useMockUsers = () => usePersistentMockState<User[]>('ra_mock_users_v4', mockUsers)
+export const useMockTeams = () => usePersistentMockState<Team[]>('ra_mock_teams_v4', mockTeams)
+export const useMockTeamMembers = () => usePersistentMockState<TeamMember[]>('ra_mock_team_members_v4', mockTeamMembers)
+export const useMockTeamInvites = () => usePersistentMockState<TeamInvite[]>('ra_mock_team_invites_v4', mockTeamInvites)
+export const useMockTeamJoinRequests = () => usePersistentMockState<TeamJoinRequest[]>('ra_mock_team_requests_v4', mockTeamJoinRequests)
+export const useMockTeamMemberBlocks = () => usePersistentMockState<TeamMemberBlock[]>('ra_mock_team_blocks_v4', mockTeamMemberBlocks)
+export const useMockTournaments = () => usePersistentMockState<Tournament[]>('ra_mock_tournaments_v4', mockTournaments)
+export const useMockTournamentApplications = () => usePersistentMockState<TournamentApplication[]>('ra_mock_tournament_applications_v4', mockTournamentApplications)
+export const useMockTournamentRosters = () => usePersistentMockState<TournamentRoster[]>('ra_mock_tournament_rosters_v4', mockTournamentRosters)

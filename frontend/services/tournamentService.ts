@@ -1,4 +1,4 @@
-import { mockTournaments } from '~/data/mock/tournaments'
+import { useMockTournaments } from '~/data/mock/state'
 import type { SportKey, Tournament, TournamentStatus } from '~/types/domain'
 
 export interface TournamentListFilters {
@@ -19,12 +19,20 @@ export interface TournamentPayload {
   eventEndDate?: string
   maxTeams: number
   requiredTeamSize: number
+  minAge?: number
+  maxAge?: number
+  matchFormat: string
+  scheduleMode: Tournament['scheduleMode']
+  location: string
+  rules: string[]
+  mapPool?: string[]
+  allowRosterChanges: boolean
   description: string
 }
 
 export const tournamentService = {
   async list(filters: TournamentListFilters = {}) {
-    return mockTournaments.filter((tournament) => {
+    return useMockTournaments().value.filter((tournament) => {
       const matchesSport = filters.sport ? tournament.sport === filters.sport : true
       const matchesCity = filters.city ? tournament.city === filters.city : true
       const matchesStatus = filters.status ? tournament.status === filters.status : true
@@ -40,19 +48,26 @@ export const tournamentService = {
   },
 
   async getById(id: string) {
-    return mockTournaments.find((tournament) => tournament.id === id) ?? null
+    return useMockTournaments().value.find((tournament) => tournament.id === id) ?? null
   },
 
   async create(payload: TournamentPayload): Promise<Tournament> {
-    return {
-      id: 'mock-new-tournament',
+    const tournaments = useMockTournaments()
+    const tournament: Tournament = {
+      id: `tournament-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
       status: 'draft',
       ...payload
     }
+    tournaments.value = [tournament, ...tournaments.value]
+    return tournament
   },
 
   async update(id: string, payload: Partial<TournamentPayload & { status: TournamentStatus }>) {
-    const tournament = mockTournaments.find((item) => item.id === id)
-    return tournament ? { ...tournament, ...payload } : null
+    const tournaments = useMockTournaments()
+    const tournament = tournaments.value.find((item) => item.id === id)
+    if (!tournament) return null
+    const updated = { ...tournament, ...payload }
+    tournaments.value = tournaments.value.map((item) => item.id === id ? updated : item)
+    return updated
   }
 }

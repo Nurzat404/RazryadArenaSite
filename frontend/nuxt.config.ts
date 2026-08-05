@@ -2,6 +2,12 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-01-01',
   devtools: { enabled: false },
   modules: ['@pinia/nuxt'],
+  routeRules: {
+    '/admin/**': { ssr: false },
+    '/profile/**': { ssr: false },
+    '/teams/**': { ssr: false },
+    '/tournaments/**': { ssr: false }
+  },
   css: [
     'bootstrap/dist/css/bootstrap.min.css',
     '~/assets/css/main.css',

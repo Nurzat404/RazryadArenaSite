@@ -13,22 +13,36 @@ export interface RegisterPayload {
 }
 
 const mockUserIdCookie = 'ra_mock_user_id'
+const mockSessionUserCookie = 'ra_mock_session_user'
 
 const saveSession = (user: User) => {
   const userId = useCookie<string | null>(mockUserIdCookie, { sameSite: 'lax', maxAge: 60 * 60 * 24 * 30 })
+  const sessionUser = useCookie<User | null>(mockSessionUserCookie, { sameSite: 'lax', maxAge: 60 * 60 * 24 * 30 })
   userId.value = user.id
+  sessionUser.value = user
+  if (typeof document !== 'undefined') {
+    document.cookie = `${mockUserIdCookie}=${encodeURIComponent(user.id)}; Max-Age=${60 * 60 * 24 * 30}; Path=/; SameSite=Lax`
+  }
 }
 
 const clearSession = () => {
   const userId = useCookie<string | null>(mockUserIdCookie, { sameSite: 'lax' })
   const oldUser = useCookie<User | null>('ra_mock_user', { sameSite: 'lax' })
+  const sessionUser = useCookie<User | null>(mockSessionUserCookie, { sameSite: 'lax' })
   userId.value = null
   oldUser.value = null
+  sessionUser.value = null
+  if (typeof document !== 'undefined') {
+    document.cookie = `${mockUserIdCookie}=; Max-Age=0; Path=/; SameSite=Lax`
+    document.cookie = `${mockSessionUserCookie}=; Max-Age=0; Path=/; SameSite=Lax`
+    document.cookie = 'ra_mock_user=; Max-Age=0; Path=/; SameSite=Lax'
+  }
 }
 
 const readSession = () => {
   const userId = useCookie<string | null>(mockUserIdCookie, { sameSite: 'lax' })
-  return useMockUsers().value.find((item) => item.id === userId.value) ?? null
+  const sessionUser = useCookie<User | null>(mockSessionUserCookie, { sameSite: 'lax' })
+  return useMockUsers().value.find((item) => item.id === userId.value) ?? sessionUser.value ?? null
 }
 
 export const authService = {

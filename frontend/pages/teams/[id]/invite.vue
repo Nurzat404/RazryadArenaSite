@@ -21,7 +21,11 @@ useHead({
   title: team ? `Приглашение в ${team.name}` : 'Приглашение в команду'
 })
 
-const canManage = Boolean(team && auth.user && team.captainId === auth.user.id)
+const canManage = Boolean(
+  team
+  && auth.user
+  && (team.captainId === auth.user.id || auth.user.role === 'admin')
+)
 const inviteHistory = ref<TeamInvite[]>(invites)
 const activeInvite = ref<TeamInvite | null>(invites.find((invite) => invite.status === 'active') ?? null)
 const copied = ref(false)
@@ -64,6 +68,8 @@ const copyInvite = async () => {
       :title="team ? `Приглашение: ${team.name}` : 'Команда не найдена'"
       subtitle="Отправьте ссылку игроку и выберите, вступит он сразу или после одобрения заявки."
     />
+
+    <TeamNav v-if="team" :team-id="team.id" active="invite" :can-manage="canManage" />
 
     <div v-if="team && canManage" class="profile-grid">
       <article class="profile-card profile-card--wide">
@@ -133,7 +139,7 @@ const copyInvite = async () => {
 
     <div v-else-if="team" class="empty-state-panel">
       <h2>Нет доступа к приглашениям</h2>
-      <p>Ссылкой для вступления управляет капитан команды.</p>
+      <p>Ссылкой для вступления управляют капитан команды и администратор.</p>
       <NuxtLink class="cta-button cta-button-primary" :to="`/teams/${team.id}`">Открыть команду</NuxtLink>
     </div>
 

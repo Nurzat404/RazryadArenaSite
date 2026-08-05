@@ -25,7 +25,12 @@ const accountLinks: Array<{ to: string, label: string, exact?: boolean }> = [
   { to: '/profile/referrals', label: 'Приглашения' }
 ]
 
-const isActive = (to: string, exact = false) => exact ? route.path === to : route.path === to || route.path.startsWith(`${to}/`)
+const isActive = (to: string, exact = false) => {
+  const openedFromProfileTeams = route.query.from === 'profile-teams' && route.path.startsWith('/teams/')
+  if (openedFromProfileTeams && to === '/profile/teams') return true
+  if (openedFromProfileTeams && to === '/teams') return false
+  return exact ? route.path === to : route.path === to || route.path.startsWith(`${to}/`)
+}
 </script>
 
 <template>

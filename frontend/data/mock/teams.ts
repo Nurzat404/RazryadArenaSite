@@ -56,6 +56,20 @@ export const mockTeams: Team[] = [
     inviteJoinMode: 'request',
     inviteEnabled: false,
     rating: 96
+  },
+  {
+    id: 't5',
+    name: 'Second Spawn',
+    sport: 'cs2',
+    city: 'Екатеринбург',
+    captainId: 'u7',
+    memberIds: ['u7', 'u8'],
+    maxMembers: 4,
+    isOpenForRequests: true,
+    notifyOnRequests: true,
+    inviteJoinMode: 'request',
+    inviteEnabled: true,
+    rating: 105
   }
 ]
 
@@ -101,6 +115,20 @@ export const mockTeamMembers: TeamMember[] = [
     userId: 'u6',
     role: 'captain',
     joinedAt: '2026-05-25T12:00:00.000Z'
+  },
+  {
+    id: 'tm7',
+    teamId: 't5',
+    userId: 'u7',
+    role: 'captain',
+    joinedAt: '2026-06-10T17:00:00.000Z'
+  },
+  {
+    id: 'tm8',
+    teamId: 't5',
+    userId: 'u8',
+    role: 'member',
+    joinedAt: '2026-06-10T17:15:00.000Z'
   }
 ]
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { applicationService, teamService, tournamentService } from '~/services'
+import { applicationService, teamService, tournamentService, userService } from '~/services'
 import type { ApplicationStatus, SportKey, TournamentStatus } from '~/types/domain'
 
 definePageMeta({ layout: 'app', middleware: 'auth' })
@@ -41,18 +41,26 @@ const formatDate = (value: string) =>
   }).format(new Date(value))
 
 const userTeams = auth.user ? await teamService.listByUser(auth.user.id) : []
+const captainTeamIds = new Set(userTeams.filter((team) => team.captainId === auth.user?.id).map((team) => team.id))
 const teamById = new Map(userTeams.map((team) => [team.id, team]))
-const allTournaments = await tournamentService.list()
+const [allTournaments, rosters, users] = await Promise.all([
+  tournamentService.list(),
+  applicationService.listRosters(),
+  userService.list()
+])
 const tournamentById = new Map(allTournaments.map((tournament) => [tournament.id, tournament]))
+const rosterByKey = new Map(rosters.map((roster) => [`${roster.tournamentId}:${roster.teamId}`, roster]))
+const userById = new Map(users.map((user) => [user.id, user]))
 const applications = (
   await Promise.all(userTeams.map((team) => applicationService.list({ teamId: team.id })))
-).flat()
+).flat().filter((application) => application.status === 'approved' || captainTeamIds.has(application.teamId))
 
 const tournamentItems = applications
   .map((application) => ({
     application,
     team: teamById.get(application.teamId),
-    tournament: tournamentById.get(application.tournamentId)
+    tournament: tournamentById.get(application.tournamentId),
+    roster: rosterByKey.get(`${application.tournamentId}:${application.teamId}`)
   }))
   .filter((item) => item.team && item.tournament)
   .sort((a, b) => (a.tournament?.eventStartDate ?? '').localeCompare(b.tournament?.eventStartDate ?? ''))
@@ -62,7 +70,7 @@ const tournamentItems = applications
   <section class="workspace-page workspace-page--profile">
     <PageHead
       title="Мои турниры"
-      subtitle="Здесь видны заявки ваших команд, статус допуска и ближайшие даты турниров."
+      subtitle="Заявки ваших команд и турниры, в которых вы играете."
     />
 
     <div v-if="tournamentItems.length" class="profile-grid">
@@ -88,6 +96,14 @@ const tournamentItems = applications
             <dt>Турнир</dt>
             <dd>{{ tournamentStatusLabels[item.tournament!.status] }}</dd>
           </div>
+          <div>
+            <dt>Состав</dt>
+            <dd>{{ item.roster?.playerIds.length ?? 0 }} игроков</dd>
+          </div>
+          <div>
+            <dt>Капитан на турнире</dt>
+            <dd>{{ userById.get(item.roster?.captainId ?? '')?.name ?? 'Не назначен' }}</dd>
+          </div>
         </dl>
 
         <p v-if="item.application.rejectReason" class="profile-card__note">
@@ -99,7 +115,6 @@ const tournamentItems = applications
 
         <div class="profile-card__actions">
           <NuxtLink class="cta-button cta-button-primary" :to="`/tournaments/${item.tournament!.id}`">Открыть турнир</NuxtLink>
-          <NuxtLink class="cta-button cta-button-secondary" :to="`/teams/${item.team!.id}`">Открыть команду</NuxtLink>
         </div>
       </article>
     </div>
@@ -109,7 +124,6 @@ const tournamentItems = applications
       <p>Здесь будут заявки ваших команд и решения организатора.</p>
       <div class="empty-state-panel__actions">
         <NuxtLink class="cta-button cta-button-primary" to="/tournaments">Смотреть турниры</NuxtLink>
-        <NuxtLink class="cta-button cta-button-secondary" to="/profile/teams">Мои команды</NuxtLink>
       </div>
     </div>
   </section>

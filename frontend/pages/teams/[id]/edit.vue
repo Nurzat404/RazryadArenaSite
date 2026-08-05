@@ -13,7 +13,11 @@ if (!auth.initialized) {
 }
 
 const team = await teamService.getById(teamId)
-const canManage = Boolean(team && auth.user && team.captainId === auth.user.id)
+const canManage = Boolean(
+  team
+  && auth.user
+  && (team.captainId === auth.user.id || auth.user.role === 'admin')
+)
 
 const sportOptions: Array<{ key: SportKey, label: string }> = [
   { key: 'cs2', label: 'CS2' },
@@ -50,7 +54,7 @@ const submitSettings = async () => {
   }
 
   if (!canManage) {
-    errorMessage.value = 'Менять настройки может только капитан команды.'
+    errorMessage.value = 'Менять настройки могут капитан команды и администратор.'
     return
   }
 
@@ -85,6 +89,8 @@ const submitSettings = async () => {
       :title="team ? `Настройки: ${team.name}` : 'Команда не найдена'"
       subtitle="Название, город, размер состава и правила вступления."
     />
+
+    <TeamNav v-if="team" :team-id="team.id" active="settings" :can-manage="canManage" />
 
     <form v-if="team && canManage" class="form-panel profile-edit-form" @submit.prevent="submitSettings">
       <div class="form-section">
@@ -149,7 +155,7 @@ const submitSettings = async () => {
 
     <div v-else-if="team" class="empty-state-panel">
       <h2>Нет доступа к настройкам</h2>
-      <p>Настройки команды может менять капитан.</p>
+      <p>Настройки команды могут менять капитан и администратор.</p>
       <NuxtLink class="cta-button cta-button-primary" :to="`/teams/${team.id}`">Открыть команду</NuxtLink>
     </div>
 

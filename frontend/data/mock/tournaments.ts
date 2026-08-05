@@ -13,7 +13,19 @@ export const mockTournaments: Tournament[] = [
     registrationEndDate: dateFromNow(14),
     eventStartDate: dateFromNow(18),
     maxTeams: 16,
-    requiredTeamSize: 5,
+    requiredTeamSize: 2,
+    minAge: 16,
+    maxAge: 30,
+    matchFormat: 'Олимпийская сетка, матчи BO1',
+    scheduleMode: 'fixed',
+    location: 'Онлайн',
+    rules: [
+      'В составе должно быть ровно два игрока.',
+      'Один игрок не может выступать за две команды в одном турнире.',
+      'Капитан отвечает за готовность команды к назначенному времени.'
+    ],
+    mapPool: ['Mirage', 'Inferno', 'Nuke', 'Ancient', 'Anubis', 'Dust II'],
+    allowRosterChanges: true,
     description: 'CS2-турнир на выходные. Матчи проходят по сетке на выбывание.'
   },
   {
@@ -28,6 +40,17 @@ export const mockTournaments: Tournament[] = [
     eventEndDate: dateFromNow(15),
     maxTeams: 8,
     requiredTeamSize: 7,
+    minAge: 16,
+    maxAge: 35,
+    matchFormat: 'Группы и плей-офф',
+    scheduleMode: 'fixed',
+    location: 'Стадион «Юность»',
+    rules: [
+      'Матчи проходят по опубликованному расписанию.',
+      'На игру нужно прийти за 20 минут до начала.',
+      'Замена игрока после старта турнира согласуется с организатором.'
+    ],
+    allowRosterChanges: false,
     description: 'Городской турнир для любительских команд. Матчи проходят по вечерам на одной площадке.'
   },
   {
@@ -42,6 +65,16 @@ export const mockTournaments: Tournament[] = [
     eventEndDate: dateFromNow(11),
     maxTeams: 6,
     requiredTeamSize: 6,
+    minAge: 16,
+    maxAge: 25,
+    matchFormat: 'Круговой этап, затем финал',
+    scheduleMode: 'fixed',
+    location: 'Спортзал УрФУ',
+    rules: [
+      'Команда заявляет шесть основных игроков.',
+      'Опоздание более чем на 15 минут может привести к техническому поражению.'
+    ],
+    allowRosterChanges: true,
     description: 'Короткий волейбольный турнир для студенческих и дворовых команд.'
   },
   {
@@ -55,6 +88,15 @@ export const mockTournaments: Tournament[] = [
     eventStartDate: dateFromNow(40),
     maxTeams: 12,
     requiredTeamSize: 3,
+    minAge: 16,
+    maxAge: 30,
+    matchFormat: 'Группы и плей-офф 3x3',
+    scheduleMode: 'sequential',
+    location: 'Площадка будет объявлена',
+    rules: [
+      'Подробные правила появятся до открытия регистрации.'
+    ],
+    allowRosterChanges: false,
     description: 'Вечерний баскетбол 3x3. Турнир пока готовится, заявки откроются позже.'
   }
 ]

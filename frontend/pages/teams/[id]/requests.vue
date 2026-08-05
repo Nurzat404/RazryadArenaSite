@@ -23,7 +23,11 @@ useHead({
 })
 
 const requests = ref<TeamJoinRequest[]>(initialRequests)
-const canManage = Boolean(team && auth.user && team.captainId === auth.user.id)
+const canManage = Boolean(
+  team
+  && auth.user
+  && (team.captainId === auth.user.id || auth.user.role === 'admin')
+)
 const actionError = ref('')
 const userById = new Map(users.map((user) => [user.id, user]))
 
@@ -69,6 +73,8 @@ const setStatus = async (requestId: string, status: TeamJoinRequest['status']) =
       :title="team ? `Заявки: ${team.name}` : 'Команда не найдена'"
       subtitle="Игроки, которые хотят попасть в команду. Капитан принимает или отклоняет заявку."
     />
+
+    <TeamNav v-if="team" :team-id="team.id" active="requests" :can-manage="canManage" />
 
     <p v-if="actionError" class="form-error">{{ actionError }}</p>
 
@@ -121,7 +127,7 @@ const setStatus = async (requestId: string, status: TeamJoinRequest['status']) =
 
     <div v-else-if="team" class="empty-state-panel">
       <h2>Нет доступа к заявкам</h2>
-      <p>Заявки видит капитан команды.</p>
+      <p>Заявки видят капитан команды и администратор.</p>
       <NuxtLink class="cta-button cta-button-primary" :to="`/teams/${team.id}`">Открыть команду</NuxtLink>
     </div>
 

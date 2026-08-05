@@ -54,7 +54,7 @@ const teams = auth.user ? await teamService.listByUser(auth.user.id) : []
         </dl>
 
         <div class="profile-card__actions">
-          <NuxtLink class="cta-button cta-button-secondary" :to="`/teams/${team.id}`">Открыть команду</NuxtLink>
+          <NuxtLink class="cta-button cta-button-secondary" :to="{ path: `/teams/${team.id}`, query: { from: 'profile-teams' } }">Открыть команду</NuxtLink>
         </div>
       </article>
     </div>

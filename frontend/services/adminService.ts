@@ -1,13 +1,12 @@
 import { mockAdminActions } from '~/data/mock/admin'
-import { mockTournaments } from '~/data/mock/tournaments'
-import { useMockTeams, useMockUsers } from '~/data/mock/state'
+import { useMockTeams, useMockTournaments, useMockUsers } from '~/data/mock/state'
 
 export const adminService = {
   async dashboard() {
     return {
       usersCount: useMockUsers().value.length,
       teamsCount: useMockTeams().value.length,
-      tournamentsCount: mockTournaments.length,
+      tournamentsCount: useMockTournaments().value.length,
       latestActions: mockAdminActions.slice(0, 5)
     }
   },

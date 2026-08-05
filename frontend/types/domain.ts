@@ -3,6 +3,7 @@ export type UserRole = 'player' | 'admin'
 export type SportKey = 'cs2' | 'football' | 'basketball' | 'volleyball'
 
 export type TournamentStatus = 'draft' | 'registration_open' | 'registration_closed' | 'active' | 'finished'
+export type TournamentScheduleMode = 'fixed' | 'sequential'
 
 export type ApplicationStatus = 'pending' | 'approved' | 'rejected' | 'excluded'
 
@@ -131,6 +132,14 @@ export interface Tournament {
   eventEndDate?: string
   maxTeams: number
   requiredTeamSize: number
+  minAge?: number
+  maxAge?: number
+  matchFormat: string
+  scheduleMode: TournamentScheduleMode
+  location: string
+  rules: string[]
+  mapPool?: string[]
+  allowRosterChanges: boolean
   description: string
 }
 
@@ -144,6 +153,7 @@ export interface TournamentApplication {
   updatedAt: string
   comment?: string
   rejectReason?: string
+  reapplyAllowed?: boolean
 }
 
 export interface TournamentRoster {
