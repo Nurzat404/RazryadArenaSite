@@ -55,6 +55,8 @@ const matches = (
 
 const uniqueMatches = [...new Map(matches.map((match) => [match.id, match])).values()]
   .sort((a, b) => a.scheduledAt.localeCompare(b.scheduledAt))
+const upcomingMatches = uniqueMatches.filter((match) => ['scheduled', 'active'].includes(match.status))
+const completedMatches = uniqueMatches.filter((match) => ['finished', 'technical_win'].includes(match.status))
 
 const opponentName = (teamId: string, team1Id: string, team2Id: string) => {
   const opponentId = teamId === team1Id ? team2Id : team1Id
@@ -74,43 +76,37 @@ const ownTeamId = (team1Id: string, team2Id: string) =>
   <section class="workspace-page workspace-page--profile">
     <PageHead
       title="Мои матчи"
-      subtitle="Матчи ваших команд: где играем, против кого и какой результат уже внесён."
+      subtitle="Ближайшие игры и результаты ваших команд."
     />
 
-    <div v-if="uniqueMatches.length" class="profile-grid">
-      <article v-for="match in uniqueMatches" :key="match.id" class="profile-card">
-        <div class="profile-card__head">
+    <div v-if="uniqueMatches.length" class="personal-matches">
+      <section v-if="upcomingMatches.length" class="personal-matches__section">
+        <h2>Ближайшие</h2>
+        <article v-for="match in upcomingMatches" :key="match.id" class="personal-match-row">
+          <time>{{ formatDateTime(match.scheduledAt) }}</time>
           <div>
-            <span class="profile-card__badge">{{ sportLabels[match.sport] }}</span>
-            <h2>{{ ownTeamName(match.team1Id, match.team2Id) }} против {{ opponentName(ownTeamId(match.team1Id, match.team2Id), match.team1Id, match.team2Id) }}</h2>
+            <span>{{ sportLabels[match.sport] }} · {{ tournamentById.get(match.tournamentId)?.name ?? 'Турнир' }}</span>
+            <strong>{{ ownTeamName(match.team1Id, match.team2Id) }} — {{ opponentName(ownTeamId(match.team1Id, match.team2Id), match.team1Id, match.team2Id) }}</strong>
+            <small>{{ match.location }}</small>
           </div>
           <StatusBadge :status="match.status" :label="matchStatusLabels[match.status]" />
-        </div>
+          <NuxtLink :to="`/matches/${match.id}`">Открыть матч</NuxtLink>
+        </article>
+      </section>
 
-        <dl class="profile-card__meta">
+      <section v-if="completedMatches.length" class="personal-matches__section">
+        <h2>Сыгранные</h2>
+        <article v-for="match in completedMatches" :key="match.id" class="personal-match-row">
+          <time>{{ formatDateTime(match.scheduledAt) }}</time>
           <div>
-            <dt>Когда</dt>
-            <dd>{{ formatDateTime(match.scheduledAt) }}</dd>
+            <span>{{ sportLabels[match.sport] }} · {{ tournamentById.get(match.tournamentId)?.name ?? 'Турнир' }}</span>
+            <strong>{{ ownTeamName(match.team1Id, match.team2Id) }} — {{ opponentName(ownTeamId(match.team1Id, match.team2Id), match.team1Id, match.team2Id) }}</strong>
+            <small>Счёт {{ match.score1 }}:{{ match.score2 }}</small>
           </div>
-          <div>
-            <dt>Место</dt>
-            <dd>{{ match.location }}</dd>
-          </div>
-          <div>
-            <dt>Счёт</dt>
-            <dd>{{ match.score1 !== undefined ? `${match.score1}:${match.score2}` : 'Ждём игру' }}</dd>
-          </div>
-        </dl>
-
-        <p class="profile-card__note">
-          Турнир: {{ tournamentById.get(match.tournamentId)?.name ?? 'турнир не найден' }}.
-        </p>
-
-        <div class="profile-card__actions">
-          <NuxtLink class="cta-button cta-button-primary" to="/tournaments">Смотреть турниры</NuxtLink>
-          <NuxtLink class="cta-button cta-button-secondary" :to="`/tournaments/${match.tournamentId}`">Открыть турнир</NuxtLink>
-        </div>
-      </article>
+          <StatusBadge :status="match.status" :label="matchStatusLabels[match.status]" />
+          <NuxtLink :to="`/matches/${match.id}`">Открыть матч</NuxtLink>
+        </article>
+      </section>
     </div>
 
     <div v-else class="empty-state-panel">

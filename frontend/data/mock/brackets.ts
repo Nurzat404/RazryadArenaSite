@@ -20,9 +20,9 @@ export const mockBracketMatches: BracketMatch[] = [
     round: 1,
     roundName: 'Полуфинал',
     position: 2,
-    team1Id: 't2',
-    team2Id: 't4',
-    winnerId: 't2',
+    team1Id: 't5',
+    team2Id: 't7',
+    winnerId: 't5',
     nextMatchId: 'bm3',
     status: 'finished'
   },
@@ -32,7 +32,7 @@ export const mockBracketMatches: BracketMatch[] = [
     round: 2,
     roundName: 'Финал',
     position: 1,
-    team2Id: 't2',
+    team2Id: 't5',
     status: 'pending'
   },
   {
@@ -41,7 +41,7 @@ export const mockBracketMatches: BracketMatch[] = [
     round: 2,
     roundName: 'Матч за 3-е место',
     position: 2,
-    team2Id: 't4',
+    team2Id: 't7',
     status: 'pending',
     isThirdPlace: true
   },
@@ -53,7 +53,7 @@ export const mockBracketMatches: BracketMatch[] = [
     roundName: 'Группа A',
     position: 1,
     team1Id: 't2',
-    team2Id: 't1',
+    team2Id: 't8',
     winnerId: 't2',
     status: 'finished'
   },

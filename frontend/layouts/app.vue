@@ -23,6 +23,7 @@ const accountLinks: Array<{ to: string, label: string, exact?: boolean }> = [
   { to: '/profile', label: 'Профиль', exact: true },
   { to: '/profile/teams', label: 'Мои команды' },
   { to: '/profile/tournaments', label: 'Мои турниры' },
+  { to: '/profile/matches', label: 'Мои матчи' },
   { to: '/profile/stats', label: 'Статистика' },
   { to: '/profile/referrals', label: 'Приглашения' }
 ]

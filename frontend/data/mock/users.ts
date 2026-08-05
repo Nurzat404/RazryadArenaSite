@@ -83,5 +83,25 @@ export const mockUsers: User[] = [
     role: 'player',
     favoriteSports: ['cs2'],
     emailVerified: true
+  },
+  {
+    id: 'u9',
+    name: 'Максим В.',
+    email: 'maxim@example.com',
+    city: 'Екатеринбург',
+    age: 23,
+    role: 'player',
+    favoriteSports: ['cs2'],
+    emailVerified: true
+  },
+  {
+    id: 'u10',
+    name: 'Кирилл С.',
+    email: 'kirill@example.com',
+    city: 'Екатеринбург',
+    age: 24,
+    role: 'player',
+    favoriteSports: ['football'],
+    emailVerified: true
   }
 ]

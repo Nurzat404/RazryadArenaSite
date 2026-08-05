@@ -70,6 +70,48 @@ export const mockTeams: Team[] = [
     inviteJoinMode: 'request',
     inviteEnabled: true,
     rating: 105
+  },
+  {
+    id: 't6',
+    name: 'Campus Six',
+    sport: 'volleyball',
+    city: 'Екатеринбург',
+    captainId: 'u4',
+    memberIds: ['u4'],
+    maxMembers: 8,
+    isOpenForRequests: true,
+    notifyOnRequests: true,
+    inviteJoinMode: 'request',
+    inviteEnabled: true,
+    rating: 89
+  },
+  {
+    id: 't7',
+    name: 'Night Shift',
+    sport: 'cs2',
+    city: 'Екатеринбург',
+    captainId: 'u9',
+    memberIds: ['u9'],
+    maxMembers: 5,
+    isOpenForRequests: true,
+    notifyOnRequests: true,
+    inviteJoinMode: 'request',
+    inviteEnabled: true,
+    rating: 101
+  },
+  {
+    id: 't8',
+    name: 'City Eleven',
+    sport: 'football',
+    city: 'Екатеринбург',
+    captainId: 'u10',
+    memberIds: ['u10'],
+    maxMembers: 11,
+    isOpenForRequests: true,
+    notifyOnRequests: true,
+    inviteJoinMode: 'request',
+    inviteEnabled: true,
+    rating: 94
   }
 ]
 
@@ -129,6 +171,27 @@ export const mockTeamMembers: TeamMember[] = [
     userId: 'u8',
     role: 'member',
     joinedAt: '2026-06-10T17:15:00.000Z'
+  },
+  {
+    id: 'tm9',
+    teamId: 't6',
+    userId: 'u4',
+    role: 'captain',
+    joinedAt: '2026-06-12T18:00:00.000Z'
+  },
+  {
+    id: 'tm10',
+    teamId: 't7',
+    userId: 'u9',
+    role: 'captain',
+    joinedAt: '2026-06-14T18:00:00.000Z'
+  },
+  {
+    id: 'tm11',
+    teamId: 't8',
+    userId: 'u10',
+    role: 'captain',
+    joinedAt: '2026-06-15T18:00:00.000Z'
   }
 ]
 

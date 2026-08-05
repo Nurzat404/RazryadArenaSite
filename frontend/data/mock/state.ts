@@ -33,14 +33,29 @@ const usePersistentMockState = <T>(key: string, initialValue: T) => {
   return state
 }
 
-export const useMockUsers = () => usePersistentMockState<User[]>('ra_mock_users_v4', mockUsers)
-export const useMockTeams = () => usePersistentMockState<Team[]>('ra_mock_teams_v4', mockTeams)
-export const useMockTeamMembers = () => usePersistentMockState<TeamMember[]>('ra_mock_team_members_v4', mockTeamMembers)
+export const useMockUsers = () => {
+  const users = usePersistentMockState<User[]>('ra_mock_users_v4', mockUsers)
+  const missingUsers = mockUsers.filter((user) => ['u9', 'u10'].includes(user.id) && !users.value.some((item) => item.id === user.id))
+  if (import.meta.client && missingUsers.length) users.value = [...users.value, ...missingUsers]
+  return users
+}
+export const useMockTeams = () => {
+  const teams = usePersistentMockState<Team[]>('ra_mock_teams_v4', mockTeams)
+  const missingTeams = mockTeams.filter((team) => ['t6', 't7', 't8'].includes(team.id) && !teams.value.some((item) => item.id === team.id))
+  if (import.meta.client && missingTeams.length) teams.value = [...teams.value, ...missingTeams]
+  return teams
+}
+export const useMockTeamMembers = () => {
+  const members = usePersistentMockState<TeamMember[]>('ra_mock_team_members_v4', mockTeamMembers)
+  const missingMembers = mockTeamMembers.filter((member) => ['tm9', 'tm10', 'tm11'].includes(member.id) && !members.value.some((item) => item.id === member.id))
+  if (import.meta.client && missingMembers.length) members.value = [...members.value, ...missingMembers]
+  return members
+}
 export const useMockTeamInvites = () => usePersistentMockState<TeamInvite[]>('ra_mock_team_invites_v4', mockTeamInvites)
 export const useMockTeamJoinRequests = () => usePersistentMockState<TeamJoinRequest[]>('ra_mock_team_requests_v4', mockTeamJoinRequests)
 export const useMockTeamMemberBlocks = () => usePersistentMockState<TeamMemberBlock[]>('ra_mock_team_blocks_v4', mockTeamMemberBlocks)
-export const useMockTournaments = () => usePersistentMockState<Tournament[]>('ra_mock_tournaments_v4', mockTournaments)
+export const useMockTournaments = () => usePersistentMockState<Tournament[]>('ra_mock_tournaments_v5', mockTournaments)
 export const useMockTournamentApplications = () => usePersistentMockState<TournamentApplication[]>('ra_mock_tournament_applications_v4', mockTournamentApplications)
 export const useMockTournamentRosters = () => usePersistentMockState<TournamentRoster[]>('ra_mock_tournament_rosters_v4', mockTournamentRosters)
-export const useMockMatches = () => usePersistentMockState<Match[]>('ra_mock_matches_v1', mockMatches)
-export const useMockBracketMatches = () => usePersistentMockState<BracketMatch[]>('ra_mock_brackets_v2', mockBracketMatches)
+export const useMockMatches = () => usePersistentMockState<Match[]>('ra_mock_matches_v3', mockMatches)
+export const useMockBracketMatches = () => usePersistentMockState<BracketMatch[]>('ra_mock_brackets_v3', mockBracketMatches)
