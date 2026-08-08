@@ -36,6 +36,7 @@ const filteredTeams = computed(() => allTeams.filter((team) => {
 
 useHead(() => ({
   title: 'Команды',
+  meta: [{ name: 'description', content: 'Команды РазрядАрены: вид спорта, город, состав и доступность заявок.' }],
   bodyAttrs: {
     class: auth.isAuthenticated ? 'layout-user' : 'layout-public',
     'data-page': 'teams',

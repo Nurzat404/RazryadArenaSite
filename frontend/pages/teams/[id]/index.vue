@@ -48,11 +48,13 @@ const ownPendingRequest = computed(() => currentRequests.value.find((request) =>
 const requestMessage = ref('')
 const requestFeedback = ref('')
 const requestError = ref('')
+const requestPending = ref(false)
 
 const submitRequest = async () => {
   if (!team || !auth.user) return
   requestError.value = ''
   requestFeedback.value = ''
+  requestPending.value = true
 
   try {
     const request = await teamService.createRequest({
@@ -70,14 +72,21 @@ const submitRequest = async () => {
       : reason === 'requests_closed'
         ? 'Команда сейчас не принимает заявки.'
         : 'Заявка уже отправлена или вы уже состоите в команде.'
+  } finally {
+    requestPending.value = false
   }
 }
 
 const cancelRequest = async () => {
   if (!team || !auth.user) return
-  if (await teamService.cancelRequest(team.id, auth.user.id)) {
-    currentRequests.value = currentRequests.value.filter((request) => request.id !== ownPendingRequest.value?.id)
-    requestFeedback.value = 'Заявка отменена.'
+  requestPending.value = true
+  try {
+    if (await teamService.cancelRequest(team.id, auth.user.id)) {
+      currentRequests.value = currentRequests.value.filter((request) => request.id !== ownPendingRequest.value?.id)
+      requestFeedback.value = 'Заявка отменена.'
+    }
+  } finally {
+    requestPending.value = false
   }
 }
 
@@ -90,7 +99,8 @@ const formatDate = (value: string) =>
   }).format(new Date(value))
 
 useHead({
-  title: team ? `${team.name} — команда РазрядАрены` : 'Команда не найдена'
+  title: team ? `${team.name} — команда РазрядАрены` : 'Команда не найдена',
+  meta: team ? [{ name: 'description', content: `${team.name}: состав, капитан, город и открытые заявки в команду.` }] : []
 })
 </script>
 
@@ -146,17 +156,19 @@ useHead({
         </aside>
       </div>
 
-      <article v-if="team && !isMember && !canManage" class="surface-panel p-4 mt-3">
+      <article v-if="team && !isMember" class="surface-panel p-4 mt-3">
         <template v-if="auth.isAuthenticated">
           <h2 class="h4 mb-2">Заявка в команду</h2>
           <template v-if="ownPendingRequest">
             <p class="text-muted-strong">Заявка уже у капитана. Можно дождаться ответа или отменить её.</p>
-            <button class="cta-button cta-button-secondary" type="button" @click="cancelRequest">Отменить заявку</button>
+            <button class="cta-button cta-button-secondary" type="button" :disabled="requestPending" @click="cancelRequest">Отменить заявку</button>
           </template>
           <form v-else-if="team.isOpenForRequests" class="team-request-form" @submit.prevent="submitRequest">
             <label class="form-label" for="joinMessage">Коротко о себе <span class="text-muted-strong">(по желанию)</span></label>
             <textarea id="joinMessage" v-model="requestMessage" class="form-control" rows="3" placeholder="Когда играете и на какой позиции"></textarea>
-            <button class="cta-button cta-button-primary" type="submit">Подать заявку</button>
+            <button class="cta-button cta-button-primary" type="submit" :disabled="requestPending">
+              {{ requestPending ? 'Отправляем...' : 'Подать заявку' }}
+            </button>
           </form>
           <p v-else class="text-muted-strong mb-0">Команда сейчас не принимает заявки.</p>
           <p v-if="requestFeedback" class="form-success">{{ requestFeedback }}</p>

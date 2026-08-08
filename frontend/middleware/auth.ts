@@ -1,6 +1,6 @@
 import { useAuthStore } from '~/stores/auth'
 
-export default defineNuxtRouteMiddleware(async () => {
+export default defineNuxtRouteMiddleware(async (to) => {
   const auth = useAuthStore()
 
   if (!auth.initialized) {
@@ -8,6 +8,6 @@ export default defineNuxtRouteMiddleware(async () => {
   }
 
   if (!auth.isAuthenticated) {
-    return navigateTo('/login')
+    return navigateTo({ path: '/login', query: { redirect: to.fullPath } })
   }
 })

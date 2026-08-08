@@ -26,6 +26,7 @@ const blocks = ref<TeamMemberBlock[]>(initialBlocks)
 const playerEmail = ref('')
 const actionError = ref('')
 const actionMessage = ref('')
+const actionPending = ref(false)
 const canManage = computed(() => Boolean(
   team
   && auth.user
@@ -74,7 +75,14 @@ const addPlayer = async () => {
     actionError.value = 'Игрок с таким email не найден.'
     return
   }
-  await runAction(() => teamService.addMember(teamId, user.id), `${user.name} добавлен в команду.`)
+  actionPending.value = true
+  await runAction(
+    () => auth.isAdmin
+      ? teamService.addMember(teamId, user.id)
+      : teamService.inviteAccount(teamId, user.id, auth.user!.id),
+    auth.isAdmin ? `${user.name} добавлен в команду.` : `Приглашение отправлено игроку ${user.name}.`
+  )
+  actionPending.value = false
   playerEmail.value = ''
 }
 
@@ -156,14 +164,16 @@ const deleteTeam = async () => {
         <article v-if="canManage" class="profile-card">
           <div class="profile-card__head">
             <div>
-              <span class="profile-card__badge">Добавить игрока</span>
+              <span class="profile-card__badge">{{ auth.isAdmin ? 'Добавить игрока' : 'Пригласить игрока' }}</span>
               <h2>По email аккаунта</h2>
             </div>
           </div>
           <form class="team-request-form" @submit.prevent="addPlayer">
             <label class="form-label" for="memberEmail">Email игрока</label>
             <input id="memberEmail" v-model="playerEmail" class="form-control" type="email" placeholder="player@example.com" required>
-            <button class="cta-button cta-button-primary" type="submit">Добавить в состав</button>
+            <button class="cta-button cta-button-primary" type="submit" :disabled="actionPending">
+              {{ actionPending ? 'Отправляем...' : auth.isAdmin ? 'Добавить в состав' : 'Отправить приглашение' }}
+            </button>
           </form>
           <NuxtLink class="cta-button cta-button-secondary" :to="`/teams/${team.id}/requests`">Открыть заявки</NuxtLink>
         </article>

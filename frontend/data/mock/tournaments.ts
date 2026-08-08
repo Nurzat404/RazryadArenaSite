@@ -8,10 +8,11 @@ export const mockTournaments: Tournament[] = [
     name: 'CS2 Weekend Cup',
     sport: 'cs2',
     city: 'Онлайн',
-    status: 'registration_open',
-    registrationStartDate: dateFromNow(-7),
-    registrationEndDate: dateFromNow(14),
-    eventStartDate: dateFromNow(18),
+    status: 'active',
+    registrationStartDate: dateFromNow(-14),
+    registrationEndDate: dateFromNow(-2),
+    eventStartDate: dateFromNow(-1),
+    eventEndDate: dateFromNow(6),
     maxTeams: 16,
     requiredTeamSize: 2,
     minAge: 16,
@@ -98,5 +99,30 @@ export const mockTournaments: Tournament[] = [
     ],
     allowRosterChanges: false,
     description: 'Вечерний баскетбол 3x3. Турнир пока готовится, заявки откроются позже.'
+  },
+  {
+    id: 'tr5',
+    name: 'CS2 Open Cup',
+    sport: 'cs2',
+    city: 'Онлайн',
+    status: 'registration_open',
+    registrationStartDate: dateFromNow(-3),
+    registrationEndDate: dateFromNow(10),
+    eventStartDate: dateFromNow(16),
+    maxTeams: 16,
+    requiredTeamSize: 2,
+    minAge: 16,
+    maxAge: 30,
+    matchFormat: 'Олимпийская сетка, матчи BO1',
+    scheduleMode: 'fixed',
+    location: 'Онлайн',
+    rules: [
+      'В составе должно быть ровно два игрока.',
+      'Один игрок не может выступать за две команды в одном турнире.',
+      'Расписание опубликуют после окончания регистрации.'
+    ],
+    mapPool: ['Mirage', 'Inferno', 'Nuke', 'Ancient', 'Anubis', 'Dust II'],
+    allowRosterChanges: true,
+    description: 'Открытый CS2-турнир на выбывание. Соберите состав и отправьте заявку до дедлайна.'
   }
 ]

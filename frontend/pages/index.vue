@@ -1,5 +1,5 @@
 ﻿<script setup lang="ts">
-import { newsService, ratingService, teamService, tournamentService } from '~/services'
+import { applicationService, matchService, newsService, ratingService, teamService, tournamentService } from '~/services'
 import type { SiteNewsType, SportKey, TournamentStatus } from '~/types/domain'
 
 const auth = useAuthStore()
@@ -35,16 +35,27 @@ const formatDate = (value: string) =>
     month: 'long'
   }).format(new Date(value))
 
-const [tournaments, allTeams, ratingRows, newsItems] = await Promise.all([
+const [tournaments, allTeams, ratingRows, newsItems, rosters, allMatches] = await Promise.all([
   tournamentService.list(),
   teamService.list(),
   ratingService.leaderboard(),
-  newsService.list(3)
+  newsService.list(3),
+  applicationService.listRosters(),
+  matchService.list()
 ])
 
 const userTeams = auth.user ? await teamService.listByUser(auth.user.id) : []
+const userRosterKeys = new Set(rosters
+  .filter((roster) => auth.user && roster.playerIds.includes(auth.user.id))
+  .map((roster) => `${roster.tournamentId}:${roster.teamId}`))
+const upcomingMatches = allMatches
+  .filter((match) => ['scheduled', 'active'].includes(match.status))
+  .filter((match) => userRosterKeys.has(`${match.tournamentId}:${match.team1Id}`) || userRosterKeys.has(`${match.tournamentId}:${match.team2Id}`))
+  .slice(0, 3)
+const teamById = new Map(allTeams.map((team) => [team.id, team]))
+const tournamentById = new Map(tournaments.map((tournament) => [tournament.id, tournament]))
 const upcomingTournaments = tournaments
-  .filter((tournament) => tournament.status !== 'finished')
+  .filter((tournament) => !['draft', 'finished'].includes(tournament.status))
   .sort((a, b) => a.eventStartDate.localeCompare(b.eventStartDate))
   .slice(0, 3)
 
@@ -57,16 +68,24 @@ const dashboardStats = [
     value: userTeams.length
   },
   {
+    label: 'Ближайших матчей',
+    value: upcomingMatches.length
+  },
+  {
     label: 'Турниров открыто',
     value: tournaments.filter((tournament) => tournament.status === 'registration_open').length
   }
 ]
 
+const formatDateTime = (value: string) => new Intl.DateTimeFormat('ru-RU', {
+  day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
+}).format(new Date(value))
+
 const faqItems = [
   {
     question: 'Зачем нужен аккаунт?',
     answer:
-      'Чтобы видеть свои команды, заявки и матчи без поиска по чатам.'
+      'Чтобы после входа видеть свои команды, заявки и ближайшие матчи.'
   },
   {
     question: 'Можно ли создать команду после регистрации?',
@@ -86,12 +105,12 @@ const faqItems = [
   {
     question: 'Как считается рейтинг?',
     answer:
-      'По подтверждённым результатам. Сыграли матч, результат приняли — таблица меняется.'
+      'По подтверждённым результатам. После принятого результата очки пересчитываются.'
   },
   {
     question: 'Подойдёт для школьной или городской лиги?',
     answer:
-      'Да. Особенно если сейчас всё держится на таблицах, личных сообщениях и закреплённых постах.'
+      'Да. Подойдёт школьным, студенческим, дворовым и городским лигам.'
   }
 ]
 
@@ -123,10 +142,10 @@ useHead(() => ({
             <div>
               <p class="home-kicker">Главная</p>
               <h1 id="dashboard-title" class="home-dashboard__title">
-                {{ auth.user?.name }}, вот что сейчас происходит
+                Матчи, заявки и команды
               </h1>
               <p class="home-dashboard__lead">
-                Ближайшие игры, открытые заявки и команды рядом. Без поиска по чатам и старым таблицам.
+                Сводка для {{ auth.user?.name }}: что скоро начнётся и где нужен ответ.
               </p>
             </div>
             <div class="home-dashboard__actions" aria-label="Быстрые действия">
@@ -143,17 +162,37 @@ useHead(() => ({
           </div>
 
           <div class="home-dashboard-grid">
+            <section v-if="upcomingMatches.length" class="home-dashboard-card home-dashboard-card--wide" aria-labelledby="home-matches-title">
+              <div class="home-dashboard-card__head">
+                <div>
+                  <p class="home-kicker">Мои матчи</p>
+                  <h2 id="home-matches-title">Ближайшие игры</h2>
+                </div>
+                <NuxtLink to="/profile/matches">Все мои матчи</NuxtLink>
+              </div>
+              <div class="home-dashboard-list">
+                <NuxtLink v-for="match in upcomingMatches" :key="match.id" class="home-dashboard-item home-dashboard-item--tournament" :to="`/matches/${match.id}`">
+                  <div>
+                    <span class="home-dashboard-badge">{{ sportLabels[match.sport] }}</span>
+                    <h3>{{ teamById.get(match.team1Id)?.name }} — {{ teamById.get(match.team2Id)?.name }}</h3>
+                    <p>{{ tournamentById.get(match.tournamentId)?.name }} · {{ formatDateTime(match.scheduledAt) }}</p>
+                  </div>
+                  <div class="home-dashboard-item__meta"><strong>{{ match.status === 'active' ? 'Идёт сейчас' : 'Назначен' }}</strong><span>{{ match.location }}</span></div>
+                </NuxtLink>
+              </div>
+            </section>
+
             <section class="home-dashboard-card home-dashboard-card--wide home-dashboard-card--tournaments" aria-labelledby="home-tournaments-title">
               <div class="home-dashboard-card__head">
                 <div>
                   <p class="home-kicker">Ближайшие турниры</p>
-                  <h2 id="home-tournaments-title">Куда можно успеть</h2>
+                  <h2 id="home-tournaments-title">Скоро начнутся</h2>
                 </div>
                 <NuxtLink to="/tournaments">Все турниры</NuxtLink>
               </div>
 
               <div class="home-dashboard-list">
-                <article v-for="tournament in upcomingTournaments" :key="tournament.id" class="home-dashboard-item home-dashboard-item--tournament">
+                <NuxtLink v-for="tournament in upcomingTournaments" :key="tournament.id" class="home-dashboard-item home-dashboard-item--tournament" :to="`/tournaments/${tournament.id}`">
                   <div>
                     <span class="home-dashboard-badge">{{ sportLabels[tournament.sport] }}</span>
                     <h3>{{ tournament.name }}</h3>
@@ -163,7 +202,7 @@ useHead(() => ({
                     <strong>{{ tournamentStatusLabels[tournament.status] }}</strong>
                     <span>{{ tournament.requiredTeamSize }} игроков в составе</span>
                   </div>
-                </article>
+                </NuxtLink>
               </div>
             </section>
 
@@ -171,13 +210,13 @@ useHead(() => ({
               <div class="home-dashboard-card__head">
                 <div>
                   <p class="home-kicker">Мои команды</p>
-                  <h2 id="home-teams-title">С кем играешь</h2>
+                  <h2 id="home-teams-title">Ваши составы</h2>
                 </div>
                 <NuxtLink to="/profile/teams">Профиль</NuxtLink>
               </div>
 
               <div v-if="userTeams.length" class="home-dashboard-list">
-                <article v-for="team in userTeams" :key="team.id" class="home-dashboard-item home-dashboard-item--compact">
+                <NuxtLink v-for="team in userTeams" :key="team.id" class="home-dashboard-item home-dashboard-item--compact" :to="`/teams/${team.id}`">
                   <div>
                     <span class="home-dashboard-badge">{{ sportLabels[team.sport] }}</span>
                     <h3>{{ team.name }}</h3>
@@ -187,7 +226,7 @@ useHead(() => ({
                     <strong>{{ team.rating }}</strong>
                     <span>рейтинг</span>
                   </div>
-                </article>
+                </NuxtLink>
               </div>
 
               <div v-else class="home-dashboard-empty">
@@ -219,13 +258,13 @@ useHead(() => ({
               <div class="home-dashboard-card__head">
                 <div>
                   <p class="home-kicker">Команды</p>
-                  <h2 id="home-popular-teams-title">Кто на виду</h2>
+                  <h2 id="home-popular-teams-title">Популярные команды</h2>
                 </div>
                 <NuxtLink to="/teams">Все команды</NuxtLink>
               </div>
 
               <div class="home-dashboard-list">
-                <article v-for="team in popularTeams" :key="team.id" class="home-dashboard-item home-dashboard-item--compact">
+                <NuxtLink v-for="team in popularTeams" :key="team.id" class="home-dashboard-item home-dashboard-item--compact" :to="`/teams/${team.id}`">
                   <div>
                     <span class="home-dashboard-badge">{{ sportLabels[team.sport] }}</span>
                     <h3>{{ team.name }}</h3>
@@ -235,7 +274,7 @@ useHead(() => ({
                     <strong>{{ team.rating }}</strong>
                     <span>очков</span>
                   </div>
-                </article>
+                </NuxtLink>
               </div>
             </section>
 
@@ -243,7 +282,7 @@ useHead(() => ({
               <div class="home-dashboard-card__head">
                 <div>
                   <p class="home-kicker">Новости</p>
-                  <h2 id="home-news-title">Что поменялось</h2>
+                  <h2 id="home-news-title">Последние новости</h2>
                 </div>
               </div>
 
@@ -444,7 +483,7 @@ useHead(() => ({
         <div class="container">
           <div class="home-section__heading" data-animate="animate__fadeInUp">
             <p class="home-kicker">Основные разделы</p>
-            <h2 id="features-title" class="section-title">То, что обычно теряется по чатам</h2>
+            <h2 id="features-title" class="section-title">Что нужно для турнира</h2>
           </div>
           <div class="row g-4">
             <div class="col-lg-4">
@@ -553,7 +592,7 @@ useHead(() => ({
                 </span>
                 <p class="role-card__eyebrow">Организаторам</p>
               </div>
-              <h3>Меньше таблиц и ручных сверок</h3>
+              <h3>Организатору проще вести турнир</h3>
               <p>Организатор проверяет заявки, назначает матчи и записывает результаты.</p>
               <ul>
                 <li>Публикация этапов и дедлайнов</li>
@@ -571,7 +610,7 @@ useHead(() => ({
           <div class="home-section__heading" data-animate="animate__fadeInUp">
             <p class="home-kicker">Что видит команда</p>
             <h2 id="atmosphere-title" class="section-title">Команда, матч, результат</h2>
-            <p class="section-subtitle">Состав подтверждён, матч назначен, результат записан. За подробностями не нужно идти в общий чат.</p>
+            <p class="section-subtitle">Состав подтверждён, матч назначен, результат записан. У каждой игры остаётся своя карточка.</p>
           </div>
           <div class="gallery-grid">
             <figure class="gallery-card gallery-card--wide" data-animate="animate__zoomIn">
@@ -610,7 +649,7 @@ useHead(() => ({
               />
               <figcaption>
                 <strong>Результат записан</strong>
-                <span>Счёт влияет на таблицу, а не остаётся сообщением в чате.</span>
+                <span>После принятого результата обновляются сетка и рейтинг.</span>
               </figcaption>
             </figure>
           </div>

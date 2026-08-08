@@ -8,6 +8,7 @@
     "dev:host": "nuxt dev --host 0.0.0.0",
     "build": "nuxt build",
     "typecheck": "nuxt typecheck",
+    "test": "node --experimental-strip-types --test tests/*.test.mjs",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"

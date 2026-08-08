@@ -18,7 +18,10 @@ const visibleApplications = applications.filter((application) => application.sta
 const approvedApplications = visibleApplications.filter((application) => application.status === 'approved')
 const pendingApplications = visibleApplications.filter((application) => application.status === 'pending')
 
-useHead({ title: tournament ? `Команды — ${tournament.name}` : 'Команды турнира' })
+useHead({
+  title: tournament ? `Команды — ${tournament.name}` : 'Команды турнира',
+  meta: tournament ? [{ name: 'description', content: `Заявленные и допущенные команды турнира ${tournament.name}.` }] : []
+})
 </script>
 
 <template>

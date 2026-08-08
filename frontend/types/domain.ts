@@ -15,6 +15,8 @@ export type TeamMemberRole = 'captain' | 'member' | 'substitute'
 
 export type TeamInviteStatus = 'active' | 'used' | 'expired' | 'revoked'
 
+export type TeamAccountInviteStatus = 'pending' | 'accepted' | 'rejected' | 'cancelled'
+
 export type TeamJoinRequestStatus = 'pending' | 'accepted' | 'rejected'
 
 export type TeamInviteJoinMode = 'request' | 'direct'
@@ -36,6 +38,7 @@ export type NotificationType =
   | 'veto_turn'
   | 'tournament_started'
   | 'queue_updated'
+  | 'next_opponent_determined'
   | 'admin_action'
 
 export type AdminActionType =
@@ -110,6 +113,16 @@ export interface TeamInvite {
   status: TeamInviteStatus
 }
 
+export interface TeamAccountInvite {
+  id: string
+  teamId: string
+  userId: string
+  invitedByUserId: string
+  status: TeamAccountInviteStatus
+  createdAt: string
+  updatedAt: string
+}
+
 export interface TeamJoinRequest {
   id: string
   teamId: string
@@ -177,9 +190,20 @@ export interface BracketMatch {
   team2Id?: string
   winnerId?: string
   nextMatchId?: string
+  nextMatchSlot?: 1 | 2
+  thirdPlaceMatchId?: string
+  thirdPlaceSlot?: 1 | 2
   status: BracketMatchStatus
   isThirdPlace?: boolean
   isBye?: boolean
+}
+
+export interface BracketTechnicalParticipant {
+  id: string
+  bracketMatchId: string
+  slot: 1 | 2
+  label: string
+  resolvedTeamId?: string
 }
 
 export interface Match {
@@ -194,6 +218,70 @@ export interface Match {
   score1?: number
   score2?: number
   winnerId?: string
+  sequenceNo?: number
+}
+
+export interface MatchMapResult {
+  mapName: string
+  score1: number
+  score2: number
+}
+
+export interface VolleyballSetScore {
+  setNo: number
+  score1: number
+  score2: number
+}
+
+export interface PlayerMatchStat {
+  userId: string
+  kills?: number
+  deaths?: number
+  assists?: number
+  goals?: number
+  points?: number
+  rebounds?: number
+  setsWon?: number
+  adr?: number
+  headshotPercent?: number
+  playerRating?: number
+  fouls?: number
+  aces?: number
+}
+
+export interface MatchResultDetails {
+  matchId: string
+  team1Id: string
+  team2Id: string
+  participantUserIds: string[]
+  technicalReason?: string
+  mapResults: MatchMapResult[]
+  volleyballSets: VolleyballSetScore[]
+  playerStats: PlayerMatchStat[]
+  mvpUserId?: string
+  updatedAt: string
+}
+
+export interface MatchResultRevision {
+  id: string
+  matchId: string
+  changedByUserId: string
+  changedAt: string
+  reason: 'created' | 'updated'
+  previousMatch?: Pick<Match, 'score1' | 'score2' | 'winnerId' | 'status'>
+  previousDetails?: MatchResultDetails
+}
+
+export interface MatchRatingEvent {
+  id: string
+  matchId: string
+  tournamentId: string
+  sport: SportKey
+  winnerTeamId: string
+  loserTeamId: string
+  winnerPlayerIds: string[]
+  loserPlayerIds: string[]
+  createdAt: string
 }
 
 export interface MapVetoAction {
@@ -258,6 +346,8 @@ export interface PlayerStats {
   points?: number
   rebounds?: number
   setsWon?: number
+  fouls?: number
+  aces?: number
 }
 
 export interface ReferralLink {

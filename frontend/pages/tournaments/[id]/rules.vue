@@ -11,7 +11,10 @@ const ageLabel = computed(() => {
   return tournament.minAge !== undefined ? `От ${tournament.minAge} лет` : `До ${tournament.maxAge} лет`
 })
 
-useHead({ title: tournament ? `Правила — ${tournament.name}` : 'Правила турнира' })
+useHead({
+  title: tournament ? `Правила — ${tournament.name}` : 'Правила турнира',
+  meta: tournament ? [{ name: 'description', content: `Правила участия, состав и формат матчей турнира ${tournament.name}.` }] : []
+})
 </script>
 
 <template>

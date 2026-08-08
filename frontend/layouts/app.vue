@@ -25,7 +25,7 @@ const accountLinks: Array<{ to: string, label: string, exact?: boolean }> = [
   { to: '/profile/tournaments', label: 'Мои турниры' },
   { to: '/profile/matches', label: 'Мои матчи' },
   { to: '/profile/stats', label: 'Статистика' },
-  { to: '/profile/referrals', label: 'Приглашения' }
+  { to: '/profile/team-invites', label: 'Приглашения в команды' }
 ]
 
 const isActive = (to: string, exact = false) => {

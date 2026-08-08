@@ -49,6 +49,7 @@ const regenerate = async () => {
 
 const copyInvite = async () => {
   copied.value = false
+  regenerated.value = false
 
   if (!inviteUrl.value) {
     return

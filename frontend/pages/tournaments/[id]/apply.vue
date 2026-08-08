@@ -10,12 +10,13 @@ if (!auth.initialized) await auth.loadCurrentUser()
 
 const tournamentId = String(route.params.id)
 const tournament = await tournamentService.getById(tournamentId)
-const [userTeams, users] = await Promise.all([
+const [userTeams, allTeams, users] = await Promise.all([
   auth.user ? teamService.listByUser(auth.user.id) : [],
+  teamService.list(),
   userService.list()
 ])
 const captainTeams = tournament && auth.user
-  ? userTeams.filter((team) => team.captainId === auth.user!.id && team.sport === tournament.sport)
+  ? (auth.isAdmin ? allTeams : userTeams.filter((team) => team.captainId === auth.user!.id)).filter((team) => team.sport === tournament.sport)
   : []
 const memberEntries = await Promise.all(captainTeams.map(async (team) => [team.id, await teamService.listMembers(team.id)] as const))
 const membersByTeamId = new Map(memberEntries)
@@ -112,6 +113,10 @@ useHead({ title: tournament ? `Заявка — ${tournament.name}` : 'Заяв�
 
       <div v-if="captainTeams.length" class="tournament-apply-layout">
         <form class="tournament-apply-form" @submit.prevent="submitApplication">
+          <div v-if="check?.existingApplication?.status === 'rejected'" class="form-error">
+            <strong>Заявку нужно подать заново.</strong>
+            <span>{{ check.existingApplication.rejectReason || 'Проверьте состав и снова отправьте данные организатору.' }}</span>
+          </div>
           <fieldset class="tournament-apply-section">
             <legend>Команда</legend>
             <div class="tournament-team-picker">

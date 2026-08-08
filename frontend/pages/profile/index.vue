@@ -40,6 +40,7 @@ const applications = (
   await Promise.all(teamIds.map((teamId) => applicationService.list({ teamId })))
 ).flat()
 const tournaments = await tournamentService.list()
+const rosters = await applicationService.listRosters()
 const tournamentById = new Map(tournaments.map((tournament) => [tournament.id, tournament]))
 const playerRatings = currentUser
   ? (await Promise.all(currentUser.favoriteSports.map((sport) => ratingService.leaderboard({
@@ -51,6 +52,12 @@ const playerRatings = currentUser
 
 const now = new Date()
 const nextTournament = applications
+  .filter((application) => application.status === 'approved')
+  .filter((application) => currentUser && rosters.some((roster) => (
+    roster.tournamentId === application.tournamentId
+    && roster.teamId === application.teamId
+    && roster.playerIds.includes(currentUser.id)
+  )))
   .map((application) => tournamentById.get(application.tournamentId))
   .filter(Boolean)
   .filter((tournament) => new Date(tournament!.eventStartDate) >= now)

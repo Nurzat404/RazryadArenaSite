@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { matchService, teamService, tournamentService } from '~/services'
+import { applicationService, matchService, teamService, tournamentService } from '~/services'
 import type { MatchStatus, SportKey } from '~/types/domain'
 
 definePageMeta({ layout: 'app', middleware: 'auth' })
@@ -42,16 +42,17 @@ const formatDateTime = (value: string) =>
     minute: '2-digit'
   }).format(new Date(value))
 
-const userTeams = auth.user ? await teamService.listByUser(auth.user.id) : []
 const allTeams = await teamService.list()
 const allTournaments = await tournamentService.list()
+const rosters = await applicationService.listRosters()
 const teamById = new Map(allTeams.map((team) => [team.id, team]))
 const tournamentById = new Map(allTournaments.map((tournament) => [tournament.id, tournament]))
-const teamIds = userTeams.map((team) => team.id)
-
-const matches = (
-  await Promise.all(teamIds.map((teamId) => matchService.list({ teamId })))
-).flat()
+const userRosters = auth.user ? rosters.filter((roster) => roster.playerIds.includes(auth.user!.id)) : []
+const rosterKeys = new Set(userRosters.map((roster) => `${roster.tournamentId}:${roster.teamId}`))
+const matches = (await matchService.list()).filter((match) => (
+  rosterKeys.has(`${match.tournamentId}:${match.team1Id}`)
+  || rosterKeys.has(`${match.tournamentId}:${match.team2Id}`)
+))
 
 const uniqueMatches = [...new Map(matches.map((match) => [match.id, match])).values()]
   .sort((a, b) => a.scheduledAt.localeCompare(b.scheduledAt))
@@ -63,13 +64,11 @@ const opponentName = (teamId: string, team1Id: string, team2Id: string) => {
   return teamById.get(opponentId)?.name ?? 'Соперник уточняется'
 }
 
-const ownTeamName = (team1Id: string, team2Id: string) => {
-  const ownTeam = userTeams.find((team) => [team1Id, team2Id].includes(team.id))
-  return ownTeam?.name ?? 'Ваша команда'
-}
+const ownTeamId = (match: { tournamentId: string, team1Id: string, team2Id: string }) =>
+  [match.team1Id, match.team2Id].find((teamId) => rosterKeys.has(`${match.tournamentId}:${teamId}`)) ?? match.team1Id
 
-const ownTeamId = (team1Id: string, team2Id: string) =>
-  userTeams.find((team) => [team1Id, team2Id].includes(team.id))?.id ?? team1Id
+const ownTeamName = (match: { tournamentId: string, team1Id: string, team2Id: string }) =>
+  teamById.get(ownTeamId(match))?.name ?? 'Ваша команда'
 </script>
 
 <template>
@@ -86,7 +85,7 @@ const ownTeamId = (team1Id: string, team2Id: string) =>
           <time>{{ formatDateTime(match.scheduledAt) }}</time>
           <div>
             <span>{{ sportLabels[match.sport] }} · {{ tournamentById.get(match.tournamentId)?.name ?? 'Турнир' }}</span>
-            <strong>{{ ownTeamName(match.team1Id, match.team2Id) }} — {{ opponentName(ownTeamId(match.team1Id, match.team2Id), match.team1Id, match.team2Id) }}</strong>
+            <strong>{{ ownTeamName(match) }} — {{ opponentName(ownTeamId(match), match.team1Id, match.team2Id) }}</strong>
             <small>{{ match.location }}</small>
           </div>
           <StatusBadge :status="match.status" :label="matchStatusLabels[match.status]" />
@@ -100,7 +99,7 @@ const ownTeamId = (team1Id: string, team2Id: string) =>
           <time>{{ formatDateTime(match.scheduledAt) }}</time>
           <div>
             <span>{{ sportLabels[match.sport] }} · {{ tournamentById.get(match.tournamentId)?.name ?? 'Турнир' }}</span>
-            <strong>{{ ownTeamName(match.team1Id, match.team2Id) }} — {{ opponentName(ownTeamId(match.team1Id, match.team2Id), match.team1Id, match.team2Id) }}</strong>
+            <strong>{{ ownTeamName(match) }} — {{ opponentName(ownTeamId(match), match.team1Id, match.team2Id) }}</strong>
             <small>Счёт {{ match.score1 }}:{{ match.score2 }}</small>
           </div>
           <StatusBadge :status="match.status" :label="matchStatusLabels[match.status]" />

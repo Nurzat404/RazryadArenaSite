@@ -14,7 +14,7 @@ if (!auth.initialized) {
 
 const [team, initialRequests, users] = await Promise.all([
   teamService.getById(teamId),
-  teamService.listRequests(teamId),
+  teamService.listRequests(teamId, 'pending'),
   userService.list()
 ])
 
@@ -29,6 +29,7 @@ const canManage = Boolean(
   && (team.captainId === auth.user.id || auth.user.role === 'admin')
 )
 const actionError = ref('')
+const pendingRequestId = ref('')
 const userById = new Map(users.map((user) => [user.id, user]))
 
 const statusLabels = {
@@ -48,6 +49,7 @@ const formatDate = (value: string) =>
 const setStatus = async (requestId: string, status: TeamJoinRequest['status']) => {
   actionError.value = ''
   if (!canManage) return
+  pendingRequestId.value = requestId
 
   let updated
   try {
@@ -56,14 +58,17 @@ const setStatus = async (requestId: string, status: TeamJoinRequest['status']) =
     actionError.value = error instanceof Error && error.message === 'team_full'
       ? 'В составе нет свободных мест. Сначала увеличьте лимит или освободите место.'
       : 'Не получилось обработать заявку.'
+    pendingRequestId.value = ''
     return
   }
 
   if (!updated) {
+    pendingRequestId.value = ''
     return
   }
 
-  requests.value = requests.value.map((request) => request.id === requestId ? updated : request)
+  requests.value = requests.value.filter((request) => request.id !== requestId)
+  pendingRequestId.value = ''
 }
 </script>
 
@@ -106,10 +111,10 @@ const setStatus = async (requestId: string, status: TeamJoinRequest['status']) =
         <p class="profile-card__note">{{ request.message || 'Игрок не оставил комментарий.' }}</p>
 
         <div class="profile-card__actions">
-          <button class="cta-button cta-button-primary" type="button" :disabled="request.status !== 'pending'" @click="setStatus(request.id, 'accepted')">
+          <button class="cta-button cta-button-primary" type="button" :disabled="pendingRequestId === request.id" @click="setStatus(request.id, 'accepted')">
             Принять
           </button>
-          <button class="cta-button cta-button-secondary" type="button" :disabled="request.status !== 'pending'" @click="setStatus(request.id, 'rejected')">
+          <button class="cta-button cta-button-secondary" type="button" :disabled="pendingRequestId === request.id" @click="setStatus(request.id, 'rejected')">
             Отклонить
           </button>
         </div>

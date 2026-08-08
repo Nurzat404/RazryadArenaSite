@@ -38,6 +38,18 @@ const form = reactive({
 const saving = ref(false)
 const saved = ref(false)
 const errorMessage = ref('')
+const savedSnapshot = ref(JSON.stringify(form))
+const currentSnapshot = computed(() => JSON.stringify(form))
+const isDirty = computed(() => currentSnapshot.value !== savedSnapshot.value)
+
+watch(isDirty, (dirty) => {
+  if (dirty) saved.value = false
+})
+
+onBeforeRouteLeave(() => {
+  if (!isDirty.value || !import.meta.client) return true
+  return window.confirm('У вас есть несохранённые изменения. Уйти со страницы?')
+})
 
 const toggleSport = (sport: SportKey) => {
   form.favoriteSports = form.favoriteSports.includes(sport)
@@ -79,6 +91,7 @@ const submitProfile = async () => {
         ? form.steamProfileUrl.trim()
         : undefined
     })
+    savedSnapshot.value = currentSnapshot.value
     saved.value = true
   } finally {
     saving.value = false
@@ -159,8 +172,8 @@ const submitProfile = async () => {
       <p v-if="saved" class="form-success">Профиль сохранён. Изменения уже видны в личном кабинете.</p>
 
       <div class="profile-form-actions">
-        <button class="cta-button cta-button-primary" type="submit" :disabled="saving">
-          {{ saving ? 'Сохраняем...' : 'Сохранить профиль' }}
+        <button class="cta-button cta-button-primary" type="submit" :disabled="saving || !isDirty">
+          {{ saving ? 'Сохраняем...' : saved ? 'Сохранено' : 'Сохранить профиль' }}
         </button>
         <NuxtLink class="cta-button cta-button-secondary" to="/profile">Вернуться в профиль</NuxtLink>
       </div>

@@ -6,7 +6,8 @@ export default defineNuxtConfig({
     '/admin/**': { ssr: false },
     '/profile/**': { ssr: false },
     '/teams/**': { ssr: false },
-    '/tournaments/**': { ssr: false }
+    '/tournaments/**': { ssr: false },
+    '/matches/**': { ssr: false }
   },
   css: [
     'bootstrap/dist/css/bootstrap.min.css',

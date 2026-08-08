@@ -1,10 +1,15 @@
 <script setup lang="ts">
 const auth = useAuthStore()
+const route = useRoute()
 
 const email = ref('nurz@example.com')
 const password = ref('')
 const isSubmitting = ref(false)
 const errorMessage = ref('')
+const destination = computed(() => {
+  const redirect = typeof route.query.redirect === 'string' ? route.query.redirect : '/profile'
+  return redirect.startsWith('/') && !redirect.startsWith('//') ? redirect : '/profile'
+})
 
 const handleSubmit = async () => {
   if (!email.value.trim() || !password.value.trim()) {
@@ -17,7 +22,7 @@ const handleSubmit = async () => {
 
   try {
     await auth.login(email.value.trim(), password.value)
-    await navigateTo('/profile')
+    await navigateTo(destination.value)
   } catch {
     errorMessage.value = 'Не получилось войти. Проверьте данные и попробуйте ещё раз.'
   } finally {
@@ -27,6 +32,7 @@ const handleSubmit = async () => {
 
 useHead({
   title: 'Вход',
+  meta: [{ name: 'description', content: 'Вход в аккаунт игрока РазрядАрены.' }],
   bodyAttrs: {
     class: 'layout-public',
     'data-page': 'login',
@@ -66,11 +72,11 @@ useHead({
               >
             </div>
             <p v-if="errorMessage" class="form-error" role="alert">{{ errorMessage }}</p>
-            <button class="cta-button cta-button-primary w-100 mb-2" type="submit" :disabled="isSubmitting">
+            <button class="cta-button cta-button-primary w-100 mb-2" type="button" :disabled="isSubmitting" @click="handleSubmit">
               {{ isSubmitting ? 'Входим...' : 'Войти' }}
             </button>
-            <a class="cta-button cta-button-secondary w-100 mb-2" href="/register">Создать аккаунт</a>
-            <a class="site-footer-link d-inline-flex justify-content-center w-100" href="/forgot-password">Забыли пароль?</a>
+            <NuxtLink class="cta-button cta-button-secondary w-100 mb-2" :to="{ path: '/register', query: route.query.redirect ? { redirect: route.query.redirect } : {} }">Создать аккаунт</NuxtLink>
+            <NuxtLink class="site-footer-link d-inline-flex justify-content-center w-100" to="/forgot-password">Забыли пароль?</NuxtLink>
           </form>
         </article>
       </div>

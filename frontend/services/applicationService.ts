@@ -44,7 +44,8 @@ const getApplicationCheck = (payload: ApplicationPayload): ApplicationCheck => {
   if (!tournament || !team) return { eligible: false, issues, conflicts, existingApplication }
 
   if (tournament.status !== 'registration_open') issues.push('Приём заявок уже закрыт.')
-  if (team.captainId !== payload.submittedByUserId) issues.push('Подать заявку может только капитан команды.')
+  const submitter = users.find((item) => item.id === payload.submittedByUserId)
+  if (team.captainId !== payload.submittedByUserId && submitter?.role !== 'admin') issues.push('Подать заявку может капитан команды или администратор.')
   if (team.sport !== tournament.sport) issues.push('Вид спорта команды не совпадает с турниром.')
   if (playerIds.length !== tournament.requiredTeamSize) {
     issues.push(`Выберите ровно ${tournament.requiredTeamSize} игроков.`)

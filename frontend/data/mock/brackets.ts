@@ -11,6 +11,9 @@ export const mockBracketMatches: BracketMatch[] = [
     team1Id: 't1',
     team2Id: 't3',
     nextMatchId: 'bm3',
+    nextMatchSlot: 1,
+    thirdPlaceMatchId: 'bm4',
+    thirdPlaceSlot: 1,
     status: 'scheduled'
   },
   {
@@ -24,6 +27,9 @@ export const mockBracketMatches: BracketMatch[] = [
     team2Id: 't7',
     winnerId: 't5',
     nextMatchId: 'bm3',
+    nextMatchSlot: 2,
+    thirdPlaceMatchId: 'bm4',
+    thirdPlaceSlot: 2,
     status: 'finished'
   },
   {
@@ -60,12 +66,12 @@ export const mockBracketMatches: BracketMatch[] = [
   {
     id: 'bm6',
     tournamentId: 'tr3',
+    matchId: 'm3',
     round: 1,
     roundName: 'Первый раунд',
     position: 2,
     team1Id: 't4',
-    winnerId: 't4',
-    status: 'finished',
-    isBye: true
+    team2Id: 't6',
+    status: 'scheduled'
   }
 ]

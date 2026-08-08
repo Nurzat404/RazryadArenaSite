@@ -1,6 +1,7 @@
 import { useMockUsers } from '~/data/mock/state'
 import type { SportKey, User } from '~/types/domain'
 import type { UserProfilePayload } from '~/services/userService'
+import { z } from 'zod'
 
 export interface RegisterPayload {
   name: string
@@ -11,6 +12,16 @@ export interface RegisterPayload {
   favoriteSports: SportKey[]
   steamProfileUrl?: string
 }
+
+const registerSchema = z.object({
+  name: z.string().trim().min(2),
+  email: z.string().trim().email(),
+  password: z.string().min(8),
+  city: z.string().trim().min(2).optional(),
+  age: z.number().int().min(10).max(100).optional(),
+  favoriteSports: z.array(z.enum(['cs2', 'football', 'basketball', 'volleyball'])).min(1),
+  steamProfileUrl: z.string().url().optional()
+})
 
 const mockUserIdCookie = 'ra_mock_user_id'
 const mockSessionUserCookie = 'ra_mock_session_user'
@@ -47,6 +58,7 @@ const readSession = () => {
 
 export const authService = {
   async login(email: string, _password: string) {
+    if (!z.string().email().safeParse(email).success || _password.length < 1) throw new Error('Invalid credentials')
     const user = useMockUsers().value.find((item) => item.email.toLowerCase() === email.toLowerCase())
     if (!user) throw new Error('User not found')
     saveSession(user)
@@ -69,6 +81,9 @@ export const authService = {
 
   async register(payload: RegisterPayload): Promise<User> {
     const users = useMockUsers()
+    const parsed = registerSchema.safeParse(payload)
+    if (!parsed.success) throw new Error('Invalid registration data')
+    payload = parsed.data
     if (users.value.some((item) => item.email.toLowerCase() === payload.email.toLowerCase())) {
       throw new Error('Email already exists')
     }
@@ -94,14 +109,14 @@ export const authService = {
   },
 
   async requestPasswordReset(email: string) {
-    return { email, sent: true }
+    return { email, sent: false, reason: 'not_available' as const }
   },
 
   async resetPassword(_token: string, _password: string) {
-    return { success: true }
+    return { success: false, reason: 'not_available' as const }
   },
 
   async verifyEmail(_token: string) {
-    return { success: true }
+    return { success: false, reason: 'not_available' as const }
   }
 }

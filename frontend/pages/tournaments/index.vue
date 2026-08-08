@@ -50,6 +50,7 @@ const applicationsByTournament = new Map(
 
 useHead(() => ({
   title: 'Турниры',
+  meta: [{ name: 'description', content: 'Любительские турниры РазрядАрены: открытые заявки, даты, формат и место проведения.' }],
   bodyAttrs: {
     class: auth.isAuthenticated ? 'layout-user' : 'layout-public',
     'data-page': 'tournaments',

@@ -26,9 +26,11 @@ const join = async () => {
 
   try {
     const result = await teamService.joinByInvite(code, auth.user.id)
-    resultMessage.value = result.mode === 'direct'
-      ? 'Вы вступили в команду.'
-      : 'Заявка отправлена капитану.'
+    if (result.mode === 'direct') {
+      await navigateTo(`/teams/${result.team.id}`)
+      return
+    }
+    resultMessage.value = 'Заявка отправлена капитану.'
   } catch (error) {
     const reason = error instanceof Error ? error.message : ''
     errorMessage.value = reason === 'team_full'

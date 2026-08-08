@@ -42,7 +42,20 @@ const form = reactive({
 })
 
 const saved = ref(false)
+const saving = ref(false)
 const errorMessage = ref('')
+const savedSnapshot = ref(JSON.stringify(form))
+const currentSnapshot = computed(() => JSON.stringify(form))
+const isDirty = computed(() => currentSnapshot.value !== savedSnapshot.value)
+
+watch(isDirty, (dirty) => {
+  if (dirty) saved.value = false
+})
+
+onBeforeRouteLeave(() => {
+  if (!isDirty.value || !import.meta.client) return true
+  return window.confirm('У вас есть несохранённые изменения. Уйти со страницы?')
+})
 
 const submitSettings = async () => {
   saved.value = false
@@ -68,18 +81,23 @@ const submitSettings = async () => {
     return
   }
 
-  await teamService.update(team.id, {
-    name: form.name.trim(),
-    sport: form.sport,
-    city: form.city.trim() || 'Онлайн',
-    maxMembers: form.maxMembers,
-    isOpenForRequests: form.isOpenForRequests,
-    notifyOnRequests: form.notifyOnRequests,
-    inviteEnabled: form.inviteEnabled,
-    inviteJoinMode: form.inviteJoinMode
-  })
-
-  saved.value = true
+  saving.value = true
+  try {
+    await teamService.update(team.id, {
+      name: form.name.trim(),
+      sport: form.sport,
+      city: form.city.trim() || 'Онлайн',
+      maxMembers: form.maxMembers,
+      isOpenForRequests: form.isOpenForRequests,
+      notifyOnRequests: form.notifyOnRequests,
+      inviteEnabled: form.inviteEnabled,
+      inviteJoinMode: form.inviteJoinMode
+    })
+    savedSnapshot.value = currentSnapshot.value
+    saved.value = true
+  } finally {
+    saving.value = false
+  }
 }
 </script>
 
@@ -148,7 +166,9 @@ const submitSettings = async () => {
       <p v-if="saved" class="form-success">Настройки сохранены.</p>
 
       <div class="profile-form-actions">
-        <button class="cta-button cta-button-primary" type="submit">Сохранить настройки</button>
+        <button class="cta-button cta-button-primary" type="submit" :disabled="saving || !isDirty">
+          {{ saving ? 'Сохраняем...' : saved ? 'Сохранено' : 'Сохранить настройки' }}
+        </button>
         <NuxtLink class="cta-button cta-button-secondary" :to="`/teams/${team.id}`">Вернуться к команде</NuxtLink>
       </div>
     </form>

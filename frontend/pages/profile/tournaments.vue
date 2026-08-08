@@ -40,20 +40,25 @@ const formatDate = (value: string) =>
     year: 'numeric'
   }).format(new Date(value))
 
-const userTeams = auth.user ? await teamService.listByUser(auth.user.id) : []
-const captainTeamIds = new Set(userTeams.filter((team) => team.captainId === auth.user?.id).map((team) => team.id))
-const teamById = new Map(userTeams.map((team) => [team.id, team]))
-const [allTournaments, rosters, users] = await Promise.all([
+const [allTeams, allTournaments, rosters, users, allApplications] = await Promise.all([
+  teamService.list(),
   tournamentService.list(),
   applicationService.listRosters(),
-  userService.list()
+  userService.list(),
+  applicationService.list()
 ])
+const captainTeamIds = new Set(allTeams.filter((team) => team.captainId === auth.user?.id).map((team) => team.id))
+const teamById = new Map(allTeams.map((team) => [team.id, team]))
 const tournamentById = new Map(allTournaments.map((tournament) => [tournament.id, tournament]))
 const rosterByKey = new Map(rosters.map((roster) => [`${roster.tournamentId}:${roster.teamId}`, roster]))
 const userById = new Map(users.map((user) => [user.id, user]))
-const applications = (
-  await Promise.all(userTeams.map((team) => applicationService.list({ teamId: team.id })))
-).flat().filter((application) => application.status === 'approved' || captainTeamIds.has(application.teamId))
+const rosterKeys = new Set(rosters
+  .filter((roster) => auth.user && roster.playerIds.includes(auth.user.id))
+  .map((roster) => `${roster.tournamentId}:${roster.teamId}`))
+const applications = allApplications.filter((application) => (
+  captainTeamIds.has(application.teamId)
+  || (application.status === 'approved' && rosterKeys.has(`${application.tournamentId}:${application.teamId}`))
+))
 
 const tournamentItems = applications
   .map((application) => ({
@@ -114,7 +119,8 @@ const tournamentItems = applications
         </p>
 
         <div class="profile-card__actions">
-          <NuxtLink class="cta-button cta-button-primary" :to="`/tournaments/${item.tournament!.id}`">Открыть турнир</NuxtLink>
+          <NuxtLink class="cta-button cta-button-primary" :to="`/tournaments/${item.tournament!.id}/applications/${item.application.id}`">Открыть заявку</NuxtLink>
+          <NuxtLink class="cta-button cta-button-secondary" :to="`/tournaments/${item.tournament!.id}`">Открыть турнир</NuxtLink>
         </div>
       </article>
     </div>

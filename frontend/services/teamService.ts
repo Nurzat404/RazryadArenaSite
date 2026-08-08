@@ -1,13 +1,22 @@
 import {
   useMockTeamInvites,
+  useMockTeamAccountInvites,
   useMockTeamJoinRequests,
   useMockTeamMemberBlocks,
   useMockTeamMembers,
-  useMockTeams
+  useMockTeams,
+  useMockTournamentApplications,
+  useMockTournamentRosters,
+  useMockMatches,
+  useMockBracketMatches,
+  useMockMatchResultDetails,
+  useMockMatchResultRevisions,
+  useMockMatchRatingEvents
 } from '~/data/mock/state'
 import type {
   SportKey,
   Team,
+  TeamAccountInviteStatus,
   TeamInviteJoinMode,
   TeamJoinRequestStatus,
   TeamMemberRole
@@ -83,6 +92,47 @@ export const teamService = {
     return useMockTeamInvites().value.filter((invite) => invite.teamId === teamId)
   },
 
+  async listAccountInvites(filters: { teamId?: string; userId?: string; status?: TeamAccountInviteStatus } = {}) {
+    return useMockTeamAccountInvites().value
+      .filter((invite) => filters.teamId ? invite.teamId === filters.teamId : true)
+      .filter((invite) => filters.userId ? invite.userId === filters.userId : true)
+      .filter((invite) => filters.status ? invite.status === filters.status : true)
+      .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+  },
+
+  async inviteAccount(teamId: string, userId: string, invitedByUserId: string) {
+    const team = useMockTeams().value.find((item) => item.id === teamId)
+    const members = useMockTeamMembers().value
+    const invites = useMockTeamAccountInvites()
+    if (!team) throw new Error('team_not_found')
+    if (members.some((member) => member.teamId === teamId && member.userId === userId)) throw new Error('already_member')
+    if (team.memberIds.length >= team.maxMembers) throw new Error('team_full')
+    if (useMockTeamMemberBlocks().value.some((block) => block.teamId === teamId && block.userId === userId)) throw new Error('blocked')
+    if (invites.value.some((invite) => invite.teamId === teamId && invite.userId === userId && invite.status === 'pending')) throw new Error('invite_exists')
+    const now = new Date().toISOString()
+    const invite = {
+      id: uniqueId('account-invite'),
+      teamId,
+      userId,
+      invitedByUserId,
+      status: 'pending' as const,
+      createdAt: now,
+      updatedAt: now
+    }
+    invites.value = [invite, ...invites.value]
+    return invite
+  },
+
+  async respondToAccountInvite(id: string, userId: string, status: 'accepted' | 'rejected') {
+    const invites = useMockTeamAccountInvites()
+    const invite = invites.value.find((item) => item.id === id && item.userId === userId && item.status === 'pending')
+    if (!invite) throw new Error('invite_not_found')
+    if (status === 'accepted') await this.addMember(invite.teamId, userId)
+    const updated = { ...invite, status, updatedAt: new Date().toISOString() }
+    invites.value = invites.value.map((item) => item.id === id ? updated : item)
+    return updated
+  },
+
   async getInviteByCode(code: string) {
     return useMockTeamInvites().value.find((invite) => invite.code.toLowerCase() === code.toLowerCase()) ?? null
   },
@@ -152,14 +202,14 @@ export const teamService = {
     return updated
   },
 
-  async createRequest(payload: TeamJoinRequestPayload) {
+  async createRequest(payload: TeamJoinRequestPayload, options: { viaInvite?: boolean } = {}) {
     const requests = useMockTeamJoinRequests()
     const teams = useMockTeams()
     const members = useMockTeamMembers()
     const blocks = useMockTeamMemberBlocks()
     const team = teams.value.find((item) => item.id === payload.teamId)
 
-    if (!team || !team.isOpenForRequests) throw new Error('requests_closed')
+    if (!team || (!team.isOpenForRequests && !options.viaInvite)) throw new Error('requests_closed')
     if (members.value.some((member) => member.teamId === payload.teamId && member.userId === payload.userId)) throw new Error('already_member')
     if (blocks.value.some((block) => block.teamId === payload.teamId && block.userId === payload.userId)) throw new Error('blocked')
     if (requests.value.some((request) => request.teamId === payload.teamId && request.userId === payload.userId && request.status === 'pending')) throw new Error('request_exists')
@@ -255,13 +305,36 @@ export const teamService = {
     const teams = useMockTeams()
     const members = useMockTeamMembers()
     const invites = useMockTeamInvites()
+    const accountInvites = useMockTeamAccountInvites()
     const requests = useMockTeamJoinRequests()
     const blocks = useMockTeamMemberBlocks()
+    const applications = useMockTournamentApplications()
+    const rosters = useMockTournamentRosters()
+    const matches = useMockMatches()
+    const brackets = useMockBracketMatches()
+    const resultDetails = useMockMatchResultDetails()
+    const resultRevisions = useMockMatchResultRevisions()
+    const ratingEvents = useMockMatchRatingEvents()
+    const removedMatchIds = matches.value
+      .filter((match) => [match.team1Id, match.team2Id].includes(teamId))
+      .map((match) => match.id)
     teams.value = teams.value.filter((team) => team.id !== teamId)
     members.value = members.value.filter((member) => member.teamId !== teamId)
     invites.value = invites.value.filter((invite) => invite.teamId !== teamId)
+    accountInvites.value = accountInvites.value.filter((invite) => invite.teamId !== teamId)
     requests.value = requests.value.filter((request) => request.teamId !== teamId)
     blocks.value = blocks.value.filter((block) => block.teamId !== teamId)
+    applications.value = applications.value.filter((application) => application.teamId !== teamId)
+    rosters.value = rosters.value.filter((roster) => roster.teamId !== teamId)
+    matches.value = matches.value.filter((match) => !removedMatchIds.includes(match.id))
+    brackets.value = brackets.value.filter((match) => (
+      !removedMatchIds.includes(match.matchId ?? '')
+      && match.team1Id !== teamId
+      && match.team2Id !== teamId
+    ))
+    resultDetails.value = resultDetails.value.filter((details) => !removedMatchIds.includes(details.matchId))
+    resultRevisions.value = resultRevisions.value.filter((revision) => !removedMatchIds.includes(revision.matchId))
+    ratingEvents.value = ratingEvents.value.filter((event) => !removedMatchIds.includes(event.matchId))
     return true
   },
 
@@ -320,7 +393,7 @@ export const teamService = {
       return { team, mode: 'direct' as const }
     }
 
-    await this.createRequest({ teamId: team.id, userId, message: 'Заявка по ссылке для вступления.' })
+    await this.createRequest({ teamId: team.id, userId, message: 'Заявка по приглашению.' }, { viaInvite: true })
     return { team, mode: 'request' as const }
   }
 }

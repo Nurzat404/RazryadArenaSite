@@ -2,6 +2,7 @@
 import type { SportKey } from '~/types/domain'
 
 const auth = useAuthStore()
+const route = useRoute()
 
 const sports: Array<{ label: string; value: SportKey }> = [
   { label: 'Футбол', value: 'football' },
@@ -23,6 +24,10 @@ const form = reactive({
 const selectedSports = ref<SportKey[]>(['football'])
 const isSubmitting = ref(false)
 const errorMessage = ref('')
+const destination = computed(() => {
+  const redirect = typeof route.query.redirect === 'string' ? route.query.redirect : '/profile'
+  return redirect.startsWith('/') && !redirect.startsWith('//') ? redirect : '/profile'
+})
 
 const toggleSport = (sport: SportKey) => {
   errorMessage.value = ''
@@ -61,7 +66,7 @@ const handleSubmit = async () => {
         ? form.steamProfileUrl.trim()
         : undefined
     })
-    await navigateTo('/profile')
+    await navigateTo(destination.value)
   } catch (error) {
     errorMessage.value = error instanceof Error && error.message === 'Email already exists'
       ? 'Аккаунт с таким email уже существует.'
@@ -73,6 +78,7 @@ const handleSubmit = async () => {
 
 useHead({
   title: 'Регистрация',
+  meta: [{ name: 'description', content: 'Регистрация игрока для участия в командах и турнирах РазрядАрены.' }],
   bodyAttrs: {
     class: 'layout-public',
     'data-page': 'register',

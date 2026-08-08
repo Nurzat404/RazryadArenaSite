@@ -4,8 +4,9 @@ import type { Match, MatchStatus, SportKey } from '~/types/domain'
 
 const route = useRoute()
 const tournamentId = String(route.params.id)
-const [tournament, matches, teams] = await Promise.all([
-  tournamentService.getById(tournamentId),
+const tournament = await tournamentService.getById(tournamentId)
+if (tournament?.scheduleMode === 'sequential') await matchService.syncSequentialQueue(tournamentId)
+const [matches, teams] = await Promise.all([
   matchService.list({ tournamentId }),
   teamService.list()
 ])
@@ -18,9 +19,10 @@ const statusLabels: Record<MatchStatus, string> = {
   scheduled: 'Матч назначен', active: 'Идёт сейчас', finished: 'Матч завершён', technical_win: 'Технический результат'
 }
 const activeMatch = computed(() => matches.find((match) => match.status === 'active') ?? null)
-const queuedMatches = computed(() => matches.filter((match) => match.status === 'scheduled'))
+const queuedMatches = computed(() => matches
+  .filter((match) => match.status === 'scheduled')
+  .sort((a, b) => (a.sequenceNo ?? Number.MAX_SAFE_INTEGER) - (b.sequenceNo ?? Number.MAX_SAFE_INTEGER)))
 const fixedSchedule = computed(() => matches
-  .filter((match) => match.status !== 'active')
   .reduce<Array<{ date: string, matches: Match[] }>>((groups, match) => {
     const date = new Intl.DateTimeFormat('ru-RU', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(match.scheduledAt))
     const group = groups.find((item) => item.date === date)
@@ -33,20 +35,23 @@ const teamName = (teamId: string) => teamById.get(teamId)?.name ?? 'Команд
 const score = (match: Match) => match.score1 === undefined ? null : `${match.score1}:${match.score2}`
 const formatTime = (value: string) => new Intl.DateTimeFormat('ru-RU', { hour: '2-digit', minute: '2-digit' }).format(new Date(value))
 
-useHead({ title: tournament ? `Расписание — ${tournament.name}` : 'Расписание турнира' })
+useHead({
+  title: tournament ? `Расписание — ${tournament.name}` : 'Расписание турнира',
+  meta: tournament ? [{ name: 'description', content: `Расписание турнира ${tournament.name}: пары, время, место и результаты матчей.` }] : []
+})
 </script>
 
 <template>
   <section class="section-padding workspace-page workspace-page--tournament-detail">
     <div class="container">
-      <PageHead :title="tournament?.name ?? 'Турнир не найден'" :subtitle="tournament ? (tournament.scheduleMode === 'sequential' ? 'Текущий матч и порядок следующих игр.' : 'Дата, время и пары назначенных матчей.') : 'Проверьте адрес страницы или вернитесь к списку турниров.'" />
+      <PageHead :title="tournament?.name ?? 'Турнир не найден'" :subtitle="tournament ? (tournament.scheduleMode === 'sequential' ? 'Текущий матч и очередь следующих пар.' : 'Пары, время и место матчей.') : 'Проверьте адрес страницы или вернитесь к списку турниров.'" />
 
       <template v-if="tournament">
         <TournamentNav :tournament-id="tournament.id" active="schedule" />
 
         <section v-if="tournament.scheduleMode === 'sequential'" class="schedule-queue">
           <div class="schedule-queue__head">
-            <div><p>Живая очередь</p><h2>Матчи идут по готовности команд</h2></div>
+            <div><p>Очередь матчей</p><h2>Кто играет сейчас и кто следующий</h2></div>
             <span>{{ sportLabels[tournament.sport] }}</span>
           </div>
           <NuxtLink v-if="activeMatch" class="schedule-live-match" :to="`/matches/${activeMatch.id}`">
@@ -54,11 +59,11 @@ useHead({ title: tournament ? `Расписание — ${tournament.name}` : '�
             <strong>{{ teamName(activeMatch.team1Id) }} <b>—</b> {{ teamName(activeMatch.team2Id) }}</strong>
             <small>{{ activeMatch.location }} · {{ score(activeMatch) ?? 'Счёт пока не внесён' }}</small>
           </NuxtLink>
-          <p v-else class="schedule-queue__empty">Сейчас свободно. Следующую пару организатор добавит, когда команды будут готовы.</p>
+          <p v-else class="schedule-queue__empty">Активного матча пока нет.</p>
           <div class="schedule-queue__next">
             <h3>Дальше</h3>
             <template v-if="queuedMatches.length">
-              <NuxtLink v-for="match in queuedMatches" :key="match.id" :to="`/matches/${match.id}`">{{ teamName(match.team1Id) }} — {{ teamName(match.team2Id) }}</NuxtLink>
+              <NuxtLink v-for="(match, index) in queuedMatches" :key="match.id" :to="`/matches/${match.id}`">{{ index + 1 }}. {{ teamName(match.team1Id) }} — {{ teamName(match.team2Id) }}</NuxtLink>
             </template>
             <p v-else>Следующая пара ещё не определена.</p>
           </div>

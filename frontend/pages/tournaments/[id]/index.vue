@@ -3,17 +3,33 @@ import { applicationService, teamService, tournamentService } from '~/services'
 import type { ApplicationStatus, SportKey, TournamentStatus } from '~/types/domain'
 
 const route = useRoute()
+const router = useRouter()
 const auth = useAuthStore()
 if (!auth.initialized) await auth.loadCurrentUser()
 
 const tournament = await tournamentService.getById(String(route.params.id))
 const applications = tournament ? await applicationService.list({ tournamentId: tournament.id }) : []
+const rosters = tournament ? await applicationService.listRosters({ tournamentId: tournament.id }) : []
 const approvedApplications = applications.filter((application) => application.status === 'approved')
 const pendingApplications = applications.filter((application) => application.status === 'pending')
 const userTeams = auth.user ? await teamService.listByUser(auth.user.id) : []
 const captainTeamIds = new Set(userTeams.filter((team) => team.captainId === auth.user?.id).map((team) => team.id))
-const ownApplications = applications.filter((application) => captainTeamIds.has(application.teamId))
+const allTeams = await teamService.list()
+const eligibleCaptainTeams = (auth.isAdmin ? allTeams : userTeams.filter((team) => team.captainId === auth.user?.id))
+  .filter((team) => team.sport === tournament?.sport)
+const ownApplications = applications.filter((application) => (
+  captainTeamIds.has(application.teamId)
+  || rosters.some((roster) => roster.teamId === application.teamId && auth.user && roster.playerIds.includes(auth.user.id))
+))
 const ownApplication = ownApplications[0] ?? null
+const applicationSent = ref(route.query.application === 'sent')
+
+onMounted(() => {
+  if (!applicationSent.value) return
+  const query = { ...route.query }
+  delete query.application
+  void router.replace({ path: route.path, query })
+})
 const canReapply = Boolean(
   ownApplication?.status === 'rejected'
   && ownApplication.reapplyAllowed
@@ -79,7 +95,7 @@ useHead({
       <template v-if="tournament">
         <TournamentNav :tournament-id="tournament.id" active="overview" />
 
-        <p v-if="route.query.application === 'sent'" class="form-success tournament-application-success">
+        <p v-if="applicationSent" class="form-success tournament-application-success">
           Заявка отправлена. Её статус появился в разделе «Мои турниры».
         </p>
 
@@ -107,17 +123,23 @@ useHead({
               <span>Ваша команда</span>
               <strong>{{ applicationStatusLabels[ownApplication.status] }}</strong>
               <p v-if="ownApplication.rejectReason">{{ ownApplication.rejectReason }}</p>
-              <NuxtLink class="cta-button cta-button-secondary" to="/profile/tournaments">Открыть заявку</NuxtLink>
+              <NuxtLink class="cta-button cta-button-secondary" :to="`/tournaments/${tournament.id}/applications/${ownApplication.id}`">Открыть заявку</NuxtLink>
             </template>
-            <template v-else-if="tournament.status === 'registration_open' && auth.isAuthenticated">
+            <template v-else-if="tournament.status === 'registration_open' && auth.isAuthenticated && eligibleCaptainTeams.length">
               <span>Регистрация до {{ formatDate(tournament.registrationEndDate) }}</span>
               <strong>{{ Math.max(tournament.maxTeams - approvedApplications.length, 0) }} мест</strong>
               <NuxtLink class="cta-button cta-button-primary" :to="`/tournaments/${tournament.id}/apply`">Подать заявку</NuxtLink>
             </template>
+            <template v-else-if="tournament.status === 'registration_open' && auth.isAuthenticated">
+              <span>Для заявки нужна команда</span>
+              <strong>Вы должны быть её капитаном</strong>
+              <p>Команда должна играть в {{ sportLabels[tournament.sport] }}.</p>
+              <NuxtLink class="cta-button cta-button-primary" to="/teams/create">Создать команду</NuxtLink>
+            </template>
             <template v-else-if="tournament.status === 'registration_open'">
               <span>Чтобы подать заявку</span>
               <strong>Войдите в аккаунт</strong>
-              <NuxtLink class="cta-button cta-button-primary" to="/login">Войти</NuxtLink>
+              <NuxtLink class="cta-button cta-button-primary" :to="{ path: '/login', query: { redirect: route.fullPath } }">Войти</NuxtLink>
             </template>
             <template v-else>
               <span>Статус</span>

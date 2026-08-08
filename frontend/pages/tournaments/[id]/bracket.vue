@@ -60,7 +60,10 @@ const matchLabel = (bracketMatch: BracketMatch) => {
   return match ? matchStatusLabels[match.status] : statusLabels[bracketMatch.status]
 }
 
-useHead({ title: tournament ? `Сетка — ${tournament.name}` : 'Турнирная сетка' })
+useHead({
+  title: tournament ? `Сетка — ${tournament.name}` : 'Турнирная сетка',
+  meta: tournament ? [{ name: 'description', content: `Сетка турнира ${tournament.name}: пары, результаты и следующие матчи.` }] : []
+})
 </script>
 
 <template>

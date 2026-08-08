@@ -1,4 +1,4 @@
-import type { Team, TeamInvite, TeamJoinRequest, TeamMember, TeamMemberBlock } from '~/types/domain'
+import type { Team, TeamAccountInvite, TeamInvite, TeamJoinRequest, TeamMember, TeamMemberBlock } from '~/types/domain'
 
 export const mockTeams: Team[] = [
   {
@@ -213,6 +213,8 @@ export const mockTeamInvites: TeamInvite[] = [
     status: 'used'
   }
 ]
+
+export const mockTeamAccountInvites: TeamAccountInvite[] = []
 
 export const mockTeamJoinRequests: TeamJoinRequest[] = [
   {
