@@ -146,7 +146,7 @@ const deleteTeam = async () => {
           <div class="team-member-list">
             <div v-for="member in members" :key="member.id" class="team-member-row">
               <div>
-                <strong>{{ userById.get(member.userId)?.name ?? 'Игрок не найден' }}</strong>
+                <NuxtLink class="team-member-row__player" :to="`/players/${member.userId}`">{{ userById.get(member.userId)?.name ?? 'Игрок не найден' }}</NuxtLink>
                 <span>{{ roleLabels[member.role] }} · с {{ formatDate(member.joinedAt) }}</span>
               </div>
               <div class="team-row-actions">

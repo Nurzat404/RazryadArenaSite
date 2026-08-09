@@ -192,7 +192,7 @@ useHead({
           <div class="team-member-list">
             <div v-for="member in members" :key="member.id" class="team-member-row">
               <div>
-                <strong>{{ userById.get(member.userId)?.name ?? 'Игрок не найден' }}</strong>
+                <NuxtLink class="team-member-row__player" :to="`/players/${member.userId}`">{{ userById.get(member.userId)?.name ?? 'Игрок не найден' }}</NuxtLink>
                 <span>{{ member.role === 'captain' ? 'Капитан' : 'Игрок' }}</span>
               </div>
               <small>{{ formatDate(member.joinedAt) }}</small>

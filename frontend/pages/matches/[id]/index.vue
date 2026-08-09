@@ -97,7 +97,6 @@ useHead({
         <section v-if="isFinished && resultDetails" class="match-protocol" aria-labelledby="matchProtocolTitle">
           <div class="match-protocol__head">
             <div>
-              <span>Протокол матча</span>
               <h2 id="matchProtocolTitle">Результаты игры</h2>
             </div>
             <strong>{{ score }}</strong>
@@ -121,13 +120,13 @@ useHead({
 
           <div v-if="resultDetails.playerStats.length" class="match-protocol__players">
             <div v-for="stat in resultDetails.playerStats" :key="stat.userId">
-              <strong>{{ userById.get(stat.userId)?.name ?? 'Игрок' }}</strong>
+              <NuxtLink :to="`/players/${stat.userId}`">{{ userById.get(stat.userId)?.name ?? 'Игрок' }}</NuxtLink>
               <span>{{ statSummary(stat) }}</span>
             </div>
           </div>
 
           <p v-if="resultDetails.mvpUserId" class="match-protocol__mvp">
-            MVP: <strong>{{ userById.get(resultDetails.mvpUserId)?.name ?? 'Игрок' }}</strong>
+            MVP: <NuxtLink :to="`/players/${resultDetails.mvpUserId}`">{{ userById.get(resultDetails.mvpUserId)?.name ?? 'Игрок' }}</NuxtLink>
           </p>
         </section>
 

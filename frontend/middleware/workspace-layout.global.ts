@@ -1,6 +1,6 @@
 import { useAuthStore } from '~/stores/auth'
 
-const workspaceSections = ['/teams', '/tournaments', '/matches', '/ratings']
+const workspaceSections = ['/teams', '/tournaments', '/matches', '/ratings', '/players']
 
 export default defineNuxtRouteMiddleware(async (to) => {
   const isWorkspaceRoute = to.path === '/'

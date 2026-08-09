@@ -8,6 +8,7 @@ import { mockMatches } from './matches'
 import { mockMapVetoSessions } from './mapVeto'
 import { mockNotifications } from './notifications'
 import { mockPlayerStats } from './stats'
+import { mockMatchResultDetails } from './matchResultDetails'
 import { mockRatings } from './ratings'
 import { mockReferralAttributions, mockReferralLinks } from './referrals'
 import type { BracketMatch, BracketTechnicalParticipant, MapVetoSession, Match, MatchRatingEvent, MatchResultDetails, MatchResultRevision, Notification, PlayerStats, RatingRow, ReferralAttribution, ReferralLink, Team, TeamAccountInvite, TeamInvite, TeamJoinRequest, TeamMember, TeamMemberBlock, Tournament, TournamentApplication, TournamentRoster, User } from '~/types/domain'
@@ -114,7 +115,12 @@ export const useMockBracketMatches = () => {
   return brackets
 }
 export const useMockBracketTechnicalParticipants = () => usePersistentMockState<BracketTechnicalParticipant[]>('ra_mock_bracket_technical_participants_v1', [])
-export const useMockMatchResultDetails = () => usePersistentMockState<MatchResultDetails[]>('ra_mock_match_result_details_v1', [])
+export const useMockMatchResultDetails = () => {
+  const details = usePersistentMockState<MatchResultDetails[]>('ra_mock_match_result_details_v1', mockMatchResultDetails)
+  const missing = mockMatchResultDetails.filter((result) => !details.value.some((item) => item.matchId === result.matchId))
+  if (import.meta.client && missing.length) details.value = [...details.value, ...missing]
+  return details
+}
 export const useMockMatchResultRevisions = () => usePersistentMockState<MatchResultRevision[]>('ra_mock_match_result_revisions_v1', [])
 export const useMockMapVetoSessions = () => usePersistentMockState<MapVetoSession[]>('ra_mock_map_veto_sessions_v4', mockMapVetoSessions)
 export const useMockMatchRatingEvents = () => usePersistentMockState<MatchRatingEvent[]>('ra_mock_match_rating_events_v1', [])

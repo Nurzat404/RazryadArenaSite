@@ -110,6 +110,7 @@ const formatDate = (value?: string) => value
 
         <div class="profile-identity__actions">
           <NuxtLink class="cta-button cta-button-primary" to="/profile/edit">Редактировать</NuxtLink>
+          <NuxtLink v-if="currentUser" class="cta-button cta-button-secondary" :to="`/players/${currentUser.id}`">Публичный профиль</NuxtLink>
         </div>
       </div>
     </section>

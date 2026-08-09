@@ -354,6 +354,8 @@ export interface PlayerStats {
   cs2Assists?: number
   cs2Adr?: number
   cs2HeadshotPercent?: number
+  cs2PlayerRating?: number
+  mvpCount?: number
   goals?: number
   assists?: number
   points?: number

@@ -13,7 +13,9 @@ export const mockPlayerStats: PlayerStats[] = [
     cs2Deaths: 118,
     cs2Assists: 42,
     cs2Adr: 78.4,
-    cs2HeadshotPercent: 41
+    cs2HeadshotPercent: 41,
+    cs2PlayerRating: 1.08,
+    mvpCount: 2
   },
   {
     id: 'stats2',
@@ -27,7 +29,9 @@ export const mockPlayerStats: PlayerStats[] = [
     cs2Deaths: 91,
     cs2Assists: 36,
     cs2Adr: 84.1,
-    cs2HeadshotPercent: 47
+    cs2HeadshotPercent: 47,
+    cs2PlayerRating: 1.17,
+    mvpCount: 2
   },
   {
     id: 'stats3',
@@ -38,7 +42,8 @@ export const mockPlayerStats: PlayerStats[] = [
     losses: 1,
     rating: 118,
     goals: 5,
-    assists: 2
+    assists: 2,
+    mvpCount: 1
   },
   {
     id: 'stats4',

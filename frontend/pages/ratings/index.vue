@@ -117,6 +117,8 @@ const filteredRatings = computed(() => {
 const ratingRows = computed(() => {
   return filteredRatings.value.map((row) => ({
     id: row.id,
+    entityId: row.entityId,
+    entityTypeKey: row.entityType,
     position: row.position,
     entityName: row.entityName,
     entityType: entityTypeLabels[row.entityType],
@@ -223,7 +225,12 @@ useHead(() => ({
           :columns="ratingColumns"
           :rows="ratingRows"
           empty-text="В этом разделе пока нет участников."
-        />
+        >
+          <template #cell-entityName="{ row, value }">
+            <NuxtLink v-if="row.entityTypeKey === 'player'" class="rating-entity-link" :to="`/players/${row.entityId}`">{{ value }}</NuxtLink>
+            <NuxtLink v-else class="rating-entity-link" :to="`/teams/${row.entityId}`">{{ value }}</NuxtLink>
+          </template>
+        </BaseTable>
       </section>
     </div>
   </div>
