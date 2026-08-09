@@ -3,13 +3,11 @@ export type UserRole = 'player' | 'admin'
 export type SportKey = 'cs2' | 'football' | 'basketball' | 'volleyball'
 
 export type TournamentStatus = 'draft' | 'registration_open' | 'registration_closed' | 'active' | 'finished'
-export type TournamentScheduleMode = 'fixed' | 'sequential'
-
 export type ApplicationStatus = 'pending' | 'approved' | 'rejected' | 'excluded'
 
 export type MatchStatus = 'scheduled' | 'active' | 'finished' | 'technical_win'
 
-export type VetoStatus = 'pending' | 'active' | 'finished'
+export type VetoStatus = 'pending' | 'active' | 'finished' | 'cancelled'
 
 export type TeamMemberRole = 'captain' | 'member' | 'substitute'
 
@@ -23,7 +21,9 @@ export type TeamInviteJoinMode = 'request' | 'direct'
 
 export type BracketMatchStatus = 'pending' | 'scheduled' | 'finished'
 
-export type VetoActionType = 'ban' | 'pick' | 'decider'
+export type VetoActionType = 'ban' | 'pick' | 'decider' | 'start' | 'cancel' | 'reset'
+export type VetoLaunchMode = 'admin_start' | 'auto_start'
+export type Cs2MatchFormat = 'bo1' | 'bo3' | 'bo5'
 
 export type ReferralStatus = 'active' | 'disabled'
 
@@ -37,7 +37,6 @@ export type NotificationType =
   | 'veto_started'
   | 'veto_turn'
   | 'tournament_started'
-  | 'queue_updated'
   | 'next_opponent_determined'
   | 'admin_action'
 
@@ -148,10 +147,16 @@ export interface Tournament {
   minAge?: number
   maxAge?: number
   matchFormat: string
-  scheduleMode: TournamentScheduleMode
   location: string
   rules: string[]
   mapPool?: string[]
+  mapVetoEnabled?: boolean
+  vetoLaunchMode?: VetoLaunchMode
+  stageMatchFormats?: {
+    earlyRound: Cs2MatchFormat
+    semifinal: Cs2MatchFormat
+    final: Cs2MatchFormat
+  }
   allowRosterChanges: boolean
   description: string
 }
@@ -218,7 +223,6 @@ export interface Match {
   score1?: number
   score2?: number
   winnerId?: string
-  sequenceNo?: number
 }
 
 export interface MatchMapResult {
@@ -296,11 +300,20 @@ export interface MapVetoAction {
 export interface MapVetoSession {
   id: string
   matchId: string
+  team1Id: string
+  team2Id: string
   status: VetoStatus
-  format: 'bo1' | 'bo3' | 'bo5'
+  format: Cs2MatchFormat
   mapPool: string[]
   currentTeamId?: string
+  currentActionType?: Extract<VetoActionType, 'ban' | 'pick'>
   deadlineAt?: string
+  turnStartedAt?: string
+  timeoutNotifiedAt?: string
+  startedByUserId?: string
+  startedAt?: string
+  completedAt?: string
+  cancelledAt?: string
   finalMaps: string[]
   actions: MapVetoAction[]
 }

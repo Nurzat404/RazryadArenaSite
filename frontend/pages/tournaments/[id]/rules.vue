@@ -37,7 +37,6 @@ useHead({
             <div><span>Состав</span><strong>{{ tournament.requiredTeamSize }} игроков</strong></div>
             <div><span>Возраст</span><strong>{{ ageLabel }}</strong></div>
             <div><span>Формат</span><strong>{{ tournament.matchFormat }}</strong></div>
-            <div><span>Проведение</span><strong>{{ tournament.scheduleMode === 'sequential' ? 'Живая очередь' : 'По расписанию' }}</strong></div>
           </aside>
         </div>
 

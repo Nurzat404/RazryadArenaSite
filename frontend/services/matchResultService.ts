@@ -199,14 +199,13 @@ export const matchResultService = {
     }
     const allDetails = useMockMatchResultDetails()
     allDetails.value = [...allDetails.value.filter((item) => item.matchId !== matchId), details]
-    if (payload.technicalReason) await vetoService.finishByMatchId(matchId)
+    await vetoService.finishByMatchId(matchId)
 
     const brackets = useMockBracketMatches()
     const progression = progressBracket(brackets.value, match.id, payload.winnerId)
     brackets.value = progression.matches
     syncDependentMatches(progression.matches)
     await createReadyMatches(progression.readyMatchIds, match)
-    await matchService.syncSequentialQueue(match.tournamentId)
     await recordConsequences(match, payload)
     return match
   }

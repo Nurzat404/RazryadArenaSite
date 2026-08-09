@@ -62,6 +62,7 @@ const applicationsByTournament = new Map(
 
         <div class="profile-card__actions">
           <NuxtLink class="cta-button cta-button-secondary" :to="`/tournaments/${tournament.id}`">Открыть турнир</NuxtLink>
+          <NuxtLink v-if="tournament.sport === 'cs2'" class="cta-button cta-button-secondary" :to="`/admin/tournaments/${tournament.id}/veto`">Map Veto</NuxtLink>
         </div>
       </article>
     </div>

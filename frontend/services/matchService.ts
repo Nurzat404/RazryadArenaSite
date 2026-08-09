@@ -58,31 +58,9 @@ export const matchService = {
       team2Id: bracketMatch.team2Id,
       scheduledAt: new Date(latestTime + 2 * 60 * 60 * 1000).toISOString(),
       location: tournament.location,
-      status: 'scheduled',
-      sequenceNo: Math.max(0, ...tournamentMatches.map((item) => item.sequenceNo ?? 0)) + 1
+      status: 'scheduled'
     }
     matches.value = [...matches.value, match]
     return match
-  },
-
-  async syncSequentialQueue(tournamentId: string) {
-    const tournament = useMockTournaments().value.find((item) => item.id === tournamentId)
-    if (tournament?.scheduleMode !== 'sequential') return []
-
-    const matches = useMockMatches()
-    const pending = matches.value
-      .filter((match) => match.tournamentId === tournamentId && ['scheduled', 'active'].includes(match.status))
-      .sort((a, b) => (a.sequenceNo ?? Number.MAX_SAFE_INTEGER) - (b.sequenceNo ?? Number.MAX_SAFE_INTEGER) || a.scheduledAt.localeCompare(b.scheduledAt))
-    const activeId = pending.find((match) => match.status === 'active')?.id ?? pending[0]?.id
-    const positions = new Map(pending.map((match, index) => [match.id, index + 1]))
-
-    matches.value = matches.value.map((match) => match.tournamentId !== tournamentId || !positions.has(match.id)
-      ? match
-      : {
-          ...match,
-          sequenceNo: positions.get(match.id),
-          status: match.id === activeId ? 'active' as const : 'scheduled' as const
-        })
-    return matches.value.filter((match) => match.tournamentId === tournamentId && positions.has(match.id))
   }
 }

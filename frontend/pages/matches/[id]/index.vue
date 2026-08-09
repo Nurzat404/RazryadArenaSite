@@ -142,6 +142,7 @@ useHead({
         <div class="match-detail-actions">
           <NuxtLink v-if="bracketMatch" class="cta-button cta-button-primary" :to="`/tournaments/${tournament.id}/bracket`">Открыть сетку</NuxtLink>
           <NuxtLink v-else class="cta-button cta-button-primary" :to="`/tournaments/${tournament.id}`">Открыть турнир</NuxtLink>
+          <NuxtLink v-if="match.sport === 'cs2' && tournament.mapVetoEnabled && !isFinished" class="cta-button cta-button-secondary" :to="`/matches/${match.id}/veto`">Пик/бан карт</NuxtLink>
           <NuxtLink v-if="auth.isAdmin" class="cta-button cta-button-secondary" :to="`/matches/${match.id}/result`">
             {{ isFinished ? 'Изменить результат' : 'Внести результат' }}
           </NuxtLink>

@@ -66,13 +66,12 @@ export const useMockTournaments = () => {
   const openCup = mockTournaments.find((tournament) => tournament.id === 'tr5')
   const currentCup = tournaments.value.find((tournament) => tournament.id === 'tr1')
 
-  if (import.meta.client && currentCup?.status === 'registration_open' && activeCup) {
+  if (import.meta.client && currentCup && activeCup && (currentCup.status === 'registration_open' || currentCup.matchFormat.includes('BO1') || currentCup.mapVetoEnabled === undefined)) {
     tournaments.value = tournaments.value.map((tournament) => tournament.id === 'tr1' ? { ...tournament, ...activeCup } : tournament)
   }
   if (import.meta.client && openCup && !tournaments.value.some((tournament) => tournament.id === openCup.id)) {
     tournaments.value = [...tournaments.value, openCup]
   }
-
   return tournaments
 }
 export const useMockTournamentApplications = () => {
@@ -96,7 +95,15 @@ export const useMockTournamentRosters = () => {
   if (import.meta.client && missing.length) rosters.value = [...rosters.value, ...missing]
   return rosters
 }
-export const useMockMatches = () => usePersistentMockState<Match[]>('ra_mock_matches_v3', mockMatches)
+export const useMockMatches = () => {
+  const matches = usePersistentMockState<Match[]>('ra_mock_matches_v3', mockMatches)
+  const currentTestMatch = matches.value.find((match) => match.id === 'm1')
+  const testMatch = mockMatches.find((match) => match.id === 'm1')
+  if (import.meta.client && currentTestMatch?.status === 'scheduled' && testMatch && Date.parse(currentTestMatch.scheduledAt) > Date.now() + 24 * 60 * 60 * 1000) {
+    matches.value = matches.value.map((match) => match.id === 'm1' ? { ...match, scheduledAt: testMatch.scheduledAt } : match)
+  }
+  return matches
+}
 export const useMockBracketMatches = () => {
   const brackets = usePersistentMockState<BracketMatch[]>('ra_mock_brackets_v3', mockBracketMatches)
   const volleyballMatch = mockBracketMatches.find((match) => match.id === 'bm6')
@@ -109,7 +116,7 @@ export const useMockBracketMatches = () => {
 export const useMockBracketTechnicalParticipants = () => usePersistentMockState<BracketTechnicalParticipant[]>('ra_mock_bracket_technical_participants_v1', [])
 export const useMockMatchResultDetails = () => usePersistentMockState<MatchResultDetails[]>('ra_mock_match_result_details_v1', [])
 export const useMockMatchResultRevisions = () => usePersistentMockState<MatchResultRevision[]>('ra_mock_match_result_revisions_v1', [])
-export const useMockMapVetoSessions = () => usePersistentMockState<MapVetoSession[]>('ra_mock_map_veto_sessions_v1', mockMapVetoSessions)
+export const useMockMapVetoSessions = () => usePersistentMockState<MapVetoSession[]>('ra_mock_map_veto_sessions_v4', mockMapVetoSessions)
 export const useMockMatchRatingEvents = () => usePersistentMockState<MatchRatingEvent[]>('ra_mock_match_rating_events_v1', [])
 export const useMockPlayerStats = () => usePersistentMockState<PlayerStats[]>('ra_mock_player_stats_v1', mockPlayerStats)
 export const useMockRatings = () => usePersistentMockState<RatingRow[]>('ra_mock_ratings_v1', mockRatings)

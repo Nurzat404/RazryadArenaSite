@@ -17,15 +17,21 @@ export const mockTournaments: Tournament[] = [
     requiredTeamSize: 2,
     minAge: 16,
     maxAge: 30,
-    matchFormat: 'Олимпийская сетка, матчи BO1',
-    scheduleMode: 'fixed',
+    matchFormat: 'Олимпийская сетка, матчи BO3',
     location: 'Онлайн',
     rules: [
       'В составе должно быть ровно два игрока.',
       'Один игрок не может выступать за две команды в одном турнире.',
       'Капитан отвечает за готовность команды к назначенному времени.'
     ],
-    mapPool: ['Mirage', 'Inferno', 'Nuke', 'Ancient', 'Anubis', 'Dust II'],
+    mapPool: ['Mirage', 'Inferno', 'Nuke', 'Ancient', 'Anubis', 'Dust II', 'Train'],
+    mapVetoEnabled: true,
+    vetoLaunchMode: 'admin_start',
+    stageMatchFormats: {
+      earlyRound: 'bo1',
+      semifinal: 'bo3',
+      final: 'bo3'
+    },
     allowRosterChanges: true,
     description: 'CS2-турнир на выходные. Матчи проходят по сетке на выбывание.'
   },
@@ -44,7 +50,6 @@ export const mockTournaments: Tournament[] = [
     minAge: 16,
     maxAge: 35,
     matchFormat: 'Группы и плей-офф',
-    scheduleMode: 'fixed',
     location: 'Стадион «Юность»',
     rules: [
       'Матчи проходят по опубликованному расписанию.',
@@ -69,7 +74,6 @@ export const mockTournaments: Tournament[] = [
     minAge: 16,
     maxAge: 25,
     matchFormat: 'Круговой этап, затем финал',
-    scheduleMode: 'sequential',
     location: 'Спортзал УрФУ',
     rules: [
       'Команда заявляет шесть основных игроков.',
@@ -92,7 +96,6 @@ export const mockTournaments: Tournament[] = [
     minAge: 16,
     maxAge: 30,
     matchFormat: 'Группы и плей-офф 3x3',
-    scheduleMode: 'sequential',
     location: 'Площадка будет объявлена',
     rules: [
       'Подробные правила появятся до открытия регистрации.'
@@ -114,14 +117,15 @@ export const mockTournaments: Tournament[] = [
     minAge: 16,
     maxAge: 30,
     matchFormat: 'Олимпийская сетка, матчи BO1',
-    scheduleMode: 'fixed',
     location: 'Онлайн',
     rules: [
       'В составе должно быть ровно два игрока.',
       'Один игрок не может выступать за две команды в одном турнире.',
       'Расписание опубликуют после окончания регистрации.'
     ],
-    mapPool: ['Mirage', 'Inferno', 'Nuke', 'Ancient', 'Anubis', 'Dust II'],
+    mapPool: ['Mirage', 'Inferno', 'Nuke', 'Ancient', 'Anubis', 'Dust II', 'Train'],
+    mapVetoEnabled: true,
+    vetoLaunchMode: 'admin_start',
     allowRosterChanges: true,
     description: 'Открытый CS2-турнир на выбывание. Соберите состав и отправьте заявку до дедлайна.'
   }

@@ -13,7 +13,7 @@ export const mockMatches: Match[] = [
     sport: 'cs2',
     team1Id: 't1',
     team2Id: 't3',
-    scheduledAt: dateTimeFromNow(5, 18),
+    scheduledAt: dateTimeFromNow(0, 18),
     location: 'Онлайн',
     status: 'scheduled'
   },

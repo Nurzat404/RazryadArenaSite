@@ -22,7 +22,6 @@ export interface TournamentPayload {
   minAge?: number
   maxAge?: number
   matchFormat: string
-  scheduleMode: Tournament['scheduleMode']
   location: string
   rules: string[]
   mapPool?: string[]

@@ -209,6 +209,68 @@
 
 /* ===== Mobile ===== */
 @media (max-width: 767.98px) {
+  .veto-match {
+    grid-template-columns: minmax(0, 1fr) 4.8rem minmax(0, 1fr);
+  }
+
+  .veto-match__team {
+    padding: 0.85rem 0.55rem;
+  }
+
+  .veto-match__team > strong {
+    font-size: 0.9rem;
+    white-space: normal;
+  }
+
+  .veto-match__status .status-badge-v2 {
+    max-width: 4.2rem;
+    white-space: normal;
+  }
+
+  .veto-admin-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .veto-admin-controls__actions,
+  .veto-timeout-actions {
+    justify-content: flex-start;
+  }
+
+  .veto-turn,
+  .veto-note,
+  .veto-settings__head {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .veto-turn__clock {
+    justify-items: start;
+  }
+
+  .veto-workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .veto-map-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .veto-mode-control {
+    grid-template-columns: 1fr;
+  }
+
+  .veto-settings__maps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .veto-custom-map {
+    grid-template-columns: 1fr;
+  }
+
+  .veto-admin-row {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
   .section-padding {
     padding: 3.2rem 0;
   }

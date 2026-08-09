@@ -1,28 +1,20 @@
 <script setup lang="ts">
 import { matchService, teamService, tournamentService } from '~/services'
-import type { Match, MatchStatus, SportKey } from '~/types/domain'
+import type { Match, MatchStatus } from '~/types/domain'
 
 const route = useRoute()
 const tournamentId = String(route.params.id)
 const tournament = await tournamentService.getById(tournamentId)
-if (tournament?.scheduleMode === 'sequential') await matchService.syncSequentialQueue(tournamentId)
 const [matches, teams] = await Promise.all([
   matchService.list({ tournamentId }),
   teamService.list()
 ])
 
 const teamById = new Map(teams.map((team) => [team.id, team]))
-const sportLabels: Record<SportKey, string> = {
-  cs2: 'CS2', football: 'Футбол', basketball: 'Баскетбол', volleyball: 'Волейбол'
-}
 const statusLabels: Record<MatchStatus, string> = {
   scheduled: 'Матч назначен', active: 'Идёт сейчас', finished: 'Матч завершён', technical_win: 'Технический результат'
 }
-const activeMatch = computed(() => matches.find((match) => match.status === 'active') ?? null)
-const queuedMatches = computed(() => matches
-  .filter((match) => match.status === 'scheduled')
-  .sort((a, b) => (a.sequenceNo ?? Number.MAX_SAFE_INTEGER) - (b.sequenceNo ?? Number.MAX_SAFE_INTEGER)))
-const fixedSchedule = computed(() => matches
+const schedule = computed(() => matches
   .reduce<Array<{ date: string, matches: Match[] }>>((groups, match) => {
     const date = new Intl.DateTimeFormat('ru-RU', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(match.scheduledAt))
     const group = groups.find((item) => item.date === date)
@@ -44,33 +36,13 @@ useHead({
 <template>
   <section class="section-padding workspace-page workspace-page--tournament-detail">
     <div class="container">
-      <PageHead :title="tournament?.name ?? 'Турнир не найден'" :subtitle="tournament ? (tournament.scheduleMode === 'sequential' ? 'Текущий матч и очередь следующих пар.' : 'Пары, время и место матчей.') : 'Проверьте адрес страницы или вернитесь к списку турниров.'" />
+      <PageHead :title="tournament?.name ?? 'Турнир не найден'" :subtitle="tournament ? 'Пары, время и место матчей.' : 'Проверьте адрес страницы или вернитесь к списку турниров.'" />
 
       <template v-if="tournament">
         <TournamentNav :tournament-id="tournament.id" active="schedule" />
 
-        <section v-if="tournament.scheduleMode === 'sequential'" class="schedule-queue">
-          <div class="schedule-queue__head">
-            <div><p>Очередь матчей</p><h2>Кто играет сейчас и кто следующий</h2></div>
-            <span>{{ sportLabels[tournament.sport] }}</span>
-          </div>
-          <NuxtLink v-if="activeMatch" class="schedule-live-match" :to="`/matches/${activeMatch.id}`">
-            <span>Сейчас на площадке</span>
-            <strong>{{ teamName(activeMatch.team1Id) }} <b>—</b> {{ teamName(activeMatch.team2Id) }}</strong>
-            <small>{{ activeMatch.location }} · {{ score(activeMatch) ?? 'Счёт пока не внесён' }}</small>
-          </NuxtLink>
-          <p v-else class="schedule-queue__empty">Активного матча пока нет.</p>
-          <div class="schedule-queue__next">
-            <h3>Дальше</h3>
-            <template v-if="queuedMatches.length">
-              <NuxtLink v-for="(match, index) in queuedMatches" :key="match.id" :to="`/matches/${match.id}`">{{ index + 1 }}. {{ teamName(match.team1Id) }} — {{ teamName(match.team2Id) }}</NuxtLink>
-            </template>
-            <p v-else>Следующая пара ещё не определена.</p>
-          </div>
-        </section>
-
-        <section v-if="tournament.scheduleMode === 'fixed' && fixedSchedule.length" class="schedule-list" aria-label="Расписание турнира">
-          <div v-for="group in fixedSchedule" :key="group.date" class="schedule-list__day">
+        <section v-if="schedule.length" class="schedule-list" aria-label="Расписание турнира">
+          <div v-for="group in schedule" :key="group.date" class="schedule-list__day">
             <h2>{{ group.date }}</h2>
             <article v-for="match in group.matches" :key="match.id" class="schedule-row">
               <time>{{ formatTime(match.scheduledAt) }}</time>
@@ -86,7 +58,7 @@ useHead({
           </div>
         </section>
 
-        <div v-else-if="tournament.scheduleMode === 'fixed'" class="empty-state-panel">
+        <div v-else class="empty-state-panel">
           <h2>Расписание ещё не опубликовано</h2>
           <p>Организатор добавит пары и время матчей после жеребьёвки.</p>
         </div>
